@@ -1,5 +1,3 @@
-[![Build and test](https://github.com/approvals/ApprovalTests.Dart/actions/workflows/build_and_test.yml/badge.svg)](https://github.com/approvals/ApprovalTests.Dart/actions/workflows/build_and_test.yml)
-
 <div align="center">
 <p align="center">
     <a href="https://github.com/approvals/ApprovalTests.Dart" align="center">
@@ -21,14 +19,19 @@
   <a href="https://pub.dev/packages/approval_tests/score"><img src="https://img.shields.io/pub/popularity/approval_tests?logo=flutter" alt="Pub popularity"></a>
   <a href="https://pub.dev/packages/approval_tests/score"><img src="https://img.shields.io/pub/points/approval_tests?logo=flutter" alt="Pub points"></a>
 </p>
+<p align="center">
+  <a href="https://github.com/approvals/ApprovalTests.Dart/actions/workflows/build_and_test.yml"><img src="https://github.com/approvals/ApprovalTests.Dart/actions/workflows/build_and_test.yml/badge.svg" alt="Build and test badge"></a>
+</p>
 
 ## 📖 About
 
-Unit testing asserts can be **difficult** to use. `Approval tests` simplify this by taking a snapshot of the results, and confirming that they have not changed.   
+**[Approval Tests](https://approvaltests.com/)** are an alternative to assertions. You’ll find them useful for testing objects with complex values *(such as long strings)*, lots of properties, or collections of objects.
+
+`Approval tests` simplify this by taking a snapshot of the results, and confirming that they have not changed.   
 
 In normal unit testing, you say `expect(person.getAge(), 5)`. Approvals allow you to do this when the thing that you want to assert is no longer a primitive but a complex object. For example, you can say, `Approvals.verify(person)`.
 
-I am writing an implementation of a great tool like **[Approval Tests](https://approvaltests.com/)** in Dart. If anyone wants to help, please **[text](https://t.me/yelmuratoff)** me. 🙏
+I am writing an implementation of **[Approval Tests](https://approvaltests.com/)** in Dart. If anyone wants to help, please **[text](https://t.me/yelmuratoff)** me. 🙏
 
 <!-- At the moment the package is **in development** and <u>not ready</u> to use. 🚧 -->
 
