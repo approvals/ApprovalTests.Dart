@@ -6,7 +6,6 @@ This is the markdown todo file for Approval Tests.
 
 Tasks for the project are listed below:
 
-* [ ] Check the causes of incorrect file paths in Windows
 * [ ] Markdown snippets
 * [ ] Startup project
 * [ ] Deploy script to automate the deployment process to pub.dev
@@ -23,3 +22,4 @@ Tasks for the project are listed below:
 * [x] Add badges
 * [x] Add dependabot
 * [x] Deploy to pub.dev
+* [x] Check the causes of incorrect file paths in Windows
