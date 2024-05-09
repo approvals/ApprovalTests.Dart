@@ -1,3 +1,5 @@
+[![Build and test](https://github.com/approvals/ApprovalTests.Dart/actions/workflows/build_and_test.yml/badge.svg)](https://github.com/approvals/ApprovalTests.Dart/actions/workflows/build_and_test.yml)
+
 <div align="center">
 <p align="center">
     <a href="https://github.com/approvals/ApprovalTests.Dart" align="center">
