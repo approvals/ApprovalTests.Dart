@@ -1,0 +1,24 @@
+{
+  "jsonItem": {
+    "id": 1,
+    "name": "JsonItem",
+    "subItem": {
+      "id": 1,
+      "name": "SubItem",
+      "anotherItems": [
+        {
+          "id": 1,
+          "name": "AnotherItem 1"
+        },
+        {
+          "id": 2,
+          "name": "AnotherItem 2"
+        }
+      ]
+    },
+    "anotherItem": {
+      "id": 1,
+      "name": "AnotherItem"
+    }
+  }
+}

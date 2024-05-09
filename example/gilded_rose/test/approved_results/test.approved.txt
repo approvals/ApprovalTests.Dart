@@ -1,0 +1,120 @@
+Item{name: foo, sellIn: -2, quality: -1}
+Item{name: foo, sellIn: -2, quality: 0}
+Item{name: foo, sellIn: -2, quality: 0}
+Item{name: foo, sellIn: -2, quality: 47}
+Item{name: foo, sellIn: -2, quality: 48}
+Item{name: foo, sellIn: -1, quality: -1}
+Item{name: foo, sellIn: -1, quality: 0}
+Item{name: foo, sellIn: -1, quality: 0}
+Item{name: foo, sellIn: -1, quality: 47}
+Item{name: foo, sellIn: -1, quality: 48}
+Item{name: foo, sellIn: 4, quality: -1}
+Item{name: foo, sellIn: 4, quality: 0}
+Item{name: foo, sellIn: 4, quality: 0}
+Item{name: foo, sellIn: 4, quality: 48}
+Item{name: foo, sellIn: 4, quality: 49}
+Item{name: foo, sellIn: 5, quality: -1}
+Item{name: foo, sellIn: 5, quality: 0}
+Item{name: foo, sellIn: 5, quality: 0}
+Item{name: foo, sellIn: 5, quality: 48}
+Item{name: foo, sellIn: 5, quality: 49}
+Item{name: foo, sellIn: 9, quality: -1}
+Item{name: foo, sellIn: 9, quality: 0}
+Item{name: foo, sellIn: 9, quality: 0}
+Item{name: foo, sellIn: 9, quality: 48}
+Item{name: foo, sellIn: 9, quality: 49}
+Item{name: foo, sellIn: 10, quality: -1}
+Item{name: foo, sellIn: 10, quality: 0}
+Item{name: foo, sellIn: 10, quality: 0}
+Item{name: foo, sellIn: 10, quality: 48}
+Item{name: foo, sellIn: 10, quality: 49}
+Item{name: Aged Brie, sellIn: -2, quality: 1}
+Item{name: Aged Brie, sellIn: -2, quality: 2}
+Item{name: Aged Brie, sellIn: -2, quality: 3}
+Item{name: Aged Brie, sellIn: -2, quality: 50}
+Item{name: Aged Brie, sellIn: -2, quality: 50}
+Item{name: Aged Brie, sellIn: -1, quality: 1}
+Item{name: Aged Brie, sellIn: -1, quality: 2}
+Item{name: Aged Brie, sellIn: -1, quality: 3}
+Item{name: Aged Brie, sellIn: -1, quality: 50}
+Item{name: Aged Brie, sellIn: -1, quality: 50}
+Item{name: Aged Brie, sellIn: 4, quality: 0}
+Item{name: Aged Brie, sellIn: 4, quality: 1}
+Item{name: Aged Brie, sellIn: 4, quality: 2}
+Item{name: Aged Brie, sellIn: 4, quality: 50}
+Item{name: Aged Brie, sellIn: 4, quality: 50}
+Item{name: Aged Brie, sellIn: 5, quality: 0}
+Item{name: Aged Brie, sellIn: 5, quality: 1}
+Item{name: Aged Brie, sellIn: 5, quality: 2}
+Item{name: Aged Brie, sellIn: 5, quality: 50}
+Item{name: Aged Brie, sellIn: 5, quality: 50}
+Item{name: Aged Brie, sellIn: 9, quality: 0}
+Item{name: Aged Brie, sellIn: 9, quality: 1}
+Item{name: Aged Brie, sellIn: 9, quality: 2}
+Item{name: Aged Brie, sellIn: 9, quality: 50}
+Item{name: Aged Brie, sellIn: 9, quality: 50}
+Item{name: Aged Brie, sellIn: 10, quality: 0}
+Item{name: Aged Brie, sellIn: 10, quality: 1}
+Item{name: Aged Brie, sellIn: 10, quality: 2}
+Item{name: Aged Brie, sellIn: 10, quality: 50}
+Item{name: Aged Brie, sellIn: 10, quality: 50}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: -2, quality: 0}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: -2, quality: 0}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: -2, quality: 0}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: -2, quality: 0}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: -2, quality: 0}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: -1, quality: 0}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: -1, quality: 0}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: -1, quality: 0}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: -1, quality: 0}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: -1, quality: 0}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: 4, quality: 2}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: 4, quality: 3}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: 4, quality: 4}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: 4, quality: 50}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: 4, quality: 50}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: 5, quality: 1}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: 5, quality: 2}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: 5, quality: 3}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: 5, quality: 50}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: 5, quality: 50}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: 9, quality: 1}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: 9, quality: 2}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: 9, quality: 3}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: 9, quality: 50}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: 9, quality: 50}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: 10, quality: 0}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: 10, quality: 1}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: 10, quality: 2}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: 10, quality: 50}
+Item{name: Backstage passes to a TAFKAL80ETC concert, sellIn: 10, quality: 50}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: -1, quality: -1}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: -1, quality: 0}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: -1, quality: 1}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: -1, quality: 49}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: -1, quality: 50}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 0, quality: -1}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 0, quality: 0}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 0, quality: 1}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 0, quality: 49}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 0, quality: 50}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 5, quality: -1}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 5, quality: 0}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 5, quality: 1}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 5, quality: 49}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 5, quality: 50}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 6, quality: -1}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 6, quality: 0}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 6, quality: 1}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 6, quality: 49}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 6, quality: 50}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 10, quality: -1}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 10, quality: 0}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 10, quality: 1}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 10, quality: 49}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 10, quality: 50}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 11, quality: -1}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 11, quality: 0}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 11, quality: 1}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 11, quality: 49}
+Item{name: Sulfuras, Hand of Ragnaros, sellIn: 11, quality: 50}
