@@ -1,3 +1,7 @@
+## 0.3.3-dev
+
+- Updated README file.
+
 ## 0.3.2-dev
 
 - Default `lints` replaced by `sizzle_lints`.
