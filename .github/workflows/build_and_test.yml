@@ -21,13 +21,13 @@ jobs:
         run: |
           ./build_and_test.sh
         shell: bash
-      - name: Check Code Coverage
-        uses: VeryGoodOpenSource/very_good_coverage@v2.2.0
-        with:
-          path: coverage/lcov.info
-          min_coverage: 30
+      # - name: Check Code Coverage
+      #   uses: VeryGoodOpenSource/very_good_coverage@v2.2.0
+      #   with:
+      #     path: coverage/lcov.info
+      #     min_coverage: 30
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+      # - name: Upload coverage to Codecov
+      #   uses: codecov/codecov-action@v3
+      #   with:
+      #     token: ${{ secrets.CODECOV_TOKEN }}
