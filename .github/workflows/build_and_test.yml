@@ -17,7 +17,7 @@ jobs:
         uses: dart-lang/setup-dart@v1.4
         with:
           sdk: stable
-      - name: Test
+      - name: Build and test
         run: |
           ./build_and_test.sh
         shell: bash
