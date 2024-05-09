@@ -14,8 +14,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Flutter Runner
-        uses: jddeep/Flutter-Runner@1.2.0
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2.12.0
+        with:
+          flutter-version: ${{ steps.get_flutter_version.outputs.version }}
+          channel: stable
+          cache: true
+          cache-key: flutter-:os:-:channel:-:version:-:arch:-:hash:-${{ hashFiles('**/pubspec.lock') }}
       - name: Test
         run: |
           ./build_and_test.sh
