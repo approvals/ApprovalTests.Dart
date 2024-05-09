@@ -1,3 +1,13 @@
+## 0.3.5-dev
+
+- The repository has been moved to Approvals.
+- Fixed bug with checking of strings received from txt file.
+- Added Github Actions.
+- Added dependabot.
+- Updated README file.
+- Updated TODO file.
+
+
 ## 0.3.3-dev
 
 - Updated README file.
