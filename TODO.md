@@ -1,8 +1,8 @@
-* [ ] Github actions
-* [ ] Building run script
+* [x] Github actions
+* [x] Building run script
 * [ ] Markdown snippets
 * [ ] Startup project
-* [ ] Add badges 
+* [x] Add badges 
 * [ ] Add dependabot
 * [ ] Deploy
 * [ ] Deploy script
