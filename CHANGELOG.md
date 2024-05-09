@@ -1,3 +1,7 @@
+## 0.3.6-dev
+
+- Updated pubspec.yaml file: changed homepage.
+
 ## 0.3.5-dev
 
 - The repository has been moved to Approvals.

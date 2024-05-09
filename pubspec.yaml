@@ -3,10 +3,10 @@
 #  * 0.0.4 for a minor release.
 name: approval_tests
 description: Approval Tests implementation in Dart. Inspired by ApprovalTests.
-version: 0.3.5-dev
-repository: https://github.com/K1yoshiSho/approval_tests_dart
-homepage: https://github.com/K1yoshiSho/approval_tests_dart.git
-issue_tracker: https://github.com/K1yoshiSho/approval_tests_dart/issues
+version: 0.3.6-dev
+repository: https://github.com/approvals/ApprovalTests.Dart
+homepage: https://github.com/approvals/ApprovalTests.Dart.git
+issue_tracker: https://github.com/approvals/ApprovalTests.Dart/issues
 
 topics:
   - test
