@@ -12,6 +12,9 @@ Tasks for the project are listed below:
 * [ ] Cover the project completely with tests
 * [ ] Refactor the code based on ApprovalTests architectural rules
 * [ ] Add more detailed documentation to the project
+* [ ] Add Codecov to the project
+* [ ] Set up autopublishing github action with PAT token and new tags
+* [ ] Revise the implementation with getting the default file path. Now it works with primary delay.
 
 # DONE
 
