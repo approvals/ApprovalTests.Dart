@@ -23,8 +23,8 @@ else
     echo "Version $VERSION is ready to be tagged and pushed."
     
     # Configure git user
-    git config --local user.email "you@example.com"
-    git config --local user.name "Your Name"
+    git config --local user.email "e99xxx@gmail.com"
+    git config --local user.name "Yelaman"
 
     # Fetch tags from the remote to update local reference
     git fetch --tags
@@ -37,6 +37,6 @@ else
         # Create a tag in Git with the new version
         echo "Publishing..."
         git tag -a "v$VERSION" -m "Release version $VERSION"
-        git push origin "v$VERSION"
+        git push origin v$VERSION
     fi
 fi
