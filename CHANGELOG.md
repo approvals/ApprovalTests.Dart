@@ -1,6 +1,6 @@
-## 0.4.8
+## 0.4.0
 
-- Test script for create release tag for autopublish
+- Autopublish with new tags.
 
 ## 0.3.9
 
