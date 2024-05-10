@@ -1,3 +1,7 @@
+## 0.4.1
+
+- Test script for create release tag for autopublish
+
 ## 0.3.9
 
 - Fix with default file path if package from pub.dev

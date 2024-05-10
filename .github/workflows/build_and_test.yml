@@ -19,7 +19,11 @@ jobs:
           sdk: stable
       - name: Build and test
         run: |
-          ./build_and_test.sh
+          ./bash/build_and_test.sh
+        shell: bash
+      - name: Check release tag
+        run: |
+          ./bash/push_release.sh
         shell: bash
       # - name: Check Code Coverage
       #   uses: VeryGoodOpenSource/very_good_coverage@v2.2.0
