@@ -8,7 +8,6 @@ Tasks for the project are listed below:
 
 * [ ] Markdown snippets
 * [ ] Startup project
-* [ ] Deploy script to automate the deployment process to pub.dev
 * [ ] Add codecov and coverage badge
 * [ ] Add contributing guide
 * [ ] Cover the project completely with tests
@@ -23,3 +22,4 @@ Tasks for the project are listed below:
 * [x] Add dependabot
 * [x] Deploy to pub.dev
 * [x] Check the causes of incorrect file paths in Windows
+* [x] Deploy script to automate the deployment process to pub.dev
