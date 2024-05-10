@@ -1,4 +1,4 @@
-## 0.4.1
+## 0.4.2
 
 - Test script for create release tag for autopublish
 

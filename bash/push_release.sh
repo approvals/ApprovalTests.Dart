@@ -26,6 +26,11 @@ else
         echo "Error: Tag v$VERSION already exists."
         exit 1
     fi
+
+    # Configure git user
+    git config --local user.email "actions@test.com"
+    git config --local user.name "Github Actions"
+
     # Create a tag in Git with the new version
     echo "Publishing..."
     git tag -a "v$VERSION" -m "Release version $VERSION"
