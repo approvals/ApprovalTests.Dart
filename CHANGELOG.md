@@ -1,4 +1,4 @@
-## 0.3.8-dev
+## 0.3.8
 
 - Test publish action with new version: 0.3.8.
 
