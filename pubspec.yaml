@@ -25,5 +25,4 @@ dependencies:
   dcli: ^3.4.0
 
 dev_dependencies:
-  # Testing
   sizzle_lints: ^2.0.2
