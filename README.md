@@ -21,6 +21,7 @@
 </p>
 <p align="center">
   <a href="https://github.com/approvals/ApprovalTests.Dart/actions/workflows/build_and_test.yml"><img src="https://github.com/approvals/ApprovalTests.Dart/actions/workflows/build_and_test.yml/badge.svg" alt="Build and test badge"></a>
+  <a href="https://github.com/approvals/ApprovalTests.Dart/actions/workflows/publish.yml"><img src="https://github.com/approvals/ApprovalTests.Dart/actions/workflows/publish.yml/badge.svg" alt="Publish to pub.dev"></a>
 </p>
 
 ## 📖 About
