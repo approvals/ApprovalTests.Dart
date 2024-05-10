@@ -14,7 +14,7 @@ Tasks for the project are listed below:
 * [ ] Add more detailed documentation to the project
 * [ ] Add Codecov to the project
 * [ ] Set up autopublishing github action with PAT token and new tags
-* [ ] Revise the implementation with getting the default file path. Now it works with primary delay.
+* [ ] Revise the implementation with getting the default file path. Now it works with primary delay. Read more: https://github.com/approvals/ApprovalTests.Dart/issues/3
 
 # DONE
 
