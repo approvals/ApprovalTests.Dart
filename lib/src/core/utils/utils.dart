@@ -35,7 +35,7 @@ final class ApprovalUtils {
   static String get fileName => filePath
       .split('/')
       .last
-      .split('.')
+      .split('.dart')
       .first; // Split the path by '/', get the last part (filename with extension), split it by '.', and get the first part (filename without extension).
 
   // Property that gets the file path of the current file.

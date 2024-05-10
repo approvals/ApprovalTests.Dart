@@ -1,10 +1,8 @@
 // ignore_for_file: avoid_relative_lib_imports
 
 import 'package:approval_tests/approval_tests.dart';
+import 'package:starter_project/starter_project.dart';
 import 'package:test/test.dart';
-
-import '../lib/gilded_rose.dart';
-import '../lib/item.dart';
 
 void main() {
   // Define all test cases
@@ -28,7 +26,6 @@ void main() {
           comparator: IDEComparator(
             ide: ComparatorIDE.visualStudioCode,
           ),
-          filesPath: "example/gilded_rose/test/approved_results/test",
         ),
         processor: processItemCombination,
       );

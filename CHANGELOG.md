@@ -1,3 +1,9 @@
+## 0.3.9
+
+- Fix with default file path if package from pub.dev
+- Gilded rose moved to starter project
+- Code formatting
+
 ## 0.3.8
 
 - Test publish action with new version: 0.3.8.
