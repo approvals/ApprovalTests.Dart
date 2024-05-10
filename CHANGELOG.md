@@ -1,6 +1,6 @@
-## 0.3.7-dev
+## 0.3.8-dev
 
-- Test publish action with new version: 0.3.7.
+- Test publish action with new version: 0.3.8.
 
 ## 0.3.6-dev
 
