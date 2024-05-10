@@ -3,12 +3,29 @@ name: Publish to pub.dev
 on:
   push:
     tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+*'
+      - 'v*'
 
 jobs:
   publish:
+    runs-on: ubuntu-latest
     permissions:
-      id-token: write # Required for authentication using OIDC
-    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
-    # with:
-    #   working-directory: path/to/package/within/repository
+      contents: write
+      id-token: write  # Assuming this is correct for your OIDC setup
+
+    steps:
+      # - name: Checkout code
+      #   uses: actions/checkout@v3
+
+      # - name: Set up Dart SDK
+      #   uses: dart-lang/setup-dart@v1.4
+      #   with:
+      #     sdk: stable
+
+      - name: Custom Publish Steps
+        run: dart pub publish --force --dry-run
+        shell: bash
+
+      # Uncomment and modify the next lines if there are additional configurations
+      # - name: Additional Configuration
+      #   run: |
+      #     echo "Additional steps go here"
