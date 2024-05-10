@@ -21,18 +21,22 @@ if [ "$VERSION" = "$PUB_DEV_VERSION" ]; then
     exit 1
 else
     echo "Version $VERSION is ready to be tagged and pushed."
-    # Check if the tag already exists
-    if git rev-parse "v$VERSION" >/dev/null 2>&1; then
-        echo "Error: Tag v$VERSION already exists."
-        exit 1
-    fi
-
+    
     # Configure git user
-    git config --local user.email "actions@test.com"
-    git config --local user.name "Github Actions"
+    git config --local user.email "you@example.com"
+    git config --local user.name "Your Name"
 
-    # Create a tag in Git with the new version
-    echo "Publishing..."
-    git tag -a "v$VERSION" -m "Release version $VERSION"
-    git push origin "v$VERSION"
+    # Fetch tags from the remote to update local reference
+    git fetch --tags
+
+    # Check if the tag already exists in the remote
+    if git rev-parse "v$VERSION" >/dev/null 2>&1; then
+        echo "Tag v$VERSION already exists. Skipping tag creation."
+        exit 0
+    else
+        # Create a tag in Git with the new version
+        echo "Publishing..."
+        git tag -a "v$VERSION" -m "Release version $VERSION"
+        git push origin "v$VERSION"
+    fi
 fi
