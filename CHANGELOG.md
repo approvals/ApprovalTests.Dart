@@ -1,3 +1,7 @@
+## 0.3.7-dev
+
+- Test publish action with new version: 0.3.7.
+
 ## 0.3.6-dev
 
 - Updated pubspec.yaml file: changed homepage.
