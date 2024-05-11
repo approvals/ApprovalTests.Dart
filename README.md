@@ -60,44 +60,11 @@ How to use diff tools is just below, there is a `Comparator` class for that.
 #### • Via approveResult property
 If you want the result to be automatically saved after running the test, you need to use the `approveResult` property in `Options`:
 
-<!-- snippet: sample_verify_as_json_test -->
-<a id='snippet-sample_verify_as_json_test'></a>
-```dart
-void main() {
-  test('test complex JSON object', () {
-    final complexObject = {
-      'name': 'JsonTest',
-      'features': ['Testing', 'JSON'],
-      'version': 0.1,
-    };
-    Approvals.verifyAsJson(
-      complexObject,
-      options: const Options(
-        approveResult: true,
-      ),
-    );
-  });
-}
-```
-<sup><a href='/test/example_test.dart#L4-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-sample_verify_as_json_test' title='Start of snippet'>anchor</a></sup>
-<!-- endSnippet -->
+snippet: sample_verify_as_json_test
 
 this will result in the following file
 `example_test.approved.txt`
-<!-- snippet: example_test.approved.txt -->
-<a id='snippet-example_test.approved.txt'></a>
-```txt
-{
-  "name": "JsonTest",
-  "features": [
-    "Testing",
-    "JSON"
-  ],
-  "version": 0.1
-}
-```
-<sup><a href='/test/example_test.approved.txt#L1-L8' title='Snippet source file'>snippet source</a> | <a href='#snippet-example_test.approved.txt' title='Start of snippet'>anchor</a></sup>
-<!-- endSnippet -->
+snippet: example_test.approved.txt
 
 #### • Via file rename
 You can just rename the `.received` file to `.approved`.
