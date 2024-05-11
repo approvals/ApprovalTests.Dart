@@ -168,12 +168,71 @@ And the `verify_methods` folder has small examples of using different `ApprovalT
 
 ### JSON example
 
-snippet: same_verify_as_json_test_with_model
+<!-- snippet: same_verify_as_json_test_with_model -->
+<a id='snippet-same_verify_as_json_test_with_model'></a>
+```dart
+void main() {
+  const jsonItem = JsonItem(
+    id: 1,
+    name: "JsonItem",
+    anotherItem: AnotherItem(id: 1, name: "AnotherItem"),
+    subItem: SubItem(
+      id: 1,
+      name: "SubItem",
+      anotherItems: [
+        AnotherItem(id: 1, name: "AnotherItem 1"),
+        AnotherItem(id: 2, name: "AnotherItem 2"),
+      ],
+    ),
+  );
+
+  test('Verify JSON output of an object', () {
+    Approvals.verifyAsJson(
+      jsonItem,
+      options: const Options(
+        deleteReceivedFile: true, // Automatically delete the received file after the test.
+        approveResult: true, // Approve the result automatically. You can remove this property after the approved file is created.
+      ),
+    );
+  });
+}
+```
+<sup><a href='/example/verify_methods/verify_as_json/verify_as_json_test.dart#L6-L32' title='Snippet source file'>snippet source</a> | <a href='#snippet-same_verify_as_json_test_with_model' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 this will result in the following file
 `verify_as_json_test.approved.txt`
 
-snippet: verify_as_json_test.approved.txt
+<!-- snippet: verify_as_json_test.approved.txt -->
+<a id='snippet-verify_as_json_test.approved.txt'></a>
+```txt
+{
+  "jsonItem": {
+    "id": 1,
+    "name": "JsonItem",
+    "subItem": {
+      "id": 1,
+      "name": "SubItem",
+      "anotherItems": [
+        {
+          "id": 1,
+          "name": "AnotherItem 1"
+        },
+        {
+          "id": 2,
+          "name": "AnotherItem 2"
+        }
+      ]
+    },
+    "anotherItem": {
+      "id": 1,
+      "name": "AnotherItem"
+    }
+  }
+}
+```
+<sup><a href='/example/verify_methods/verify_as_json/verify_as_json_test.approved.txt#L1-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-verify_as_json_test.approved.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 <img src="https://github.com/K1yoshiSho/packages_assets/blob/main/assets/approval_tests/passed.png?raw=true" alt="Passed test example" title="ApprovalTests" style="max-width: 800px;">
 
