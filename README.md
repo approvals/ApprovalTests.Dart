@@ -46,6 +46,21 @@ dependencies:
   approval_tests: ^0.4.1
 ```
 
+## 👀 Getting Started
+
+The best way to get started is to download and open the starter project:
+* [Approvaltests.Dart.StarterProject](https://github.com/approvals/Approvaltests.Dart.StarterProject)
+
+This is a standard project that can be imported into any editor or IDE and also includes CI with GitHub Actions.
+
+It comes ready with:
+
+- A suitable `.gitignore` to exclude approval artifacts
+- A ready linter with all rules in place
+- A GitHub action to build and run tests
+- A GitHub build status ToBadge
+
+
 ## 📚 How to use
 
 ### Approving Results
@@ -153,68 +168,12 @@ And the `verify_methods` folder has small examples of using different `ApprovalT
 
 ### JSON example
 
-```dart
-import 'package:approval_tests/approval_dart.dart';
-import 'package:test/test.dart';
+snippet: same_verify_as_json_test_with_model
 
-void main() {
-  test('Verify JSON output of an object', () {
-    var item = Item(
-      id: 1,
-      name: "Widget",
-      anotherItem: AnotherItem(id: 1, name: "AnotherWidget"),
-      subItem: SubItem(
-        id: 1,
-        name: "SubWidget",
-        anotherItems: [
-          AnotherItem(id: 1, name: "AnotherWidget1"),
-          AnotherItem(id: 2, name: "AnotherWidget2"),
-        ],
-      ),
-    );
+this will result in the following file
+`verify_as_json_test.approved.txt`
 
-    ApprovalTests.verifyAsJson(
-      item,
-    );
-  });
-}
-
-/// Item class for testing
-class Item {
-  final int id;
-  final String name;
-  final SubItem subItem;
-  final AnotherItem anotherItem;
-
-  Item({
-    required this.id,
-    required this.name,
-    required this.subItem,
-    required this.anotherItem,
-  });
-}
-
-/// Sub item class for testing
-class SubItem {
-  final int id;
-  final String name;
-  final List<AnotherItem> anotherItems;
-
-  SubItem({
-    required this.id,
-    required this.name,
-    required this.anotherItems,
-  });
-}
-
-/// Another item class for testing
-class AnotherItem {
-  final int id;
-  final String name;
-
-  AnotherItem({required this.id, required this.name});
-}
-```
+snippet: verify_as_json_test.approved.txt
 
 <img src="https://github.com/K1yoshiSho/packages_assets/blob/main/assets/approval_tests/passed.png?raw=true" alt="Passed test example" title="ApprovalTests" style="max-width: 800px;">
 

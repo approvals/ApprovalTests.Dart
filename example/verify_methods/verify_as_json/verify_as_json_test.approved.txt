@@ -1,24 +1,24 @@
 {
-  "item": {
+  "jsonItem": {
     "id": 1,
-    "name": "Widget",
+    "name": "JsonItem",
     "subItem": {
       "id": 1,
-      "name": "SubWidget",
+      "name": "SubItem",
       "anotherItems": [
         {
           "id": 1,
-          "name": "AnotherWidget1"
+          "name": "AnotherItem 1"
         },
         {
           "id": 2,
-          "name": "AnotherWidget2"
+          "name": "AnotherItem 2"
         }
       ]
     },
     "anotherItem": {
       "id": 1,
-      "name": "AnotherWidget"
+      "name": "AnotherItem"
     }
   }
 }

@@ -1,13 +1,32 @@
 import 'package:approval_tests/approval_tests.dart';
 import 'package:test/test.dart';
 
-import '../../../test/approval_test.dart';
+import '../../../test/models/item.dart';
 
+// begin-snippet: same_verify_as_json_test_with_model
 void main() {
+  const jsonItem = JsonItem(
+    id: 1,
+    name: "JsonItem",
+    anotherItem: AnotherItem(id: 1, name: "AnotherItem"),
+    subItem: SubItem(
+      id: 1,
+      name: "SubItem",
+      anotherItems: [
+        AnotherItem(id: 1, name: "AnotherItem 1"),
+        AnotherItem(id: 2, name: "AnotherItem 2"),
+      ],
+    ),
+  );
+
   test('Verify JSON output of an object', () {
     Approvals.verifyAsJson(
-      ApprovalTestHelper.jsonItem,
-      options: const Options(deleteReceivedFile: true),
+      jsonItem,
+      options: const Options(
+        deleteReceivedFile: true, // Automatically delete the received file after the test.
+        approveResult: true, // Approve the result automatically. You can remove this property after the approved file is created.
+      ),
     );
   });
 }
+// end-snippet

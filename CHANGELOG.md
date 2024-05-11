@@ -1,6 +1,9 @@
 ## 0.4.1
 
-- Autopublish with new tags.
+- Autopublish to pub.dev if the version in pubspec.yaml has been changed by auto adding a new tag to the repositories.
+- Codecov added to github actions. Codecov badge, graph was added to README.md.
+- Added mdsnippets to github actions. And example snippets added to README.md.
+- Added `ApprovalTests.Dart.StarterProject'. You can find it in the README.md file.
 
 ## 0.3.9
 
