@@ -17,3 +17,5 @@ generated_*
 
 # Other files
 .old.dart
+
+.DS_Store
