@@ -1,0 +1,20 @@
+name: Check Release Tag
+
+on:
+  workflow_run:
+    workflows: ["Build and test"]
+    types:
+      - completed
+
+jobs:
+  check-release-tag:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PUB_SPEC_ID }}
+      - name: Check release tag
+        run: |
+          ./bash/push_release.sh
+        shell: bash
