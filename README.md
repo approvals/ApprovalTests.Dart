@@ -97,7 +97,7 @@ void main() {
   });
 }
 ```
-<sup><a href='/test/example_test.dart#L4-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-sample_verify_as_json_test' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/test/example/example_test.dart#L4-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-sample_verify_as_json_test' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 this will result in the following file
@@ -114,7 +114,7 @@ this will result in the following file
   "version": 0.1
 }
 ```
-<sup><a href='/test/example_test.approved.txt#L1-L8' title='Snippet source file'>snippet source</a> | <a href='#snippet-example_test.approved.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/test/example/example_test.approved.txt#L1-L8' title='Snippet source file'>snippet source</a> | <a href='#snippet-example_test.approved.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 #### • Via file rename
