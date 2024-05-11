@@ -47,7 +47,7 @@ class Approvals {
       } else if (isFilesMatch) {
         if (options.logResults) {
           ApprovalLogger.success(
-            'Test passed: [${namer.approvedFileName}] matches [${namer.receivedFileName}\nApproved file path: ${namer.approved}\nReceived file path: ${namer.received}]',
+            'Test passed: [${namer.approvedFileName}] matches [${namer.receivedFileName}\n\nApproved file path: ${namer.approved}\n\nReceived file path: ${namer.received}]',
           );
         }
       }
@@ -55,16 +55,22 @@ class Approvals {
       if (options.logErrors) {
         ApprovalLogger.exception(e, stackTrace: st);
       }
+      _deleteFileAfterTest(options);
       rethrow;
     } finally {
-      if (options.deleteReceivedFile) {
-        if (options.filesPath != null) {
-          ApprovalUtils.deleteFile(Namer(options.filesPath!).received);
-        } else {
-          ApprovalUtils.deleteFile(
-            Namer(ApprovalUtils.filePath.split('.dart').first).received,
-          );
-        }
+      _deleteFileAfterTest(options);
+    }
+  }
+
+  /// `_deleteFileAfterTest` method to delete the received file after the test.
+  static void _deleteFileAfterTest(Options options) {
+    if (options.deleteReceivedFile) {
+      if (options.filesPath != null) {
+        ApprovalUtils.deleteFile(Namer(options.filesPath!).received);
+      } else {
+        ApprovalUtils.deleteFile(
+          Namer(ApprovalUtils.filePath.split('.dart').first).received,
+        );
       }
     }
   }

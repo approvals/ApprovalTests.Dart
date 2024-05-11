@@ -35,7 +35,11 @@ void main() {
       );
     });
     test('Verify string with approved result options', () {
-      helper.verify('Hello World', 'verify', approveResult: true);
+      helper.verify(
+        'Hello World',
+        'verify',
+        approveResult: true,
+      );
     });
 
     test('Verify all strings in a list', () {
@@ -195,8 +199,7 @@ void main() {
       );
     });
 
-    test("Method «verify» must throw DoesntMatchException with error handling",
-        () {
+    test("Method «verify» must throw DoesntMatchException with error handling", () {
       expect(
         () => helper.verify(
           'Hello W0rld',
@@ -228,6 +231,23 @@ void main() {
       );
       ApprovalLogger.success(
         "Test Passed: The method was successfully verified for absence of an initial path — PathNotFoundException was thrown.",
+      );
+    });
+
+    test('Simulate file not found error during comparison', () async {
+      const comparator = CommandLineComparator();
+
+      // Setup: paths to non-existent files
+      const nonExistentApprovedPath = 'path/to/nonexistent/approved.txt';
+      const nonExistentReceivedPath = 'path/to/nonexistent/received.txt';
+
+      // Expect an exception to be thrown
+      expect(
+        () => comparator.compare(
+          approvedPath: nonExistentApprovedPath,
+          receivedPath: nonExistentReceivedPath,
+        ),
+        throwsA(isA<FileSystemException>()),
       );
     });
   });

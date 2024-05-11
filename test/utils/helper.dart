@@ -35,6 +35,7 @@ class ApprovalTestHelper {
         expectException: expectException,
         approveResult: approveResult,
         deleteReceivedFile: deleteReceivedFile,
+        useDefaultPath: useDefaultPath,
       ),
     );
   }

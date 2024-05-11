@@ -3,7 +3,7 @@ part of '../../approval_tests.dart';
 /// `CommandLineComparator` it is for comparing files via Command Line.
 ///
 /// This method compares the content of two files line by line and prints the differences in the console.
-final class CommandLineComparator extends ComparatorImp {
+class CommandLineComparator extends ComparatorImp {
   const CommandLineComparator();
 
   @override
@@ -22,9 +22,7 @@ final class CommandLineComparator extends ComparatorImp {
 
       final int maxLines = max(approvedLines.length, receivedLines.length);
       for (int i = 0; i < maxLines; i++) {
-        if (i >= approvedLines.length ||
-            i >= receivedLines.length ||
-            approvedLines[i] != receivedLines[i]) {
+        if (i >= approvedLines.length || i >= receivedLines.length || approvedLines[i] != receivedLines[i]) {
           buffer.writeln(
             '${ApprovalUtils.lines(20)} Difference at line ${i + 1} ${ApprovalUtils.lines(20)}',
           );
