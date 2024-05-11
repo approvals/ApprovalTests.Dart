@@ -1,4 +1,4 @@
-## 0.4.1
+## 0.4.2
 
 - Autopublish to pub.dev if the version in pubspec.yaml has been changed by auto adding a new tag to the repositories.
 - Codecov added to github actions. Codecov badge, graph was added to README.md.

@@ -199,7 +199,8 @@ void main() {
       );
     });
 
-    test("Method «verify» must throw DoesntMatchException with error handling", () {
+    test("Method «verify» must throw DoesntMatchException with error handling",
+        () {
       expect(
         () => helper.verify(
           'Hello W0rld',

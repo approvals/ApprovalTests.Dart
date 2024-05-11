@@ -1,4 +1,5 @@
 #!/bin/bash -e
+# chmod +x push_release.sh
 
 PACKAGE_NAME="approval_tests"
 VERSION=""

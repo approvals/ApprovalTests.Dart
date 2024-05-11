@@ -22,7 +22,9 @@ class CommandLineComparator extends ComparatorImp {
 
       final int maxLines = max(approvedLines.length, receivedLines.length);
       for (int i = 0; i < maxLines; i++) {
-        if (i >= approvedLines.length || i >= receivedLines.length || approvedLines[i] != receivedLines[i]) {
+        if (i >= approvedLines.length ||
+            i >= receivedLines.length ||
+            approvedLines[i] != receivedLines[i]) {
           buffer.writeln(
             '${ApprovalUtils.lines(20)} Difference at line ${i + 1} ${ApprovalUtils.lines(20)}',
           );
