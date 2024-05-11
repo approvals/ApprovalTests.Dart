@@ -1,0 +1,76 @@
+{
+   "version": "2.0.0",
+   "tasks": [
+     {
+       "label": "Get dependencies",
+       "type": "shell",
+       "command": ["dart pub get"],
+       "group": {
+         "kind": "none",
+         "isDefault": true
+       },
+       "problemMatcher": []
+     },
+     {
+       "label": "Give permissions for bash commands",
+       "type": "shell",
+       "command": [
+         "chmod +x bash/build_and_test.sh && chmod +x bash/gen_coverage_report.sh && chmod +x bash/push_release.sh"
+       ],
+       "group": {
+         "kind": "none",
+         "isDefault": true
+       },
+       "problemMatcher": []
+     },
+     {
+       "label": "Run build and tests",
+       "type": "shell",
+       "command": [
+         "./bash/build_and_test.sh"
+       ],
+       "group": {
+         "kind": "none",
+         "isDefault": true
+       },
+       "problemMatcher": []
+     },
+     {
+      "label": "Generate coverage report",
+      "type": "shell",
+      "command": [
+        "./bash/gen_coverage_report.sh"
+      ],
+      "group": {
+        "kind": "none",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+     {
+       "label": "Format",
+       "type": "shell",
+       "command": [
+         "dart format ."
+       ],
+       "group": {
+         "kind": "none",
+         "isDefault": true
+       },
+       "problemMatcher": []
+     },
+     {
+      "label": "Run tests",
+      "type": "shell",
+      "command": [
+        "dart pub global activate coverage && dart run test --coverage=./coverage && dart pub global run coverage:format_coverage --packages=.dart_tool/package_config.json --report-on=lib --lcov -o ./coverage/lcov.info -i ./coverage && dart pub global deactivate coverage",
+      ],
+      "group": {
+        "kind": "none",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+   ]
+ }
+ 
