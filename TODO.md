@@ -6,13 +6,9 @@ This is the markdown todo file for Approval Tests.
 
 Tasks for the project are listed below:
 
-* [ ] Markdown snippets
-* [ ] Startup project
-* [ ] Add codecov and coverage badge
-* [ ] Cover the project completely with tests
+* [ ] Cover the project completely with tests (Now its 88%)
 * [ ] Refactor the code based on ApprovalTests architectural rules
 * [ ] Add more detailed documentation to the project
-* [ ] Add Codecov to the project
 * [ ] Set up autopublishing github action with PAT token and new tags
 * [ ] Revise the implementation with getting the default file path. Now it works with primary delay. Read more: https://github.com/approvals/ApprovalTests.Dart/issues/3
 
@@ -26,3 +22,7 @@ Tasks for the project are listed below:
 * [x] Check the causes of incorrect file paths in Windows
 * [x] Deploy script to automate the deployment process to pub.dev
 * [x] Add contributing guide
+* [x] Markdown snippets
+* [x] Startup project
+* [x] Add Codecov to the project
+* [x] Add codecov and coverage badge

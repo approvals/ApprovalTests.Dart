@@ -9,6 +9,7 @@
 <h2 align="center"> Approval Tests implementation in Dart 🚀 </h2>
 <br>
 <p align="center">
+  <a href="https://app.codecov.io/gh/approvals/ApprovalTests.Dart"><img src="https://codecov.io/gh/approvals/ApprovalTests.Dart/branch/main/graph/badge.svg" alt="codecov"></a>
   <a href="https://pub.dev/packages/approval_tests"><img src="https://img.shields.io/pub/v/approval_tests.svg" alt="Pub"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
   <a href="https://github.com/approvals/ApprovalTests.Dart"><img src="https://hits.dwyl.com/K1yoshiSho/approval_tests.svg?style=flat" alt="Repository views"></a>
@@ -245,6 +246,10 @@ Prefer learning by listening? Then you might enjoy the following podcasts:
 - [Hanselminutes](https://www.hanselminutes.com/360/approval-tests-with-llewellyn-falco)
 - [Herding Code](https://www.developerfusion.com/media/122649/herding-code-117-llewellyn-falcon-on-approval-tests/)
 - [The Watir Podcast](https://watirpodcast.com/podcast-53/)
+
+## Coverage
+
+[![](https://codecov.io/gh/approvals/ApprovalTests.Dart/branch/main/graphs/sunburst.svg)](https://codecov.io/gh/approvals/ApprovalTests.Dart/branch/main)
 
 ## 🤝 Contributing
 Show some 💙 and <a href="https://github.com/approvals/ApprovalTests.Dart.git">star the repo</a> to support the project! 🙌   
