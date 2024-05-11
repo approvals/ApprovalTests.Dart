@@ -21,3 +21,5 @@ part 'src/core/utils/extensions.dart';
 part 'src/core/utils/converter.dart';
 part 'src/core/utils/executable_query.dart';
 part 'src/namer/approval_number.dart';
+part 'src/reporter/command_line_comparator_exception.dart';
+part 'src/reporter/ide_comparator_exception.dart';

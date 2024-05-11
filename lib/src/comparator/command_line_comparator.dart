@@ -3,7 +3,7 @@ part of '../../approval_tests.dart';
 /// `CommandLineComparator` it is for comparing files via Command Line.
 ///
 /// This method compares the content of two files line by line and prints the differences in the console.
-class CommandLineComparator extends ComparatorImp {
+class CommandLineComparator extends Comparator {
   const CommandLineComparator();
 
   @override
@@ -39,16 +39,14 @@ class CommandLineComparator extends ComparatorImp {
 
       if (buffer.isNotEmpty && isLogError) {
         final String message = buffer.toString();
-        logError(exception: message.trim());
+        ApprovalLogger.exception(message);
       }
     } catch (e, st) {
-      if (isLogError) {
-        logError(
-          exception: 'Error during comparison via Command Line. Error: $e',
-          stackTrace: st,
-        );
-      }
-      rethrow;
+      throw CommandLineComparatorException(
+        message: 'Error during comparison via Command Line.',
+        exception: e,
+        stackTrace: st,
+      );
     }
   }
 }

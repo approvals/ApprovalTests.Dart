@@ -11,16 +11,3 @@ abstract interface class Comparator {
     bool isLogError = true,
   });
 }
-
-/// `ComparatorImp` is an abstract class for implementing the `Comparator` interface.
-abstract class ComparatorImp implements Comparator {
-  const ComparatorImp();
-
-  /// A method named `logError` for logging errors.
-  void logError({
-    required Object exception,
-    StackTrace? stackTrace,
-  }) {
-    ApprovalLogger.exception(exception, stackTrace: stackTrace);
-  }
-}

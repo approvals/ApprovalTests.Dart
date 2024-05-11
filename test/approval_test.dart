@@ -199,8 +199,7 @@ void main() {
       );
     });
 
-    test("Method «verify» must throw DoesntMatchException with error handling",
-        () {
+    test("Method «verify» must throw DoesntMatchException with error handling", () {
       expect(
         () => helper.verify(
           'Hello W0rld',
@@ -235,7 +234,7 @@ void main() {
       );
     });
 
-    test('Simulate file not found error during comparison', () async {
+    test('Simulate file not found error during comparison. Must throw CommandLineComparatorException.', () async {
       const comparator = CommandLineComparator();
 
       // Setup: paths to non-existent files
@@ -248,7 +247,32 @@ void main() {
           approvedPath: nonExistentApprovedPath,
           receivedPath: nonExistentReceivedPath,
         ),
-        throwsA(isA<FileSystemException>()),
+        throwsA(isA<CommandLineComparatorException>()),
+      );
+
+      ApprovalLogger.success(
+        "Test Passed: Successfully handled a file not found error during comparison.",
+      );
+    });
+
+    test('Simulate file not found error during comparison. Must throw IDEComparatorException.', () async {
+      const comparator = IDEComparator(ide: ComparatorIDE.visualStudioCode);
+
+      // Setup: paths to non-existent files
+      const nonExistentApprovedPath = 'path/to/nonexistent/approved.txt';
+      const nonExistentReceivedPath = 'path/to/nonexistent/received.txt';
+
+      // Expect an exception to be thrown
+      expect(
+        () => comparator.compare(
+          approvedPath: nonExistentApprovedPath,
+          receivedPath: nonExistentReceivedPath,
+        ),
+        throwsA(isA<IDEComparatorException>()),
+      );
+
+      ApprovalLogger.success(
+        "Test Passed: Successfully handled a file not found error during comparison.",
       );
     });
   });
