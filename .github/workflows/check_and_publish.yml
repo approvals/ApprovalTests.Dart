@@ -13,8 +13,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.PUB_SPEC_ID }}
-      - name: Check release tag
+          token: "${secrets.PUB_SPEC_ID}"
+      - name: Auto-Deploy to pub.dev
         run: |
           ./bash/push_release.sh
         shell: bash
