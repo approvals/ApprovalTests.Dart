@@ -1,7 +1,7 @@
 <div align="center">
 <p align="center">
     <a href="https://github.com/approvals/ApprovalTests.Dart" align="center">
-        <img src="https://github.com/K1yoshiSho/packages_assets/blob/main/assets/approval_tests/approval_tests.png?raw=true" width="400px">
+        <img src="https://github.com/yelmuratoff/packages_assets/blob/main/assets/approval_tests/approval_tests.png?raw=true" width="400px">
     </a>
 </p>
 </div>
@@ -12,8 +12,8 @@
   <a href="https://app.codecov.io/gh/approvals/ApprovalTests.Dart"><img src="https://codecov.io/gh/approvals/ApprovalTests.Dart/branch/main/graph/badge.svg" alt="codecov"></a>
   <a href="https://pub.dev/packages/approval_tests"><img src="https://img.shields.io/pub/v/approval_tests.svg" alt="Pub"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
-  <a href="https://github.com/approvals/ApprovalTests.Dart"><img src="https://hits.dwyl.com/K1yoshiSho/approval_tests.svg?style=flat" alt="Repository views"></a>
-  <a href="https://github.com/approvals/ApprovalTests.Dart"><img src="https://img.shields.io/github/stars/K1yoshiSho/approval_tests?style=social" alt="Pub"></a>
+  <a href="https://github.com/approvals/ApprovalTests.Dart"><img src="https://hits.dwyl.com/approvals/ApprovalTests.Dart.svg?style=flat" alt="Repository views"></a>
+  <a href="https://github.com/approvals/ApprovalTests.Dart"><img src="https://img.shields.io/github/stars/approvals/ApprovalTests.Dart?style=social" alt="Stars"></a>
 </p>
 <p align="center">
   <a href="https://pub.dev/packages/approval_tests/score"><img src="https://img.shields.io/pub/likes/approval_tests?logo=flutter" alt="Pub likes"></a>
@@ -124,7 +124,7 @@ You can just rename the `.received` file to `.approved`.
 
 You can use different comparators to compare files. The default is `CommandLineComparator` which compares files in the console.
 
-<img src="https://github.com/K1yoshiSho/packages_assets/blob/main/assets/approval_tests/diff_command_line.png?raw=true" alt="CommandLineComparator img" title="ApprovalTests" style="max-width: 500px;">
+<img src="https://github.com/yelmuratoff/packages_assets/blob/main/assets/approval_tests/diff_command_line.png?raw=true" alt="CommandLineComparator img" title="ApprovalTests" style="max-width: 500px;">
 
 
 To use `IDEComparator` you just need to add it to `options`:
@@ -154,8 +154,8 @@ But before you add an `IDEComparator` you need to do the initial customization:
    - To enable the `studio` command, you need to create the command-line launcher using `Tools - Create Command-line Launcher` in Android Studio.
 
 <div style="display: flex; justify-content: center; align-items: center;">
-  <img src="https://github.com/K1yoshiSho/packages_assets/blob/main/assets/approval_tests/diff_tool_vs_code.png?raw=true" alt="Visual Studio code img" style="width: 45%;margin-right: 1%;" />
-  <img src="https://github.com/K1yoshiSho/packages_assets/blob/main/assets/approval_tests/diff_tool_studio.png?raw=true" alt="Android Studio img" style="width: 45%;" />
+  <img src="https://github.com/yelmuratoff/packages_assets/blob/main/assets/approval_tests/diff_tool_vs_code.png?raw=true" alt="Visual Studio code img" style="width: 45%;margin-right: 1%;" />
+  <img src="https://github.com/yelmuratoff/packages_assets/blob/main/assets/approval_tests/diff_tool_studio.png?raw=true" alt="Android Studio img" style="width: 45%;" />
 </div>
 
 
@@ -238,7 +238,7 @@ this will result in the following file
 <sup><a href='/example/verify_methods/verify_as_json/verify_as_json_test.approved.txt#L1-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-verify_as_json_test.approved.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-<img src="https://github.com/K1yoshiSho/packages_assets/blob/main/assets/approval_tests/passed.png?raw=true" alt="Passed test example" title="ApprovalTests" style="max-width: 800px;">
+<img src="https://github.com/yelmuratoff/packages_assets/blob/main/assets/approval_tests/passed.png?raw=true" alt="Passed test example" title="ApprovalTests" style="max-width: 800px;">
 
 
 ## ❓ Which File Artifacts to Exclude from Source Control
@@ -282,7 +282,7 @@ We appreciate your support. 🫰
 <div align="center" >
   <p>Thanks to all contributors of this package</p>
   <a href="https://github.com/approvals/ApprovalTests.Dart/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=K1yoshiSho/approval_tests" />
+    <img src="https://contrib.rocks/image?repo=approvals/ApprovalTests.Dart" />
   </a>
 </div>
 <br>
