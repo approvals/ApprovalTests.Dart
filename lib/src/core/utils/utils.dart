@@ -7,7 +7,8 @@ final class ApprovalUtils {
     final int green = int.parse(hex.substring(2, 4), radix: 16);
     final int blue = int.parse(hex.substring(4, 6), radix: 16);
 
-    final AnsiPen pen = AnsiPen()..rgb(r: red / 255, g: green / 255, b: blue / 255);
+    final AnsiPen pen = AnsiPen()
+      ..rgb(r: red / 255, g: green / 255, b: blue / 255);
     return pen;
   }
 
@@ -43,8 +44,12 @@ final class ApprovalUtils {
   static bool filesMatch(String approvedPath, String receivedPath) {
     try {
       // Read contents of the approved and received files
-      final approved = ApprovalUtils.readFile(path: approvedPath).replaceAll('\r\n', '\n').trim();
-      final received = ApprovalUtils.readFile(path: receivedPath).replaceAll('\r\n', '\n').trim();
+      final approved = ApprovalUtils.readFile(path: approvedPath)
+          .replaceAll('\r\n', '\n')
+          .trim();
+      final received = ApprovalUtils.readFile(path: receivedPath)
+          .replaceAll('\r\n', '\n')
+          .trim();
 
       // Return true if contents of both files match exactly
       return approved.compareTo(received) == 0;

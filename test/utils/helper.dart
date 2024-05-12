@@ -4,7 +4,7 @@ part of '../approval_test.dart';
 class ApprovalTestHelper {
   const ApprovalTestHelper();
 
-  static const String basePath = 'test/approved_files/';
+  static const String basePath = 'test/approved_files';
 
   static const jsonItem = JsonItem(
     id: 1,
