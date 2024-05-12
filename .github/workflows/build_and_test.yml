@@ -4,7 +4,6 @@ on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: true
@@ -13,24 +12,29 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Dart SDK
         uses: dart-lang/setup-dart@v1.4
         with:
           sdk: stable
+
       - name: Setup Visual Studio Code
         run: |
-            if [[ "${{ runner.os }}" == "Linux" ]]; then
-              sudo snap install code --classic
-            elif [[ "${{ runner.os }}" == "macOS" ]]; then
-              brew install --cask visual-studio-code
-            elif [[ "${{ runner.os }}" == "Windows" ]]; then
-              choco install vscode
-            fi
+          if [[ "${{ runner.os }}" == "Linux" ]]; then
+            sudo snap install code --classic
+          elif [[ "${{ runner.os }}" == "macOS" ]]; then
+            brew install --cask visual-studio-code
+          elif [[ "${{ runner.os }}" == "Windows" ]]; then
+            choco install vscode
+          fi
+        shell: bash # Ensure bash is used for this step on all OS
+
       - name: Build and test
         run: |
           ./bash/build_and_test.sh
-        shell: bash
+        shell: bash # Ensure bash is used for this step on all OS
+
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}  
+          token: ${{ secrets.CODECOV_TOKEN }}
