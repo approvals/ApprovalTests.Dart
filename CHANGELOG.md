@@ -1,3 +1,7 @@
+## 0.4.4
+
+- Added setup visual studio code action to the `build_and_test` workflow for test `IDEComparator`.
+
 ## 0.4.3
 
 - Completed coverage of the project with tests. Now the project has 100% coverage.

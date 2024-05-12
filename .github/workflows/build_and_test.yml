@@ -27,12 +27,12 @@ jobs:
           elif [[ "${{ runner.os }}" == "Windows" ]]; then
             choco install vscode
           fi
-        shell: bash # Ensure bash is used for this step on all OS
+        shell: bash
 
       - name: Build and test
         run: |
           ./bash/build_and_test.sh
-        shell: bash # Ensure bash is used for this step on all OS
+        shell: bash
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
