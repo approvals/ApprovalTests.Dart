@@ -2,15 +2,12 @@ part of '../../../approval_tests.dart';
 
 // Define utility class for approval related operations. It contains methods for converting string cases and retrieving directory or file path.
 final class ApprovalUtils {
-  const ApprovalUtils._();
-
   static AnsiPen hexToAnsiPen(String hex) {
     final int red = int.parse(hex.substring(0, 2), radix: 16);
     final int green = int.parse(hex.substring(2, 4), radix: 16);
     final int blue = int.parse(hex.substring(4, 6), radix: 16);
 
-    final AnsiPen pen = AnsiPen()
-      ..rgb(r: red / 255, g: green / 255, b: blue / 255);
+    final AnsiPen pen = AnsiPen()..rgb(r: red / 255, g: green / 255, b: blue / 255);
     return pen;
   }
 
@@ -26,17 +23,6 @@ final class ApprovalUtils {
       rethrow;
     }
   }
-
-  // Property that gets the directory path of the current file.
-  static String get directoryPath =>
-      '${filePath.split('/').sublist(0, filePath.split('/').length - 1).join('/')}/'; // Get parts of the path except the last one (filename), join them with '/' and append '/' at the end.
-
-  // Property that gets the file name from file path.
-  static String get fileName => filePath
-      .split('/')
-      .last
-      .split('.dart')
-      .first; // Split the path by '/', get the last part (filename with extension), split it by '.', and get the first part (filename without extension).
 
   // Property that gets the file path of the current file.
   static String get filePath =>
@@ -57,12 +43,8 @@ final class ApprovalUtils {
   static bool filesMatch(String approvedPath, String receivedPath) {
     try {
       // Read contents of the approved and received files
-      final approved = ApprovalUtils.readFile(path: approvedPath)
-          .replaceAll('\r\n', '\n')
-          .trim();
-      final received = ApprovalUtils.readFile(path: receivedPath)
-          .replaceAll('\r\n', '\n')
-          .trim();
+      final approved = ApprovalUtils.readFile(path: approvedPath).replaceAll('\r\n', '\n').trim();
+      final received = ApprovalUtils.readFile(path: receivedPath).replaceAll('\r\n', '\n').trim();
 
       // Return true if contents of both files match exactly
       return approved.compareTo(received) == 0;

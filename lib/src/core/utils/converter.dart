@@ -1,7 +1,6 @@
 part of '../../../approval_tests.dart';
 
 class ApprovalConverter {
-  const ApprovalConverter._();
   static String convert(String jsonString) {
     // Decode the JSON string to a dynamic object
     final decodedJson = jsonDecode(jsonString);
@@ -55,14 +54,11 @@ class ApprovalConverter {
     }
 
     // Format the map into JSON
-    final String jsonBody = jsonMap.entries
-        .map((entry) => '"${entry.key}": ${entry.value}')
-        .join(', ');
+    final String jsonBody = jsonMap.entries.map((entry) => '"${entry.key}": ${entry.value}').join(', ');
 
     if (includeClassName) {
       final String className = MirrorSystem.getName(classMirror.simpleName);
-      final String capitalizedClassName =
-          '${className[0].toLowerCase()}${className.substring(1)}';
+      final String capitalizedClassName = '${className[0].toLowerCase()}${className.substring(1)}';
       return '{"$capitalizedClassName": {$jsonBody}}';
     }
 

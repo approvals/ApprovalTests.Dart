@@ -1,3 +1,7 @@
+## 0.4.3
+
+- Completed coverage of the project with tests. Now the project has 100% coverage.
+
 ## 0.4.2
 
 - Autopublish to `pub.dev` if the version in `pubspec.yaml` has been changed by auto adding a new tag to the repositories.

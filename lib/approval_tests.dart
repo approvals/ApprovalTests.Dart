@@ -17,7 +17,6 @@ part 'src/core/enums/comporator_ide.dart';
 part 'src/comparator/command_line_comparator.dart';
 part 'src/comparator/ide_comparator.dart';
 part 'src/reporter/doesnt_match_exception.dart';
-part 'src/core/utils/extensions.dart';
 part 'src/core/utils/converter.dart';
 part 'src/core/utils/executable_query.dart';
 part 'src/namer/approval_number.dart';
