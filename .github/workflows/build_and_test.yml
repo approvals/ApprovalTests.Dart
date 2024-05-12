@@ -20,8 +20,7 @@ jobs:
       - name: Setup Visual Studio Code
         run: |
             if [[ "${{ runner.os }}" == "Linux" ]]; then
-              sudo apt-get update
-              sudo apt install -y code
+              snap install code
             elif [[ "${{ runner.os }}" == "macOS" ]]; then
               brew install --cask visual-studio-code
             elif [[ "${{ runner.os }}" == "Windows" ]]; then
