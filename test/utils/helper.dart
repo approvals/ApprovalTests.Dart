@@ -53,7 +53,8 @@ class ApprovalTestHelper {
   }) {
     Approvals.verifyAll(
       contents,
-      processor: (item) => item, // Simple processor function that returns the item itself.
+      processor: (item) =>
+          item, // Simple processor function that returns the item itself.
       options: _getOptions(
         testName,
         expectException: expectException,

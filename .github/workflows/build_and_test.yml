@@ -17,6 +17,16 @@ jobs:
         uses: dart-lang/setup-dart@v1.4
         with:
           sdk: stable
+      - name: Setup Visual Studio Code
+        run: |
+            if [[ "${{ runner.os }}" == "Linux" ]]; then
+              sudo apt-get update
+              sudo apt install -y code
+            elif [[ "${{ runner.os }}" == "macOS" ]]; then
+              brew install --cask visual-studio-code
+            elif [[ "${{ runner.os }}" == "Windows" ]]; then
+              choco install vscode
+            fi
       - name: Build and test
         run: |
           ./bash/build_and_test.sh
