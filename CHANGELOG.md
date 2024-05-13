@@ -1,3 +1,9 @@
+## 0.4.5
+
+- Updated dependencies and actions versions.
+- Updated Logger's output: now it is more informative.
+- Updated `CONTRIBUTING.md` file: added Arlo's Commit Notation.
+
 ## 0.4.4
 
 - Added setup visual studio code action to the `build_and_test` workflow for test `IDEComparator`.
