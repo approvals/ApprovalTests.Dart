@@ -42,12 +42,12 @@ class Approvals {
           isLogError: options.logErrors,
         );
         throw DoesntMatchException(
-          'Test failed: ${namer.approved} does not match ${namer.received}',
+          'Test failed: ${namer.approved} does not match ${namer.received}.\n - Approved file path: ${namer.approved}\n - Received file path: ${namer.received}',
         );
       } else if (isFilesMatch) {
         if (options.logResults) {
           ApprovalLogger.success(
-            'Test passed: [${namer.approvedFileName}] matches [${namer.receivedFileName}]\n\nApproved file path: ${namer.approved}\n\nReceived file path: ${namer.received}',
+            'Test passed: [${namer.approvedFileName}] matches [${namer.receivedFileName}]\n- Approved file path: ${namer.approved}\n- Received file path: ${namer.received}',
           );
         }
       }

@@ -33,12 +33,12 @@ final class ApprovalLogger {
   // Define default titles for different log types.
   static const _defaultTitles = {
     TalkerLogType.critical: '💀 $_approvalTitle',
-    TalkerLogType.warning: '⚠️ $_approvalTitle',
+    TalkerLogType.warning: '🟡 $_approvalTitle',
     TalkerLogType.verbose: '🐛 $_approvalTitle',
     TalkerLogType.info: '🔍 $_approvalTitle',
     TalkerLogType.debug: '🐛 $_approvalTitle',
-    TalkerLogType.error: '❌ $_approvalTitle',
-    TalkerLogType.exception: '❌ $_approvalTitle',
+    TalkerLogType.error: '🔴 $_approvalTitle',
+    TalkerLogType.exception: '🔴 $_approvalTitle',
   };
 
   /// `log` method to log messages with debug log level.
@@ -56,7 +56,7 @@ final class ApprovalLogger {
     final message = exception.toString();
     _instance._logger.error(
       message,
-      exception,
+      null,
       stackTrace,
     );
   }
