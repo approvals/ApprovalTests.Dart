@@ -1,4 +1,4 @@
-name: Publish to pub.dev
+name: Deploy and Create Release
 
 on:
   push:
@@ -12,3 +12,18 @@ jobs:
     uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
     # with:
     #   working-directory: path/to/package/within/repository
+  create_release:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+  
+        - name: Get the latest tag
+          id: tag
+          run: echo ::set-output name=tag::${GITHUB_REF##*/}
+  
+        - name: Create GitHub release
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            gh release create ${{ steps.tag.outputs.tag }} --notes "Release ${{ steps.tag.outputs.tag }}"
