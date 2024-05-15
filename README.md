@@ -87,6 +87,7 @@ void main() {
       'features': ['Testing', 'JSON'],
       'version': 0.1,
     };
+
     Approvals.verifyAsJson(
       complexObject,
       options: const Options(
@@ -96,7 +97,7 @@ void main() {
   });
 }
 ```
-<sup><a href='/test/example/example_test.dart#L4-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-sample_verify_as_json_test' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/test/example/example_test.dart#L4-L21' title='Snippet source file'>snippet source</a> | <a href='#snippet-sample_verify_as_json_test' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 this will result in the following file
