@@ -7,8 +7,7 @@ final class ApprovalUtils {
     final int green = int.parse(hex.substring(2, 4), radix: 16);
     final int blue = int.parse(hex.substring(4, 6), radix: 16);
 
-    final AnsiPen pen = AnsiPen()
-      ..rgb(r: red / 255, g: green / 255, b: blue / 255);
+    final AnsiPen pen = AnsiPen()..rgb(r: red / 255, g: green / 255, b: blue / 255);
     return pen;
   }
 
@@ -26,10 +25,20 @@ final class ApprovalUtils {
   }
 
   // Property that gets the file path of the current file.
-  static String get filePath =>
-      // final Uri uri = Platform.script; // Get the URL (Uniform Resource Identifier) of the script being run.
-      // return Uri.decodeFull(uri.path); // Convert the URL-encoded path to a regular string.
-      DartScript.self.pathToScript;
+  static String get filePath {
+    final stackTraceString = StackTrace.current.toString();
+    final uriRegExp = RegExp(r'file:\/\/\/([^:]*):');
+
+    final match = uriRegExp.firstMatch(stackTraceString);
+
+    if (match != null) {
+      final filePath = Uri.tryParse(match.group(0)!);
+      ApprovalLogger.log('Running test: $filePath');
+      return filePath!.toFilePath();
+    } else {
+      throw Exception('Could not find file path');
+    }
+  }
 
   static String readFile({
     required String path,
@@ -44,12 +53,8 @@ final class ApprovalUtils {
   static bool filesMatch(String approvedPath, String receivedPath) {
     try {
       // Read contents of the approved and received files
-      final approved = ApprovalUtils.readFile(path: approvedPath)
-          .replaceAll('\r\n', '\n')
-          .trim();
-      final received = ApprovalUtils.readFile(path: receivedPath)
-          .replaceAll('\r\n', '\n')
-          .trim();
+      final approved = ApprovalUtils.readFile(path: approvedPath).replaceAll('\r\n', '\n').trim();
+      final received = ApprovalUtils.readFile(path: receivedPath).replaceAll('\r\n', '\n').trim();
 
       // Return true if contents of both files match exactly
       return approved.compareTo(received) == 0;
