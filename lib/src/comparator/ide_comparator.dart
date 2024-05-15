@@ -49,7 +49,7 @@ final class IDEComparator extends Comparator {
     throw IDEComparatorException(
       message: message,
       exception: null,
-      stackTrace: null,
+      stackTrace: StackTrace.current,
     );
   }
 }

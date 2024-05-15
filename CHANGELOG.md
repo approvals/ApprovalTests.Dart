@@ -1,3 +1,9 @@
+## 0.4.6
+
+- Updated dependencies. Removed `dcli` package.
+- Issue https://github.com/approvals/ApprovalTests.Dart/issues/3 was fixed.
+- Minor changes: `IDEComparator` now gets the current `StackTrace` if an error occurs.
+
 ## 0.4.5
 
 - Updated dependencies and actions versions.

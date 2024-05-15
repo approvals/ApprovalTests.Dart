@@ -9,6 +9,7 @@ void main() {
       'features': ['Testing', 'JSON'],
       'version': 0.1,
     };
+
     Approvals.verifyAsJson(
       complexObject,
       options: const Options(
