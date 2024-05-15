@@ -59,7 +59,7 @@ It comes ready with:
 - A suitable `.gitignore` to exclude approval artifacts
 - A ready linter with all rules in place
 - A GitHub action to run tests and you can always check the status of the tests on the badge in the `README.md` file.
-s
+
 ## 📚 How to use
 
 ### Approving Results
