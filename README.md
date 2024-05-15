@@ -58,9 +58,7 @@ It comes ready with:
 
 - A suitable `.gitignore` to exclude approval artifacts
 - A ready linter with all rules in place
-- A GitHub action to build and run tests
-- A GitHub build status ToBadge
-
+- A GitHub action to run tests and you can always check the status of the tests on the badge below
 
 ## 📚 How to use
 
