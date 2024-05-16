@@ -9,12 +9,15 @@ class ApprovalNamer {
   // A getter named `approved` that returns the string `'file.approved.txt'`.
   String get approved => '$file.approved.txt';
 
-  String get approvedFileName =>
-      '${file.split('/').last.split('.dart').first}.approved.txt';
+  String get approvedFileName => '${file.split('/').last.split('.dart').first}.approved.txt';
 
   // A getter named `received` that returns the string `'file.received.txt'`.
   String get received => '$file.received.txt';
 
-  String get receivedFileName =>
-      '${file.split('/').last.split('.dart').first}.received.txt';
+  String get receivedFileName => '${file.split('/').last.split('.dart').first}.received.txt';
+
+  String get currentTestName {
+    final testName = Invoker.current?.liveTest.individualName;
+    return testName == null ? '' : testName.replaceAll(' ', '_');
+  }
 }

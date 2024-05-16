@@ -4,6 +4,8 @@ import 'dart:math';
 import 'dart:mirrors';
 
 import 'package:talker/talker.dart';
+// ignore: depend_on_referenced_packages, implementation_imports
+import 'package:test_api/src/backend/invoker.dart' show Invoker;
 
 part 'src/approvals.dart';
 part 'src/writers/approval_text_writer.dart';
