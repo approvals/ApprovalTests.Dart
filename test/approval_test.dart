@@ -256,7 +256,7 @@ void main() {
     });
 
     test('Simulate file not found error during comparison. Must throw IDEComparatorException.', () async {
-      const comparator = IDEComparator(ide: ComparatorIDE.visualStudioCode);
+      const comparator = IDEComparator();
 
       // Setup: paths to non-existent files
       const nonExistentApprovedPath = 'path/to/nonexistent/approved.txt';
@@ -276,13 +276,13 @@ void main() {
       );
     });
 
-    test('Verify string with IDEComparator. Must throw DoesntMatchException.', () {
+    test('verify string with IDEComparator', () {
       expect(
         () => helper.verify(
           'Hello W0rld',
           'verify',
           deleteReceivedFile: false,
-          comparator: const IDEComparator(ide: ComparatorIDE.androidStudio),
+          comparator: const IDEComparator(),
         ),
         throwsA(isA<DoesntMatchException>()),
       );
