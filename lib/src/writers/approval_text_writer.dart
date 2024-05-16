@@ -4,10 +4,9 @@ part of '../../approval_tests.dart';
 class ApprovalTextWriter {
   // The two instance variables content and fileExtension of type String
   final String content;
-  final String fileExtension;
 
   // Constructor for the class ApprovalTextWriter that takes in two parameters: content and fileExtension
-  const ApprovalTextWriter(this.content, this.fileExtension);
+  const ApprovalTextWriter(this.content);
 
   // A method that writes the given content to the file at the specified path
   void writeToFile(String path) {

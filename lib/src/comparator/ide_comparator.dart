@@ -35,8 +35,7 @@ final class IDEComparator extends Comparator {
       );
     } catch (e, st) {
       throw IDEComparatorException(
-        message:
-            'Error during comparison via ${ide.name}. Please try restart your IDE.',
+        message: 'Error during comparison via ${ide.name}. Please try restart your IDE.',
         exception: e,
         stackTrace: st,
       );

@@ -28,7 +28,7 @@ class ApprovalTestHelper {
     bool deleteReceivedFile = true,
     bool useDefaultPath = true,
     Comparator comparator = const CommandLineComparator(),
-    bool isScrub = false,
+    ApprovalScrubber scrubber = const ScrubNothing(),
   }) {
     Approvals.verify(
       content,
@@ -39,7 +39,7 @@ class ApprovalTestHelper {
         deleteReceivedFile: deleteReceivedFile,
         useDefaultPath: useDefaultPath,
         comparator: comparator,
-        isScrub: isScrub,
+        scrubber: scrubber,
       ),
     );
   }
@@ -53,8 +53,7 @@ class ApprovalTestHelper {
   }) {
     Approvals.verifyAll(
       contents,
-      processor: (item) =>
-          item, // Simple processor function that returns the item itself.
+      processor: (item) => item, // Simple processor function that returns the item itself.
       options: _getOptions(
         testName,
         expectException: expectException,
@@ -143,7 +142,7 @@ class ApprovalTestHelper {
     required bool approveResult,
     required bool deleteReceivedFile,
     bool useDefaultPath = true,
-    bool isScrub = false,
+    ApprovalScrubber scrubber = const ScrubNothing(),
     Comparator comparator = const CommandLineComparator(),
   }) =>
       Options(
@@ -152,6 +151,6 @@ class ApprovalTestHelper {
         approveResult: approveResult,
         logErrors: !expectException,
         comparator: comparator,
-        isScrub: isScrub,
+        scrubber: scrubber,
       );
 }
