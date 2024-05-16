@@ -19,7 +19,7 @@ class ScrubWithRegEx implements ApprovalScrubber {
   String scrub(String input) => input
       .replacingOccurrences(
         matchingPattern: pattern,
-        replacementProvider: replacementFunction ?? (match) => '',
+        replacementProvider: replacementFunction ?? (match) => ' ',
       )
       .trim();
 

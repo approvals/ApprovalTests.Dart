@@ -146,7 +146,15 @@ class ApprovalTestHelper {
     Comparator comparator = const CommandLineComparator(),
   }) =>
       Options(
-        filesPath: useDefaultPath ? '$basePath/$testName' : null,
+        namer: useDefaultPath
+            ? Namer(
+                options: FileNamerOptions(
+                  folderPath: basePath,
+                  testName: testName,
+                  fileName: 'approval_test',
+                ),
+              )
+            : null,
         deleteReceivedFile: deleteReceivedFile,
         approveResult: approveResult,
         logErrors: !expectException,

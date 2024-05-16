@@ -11,9 +11,6 @@ class Options {
   /// A final bool variable `approveResult` used to determine if the result should be approved after the test.
   final bool approveResult;
 
-  /// Path to the files: `approved` and `received`.
-  final String? filesPath;
-
   /// A final bool variable `deleteReceivedFile` used to determine if the received file should be deleted after passed test.
   final bool deleteReceivedFile;
 
@@ -31,7 +28,6 @@ class Options {
     this.scrubber = const ScrubNothing(),
     this.approveResult = false,
     this.comparator = const CommandLineComparator(),
-    this.filesPath,
     this.deleteReceivedFile = false,
     this.namer,
     this.logErrors = true,

@@ -25,6 +25,7 @@ part 'src/core/extensions/approval_string_extensions.dart';
 
 part 'src/namer/namer.dart';
 part 'src/core/approval_number.dart';
+part 'src/namer/file_namer_options.dart';
 
 part 'src/comparator/comparator.dart';
 part 'src/comparator/command_line_comparator.dart';
