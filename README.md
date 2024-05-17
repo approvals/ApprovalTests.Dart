@@ -187,14 +187,16 @@ void main() {
     Approvals.verifyAsJson(
       jsonItem,
       options: const Options(
-        deleteReceivedFile: true, // Automatically delete the received file after the test.
-        approveResult: true, // Approve the result automatically. You can remove this property after the approved file is created.
+        deleteReceivedFile:
+            true, // Automatically delete the received file after the test.
+        approveResult:
+            true, // Approve the result automatically. You can remove this property after the approved file is created.
       ),
     );
   });
 }
 ```
-<sup><a href='/example/verify_methods/verify_as_json/verify_as_json_test.dart#L6-L32' title='Snippet source file'>snippet source</a> | <a href='#snippet-same_verify_as_json_test_with_model' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/example/verify_methods/verify_as_json/verify_as_json_test.dart#L6-L34' title='Snippet source file'>snippet source</a> | <a href='#snippet-same_verify_as_json_test_with_model' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 this will result in the following file
