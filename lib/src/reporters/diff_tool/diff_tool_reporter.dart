@@ -31,10 +31,10 @@ class DiffReporter implements Reporter {
       if (e is ProcessException) {
         ApprovalLogger.exception(e, stackTrace: st);
         final ProcessResult result = await Process.run('which', ['code']);
-        ApprovalLogger.log('Path to Visual Studio Code: ${result.stdout}');
         throw ProcessException(
-          'Error during comparison via ${ide.name}. Please try check path to IDE. \n Current path: ${diffInfo.command}.',
+          "ProcessException",
           [diffInfo.arg],
+          'Error during comparison via ${ide.name}. Please try check path to IDE. \n Current path: ${diffInfo.command}. \n Path to IDE: ${result.stdout}. \n Please, add path to customDiffInfo.',
         );
       }
       throw IDEComparatorException(
