@@ -1,36 +1,19 @@
-part of '../../approval_tests.dart';
+part of '../../../approval_tests.dart';
 
-/// `IDEComparator` is a class for comparing files using an `IDE`.
-///
-/// Available IDEs:
-/// - `Visual Studio Code`
-/// - `Android Studio`
-final class IDEComparator extends Comparator {
+/// `DiffReporter` is a class for reporting the comparison results using a `Diff Tool`.
+class DiffReporter implements Reporter {
   final ComparatorIDE ide;
   final DiffInfo? customDiffInfo;
 
-  const IDEComparator({
+  const DiffReporter({
     this.ide = ComparatorIDE.vsCode,
     this.customDiffInfo,
   });
 
   @override
-  Future<void> compare({
-    required String approvedPath,
-    required String receivedPath,
-    bool isLogError = true,
-  }) async {
+  Future<void> report(String approvedPath, String receivedPath) async {
+    final DiffInfo diffInfo = _diffInfo;
     try {
-      final File approvedFile = File(approvedPath);
-      final File receivedFile = File(receivedPath);
-
-      if (!_fileExists(approvedFile) || !_fileExists(receivedFile)) {
-        _throwFileException(
-          'Files not found for comparison. Please check the paths: \n\n Approved file path: $approvedPath, \n\n Received file path: $receivedPath.',
-        );
-      }
-      final DiffInfo diffInfo = _diffInfo;
-
       await Process.run(
         diffInfo.command,
         [diffInfo.arg, approvedPath, receivedPath],
@@ -38,7 +21,7 @@ final class IDEComparator extends Comparator {
     } catch (e, st) {
       throw IDEComparatorException(
         message:
-            'Error during comparison via ${ide.name}. Please try restart your IDE.',
+            'Error during comparison via ${ide.name}. Please try check path to IDE. \n Current path: ${diffInfo.command}.',
         exception: e,
         stackTrace: st,
       );
@@ -66,15 +49,5 @@ final class IDEComparator extends Comparator {
         };
       }
     }
-  }
-
-  bool _fileExists(File file) => file.existsSync();
-
-  void _throwFileException(String message) {
-    throw IDEComparatorException(
-      message: message,
-      exception: null,
-      stackTrace: StackTrace.current,
-    );
   }
 }

@@ -34,20 +34,19 @@ class Approvals {
       }
 
       // Check if received file matches the approved file
-      final bool isFilesMatch =
-          ApprovalUtils.filesMatch(namer.approved, namer.received);
+      final bool isFilesMatch = options.comparator.compare(
+        approvedPath: namer.approved,
+        receivedPath: namer.received,
+        isLogError: options.logErrors,
+      );
 
       // Log results and throw exception if files do not match
       if (!isFilesMatch) {
-        options.comparator.compare(
-          approvedPath: namer.approved,
-          receivedPath: namer.received,
-          isLogError: options.logErrors,
-        );
+        options.reporter.report(namer.approved, namer.received);
         throw DoesntMatchException(
           'Test failed: ${namer.approved} does not match ${namer.received}.\n - Approved file path: ${namer.approved}\n - Received file path: ${namer.received}',
         );
-      } else if (isFilesMatch) {
+      } else {
         if (options.logResults) {
           ApprovalLogger.success(
             'Test passed: [${namer.approvedFileName}] matches [${namer.receivedFileName}]\n- Approved file path: ${namer.approved}\n- Received file path: ${namer.received}',

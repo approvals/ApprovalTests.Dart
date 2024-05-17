@@ -8,6 +8,9 @@ class Options {
   /// A final variable `comparator` of type `Comparator` used to compare the approved and received files.
   final Comparator comparator;
 
+  /// A final variable `reporter` of type `Reporter` used to report the comparison results.
+  final Reporter reporter;
+
   /// A final bool variable `approveResult` used to determine if the result should be approved after the test.
   final bool approveResult;
 
@@ -27,7 +30,8 @@ class Options {
   const Options({
     this.scrubber = const ScrubNothing(),
     this.approveResult = false,
-    this.comparator = const CommandLineComparator(),
+    this.comparator = const FileComparator(),
+    this.reporter = const CommandLineReporter(),
     this.deleteReceivedFile = false,
     this.namer,
     this.logErrors = true,

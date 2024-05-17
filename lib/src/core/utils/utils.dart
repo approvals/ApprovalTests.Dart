@@ -54,24 +54,6 @@ final class ApprovalUtils {
 
   static String lines(int count) => List.filled(count, '=').join();
 
-  // Helper private method to check if contents of two files match
-  static bool filesMatch(String approvedPath, String receivedPath) {
-    try {
-      // Read contents of the approved and received files
-      final approved = ApprovalUtils.readFile(path: approvedPath)
-          .replaceAll('\r\n', '\n')
-          .trim();
-      final received = ApprovalUtils.readFile(path: receivedPath)
-          .replaceAll('\r\n', '\n')
-          .trim();
-
-      // Return true if contents of both files match exactly
-      return approved.compareTo(received) == 0;
-    } catch (_) {
-      rethrow;
-    }
-  }
-
   static void deleteFile(String path) {
     try {
       final File file = File(path);
