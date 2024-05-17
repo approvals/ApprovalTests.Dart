@@ -26,28 +26,28 @@ class DiffReporter implements Reporter {
       );
     } catch (e, st) {
       if (e is PathNotFoundException) {
+        ApprovalLogger.exception(e, stackTrace: st);
         rethrow;
       }
       if (e is ProcessException) {
-        ApprovalLogger.exception(e, stackTrace: st);
         final ProcessResult result = await Process.run('which', ['code']);
-        throw ProcessException(
-          "ProcessException",
-          [diffInfo.arg],
-          'Error during comparison via ${ide.name}. Please try check path to IDE. \n Current path: ${diffInfo.command}. \n Path to IDE: ${result.stdout}. \n Please, add path to customDiffInfo.',
+        ApprovalLogger.exception(
+          'Error during comparison via ${ide.name}. Please try check path of IDE. \n Current path: ${diffInfo.command} with arg: "${diffInfo.arg}" \n Path to IDE: ${result.stdout} \n Please, add path to customDiffInfo.',
+          stackTrace: st,
         );
+        rethrow;
       }
-      throw IDEComparatorException(
-        message: 'Error during comparison via ${ide.name}. Please try check path to IDE. \n Current path: ${diffInfo.command}.',
-        exception: e,
-        stackTrace: st,
-      );
+      rethrow;
     }
   }
 
   Future<void> _checkFileExists(String path) async {
     if (!ApprovalUtils.isFileExists(path)) {
-      throw PathNotFoundException(path, const OSError('File not found'));
+      throw PathNotFoundException(
+        path,
+        const OSError('File not found'),
+        'From DiffToolReporter: File not found at path: [$path]. Please check the path and try again.',
+      );
     }
   }
 
