@@ -178,6 +178,35 @@ void main() {
       );
     });
 
+    if (Platform.isLinux) {
+      test(
+          'Verify string with DiffReporter. Must throw IDEComparatorException.',
+          () async {
+        const reporter = DiffReporter(
+          customDiffInfo: LinuxDiffTools.visualStudioCode,
+        );
+
+        // Setup: paths to non-existent files
+        const nonExistentApprovedPath =
+            'test/approved_files/approval_test.verify.approved.txt';
+        const nonExistentReceivedPath =
+            'test/approved_files/approval_test.verify.received.txt';
+
+        // Expect an exception to be thrown
+        expect(
+          () => reporter.report(
+            nonExistentApprovedPath,
+            nonExistentReceivedPath,
+          ),
+          throwsA(isA<ProcessException>()),
+        );
+
+        ApprovalLogger.success(
+          "Test Passed: Successfully handled a file not found error during comparison.",
+        );
+      });
+    }
+
     test('Verify string with scrubber', () {
       helper.verify(
         '  Hello    World  \t\n ',

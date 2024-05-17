@@ -28,6 +28,13 @@ class DiffReporter implements Reporter {
       if (e is PathNotFoundException) {
         rethrow;
       }
+      if (e is ProcessException) {
+        ApprovalLogger.exception(e, stackTrace: st);
+        throw ProcessException(
+          'Error during comparison via ${ide.name}. Please try check path to IDE. \n Current path: ${diffInfo.command}.',
+          [diffInfo.arg],
+        );
+      }
       throw IDEComparatorException(
         message:
             'Error during comparison via ${ide.name}. Please try check path to IDE. \n Current path: ${diffInfo.command}.',
