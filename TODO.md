@@ -8,6 +8,8 @@ Tasks for the project are listed below:
 
 * [ ] Refactor the code based on ApprovalTests architectural rules: check reporters and comparators
 * [ ] Add more detailed documentation to the project
+* [ ] Test new comparators on Windows
+* [ ] Test new comparators on Linux
 
 # DONE
 

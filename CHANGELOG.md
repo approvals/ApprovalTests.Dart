@@ -1,3 +1,13 @@
+## 5.0.0
+
+- Updated documentation.
+- Updated dependencies.
+- Updated `README.md` file.
+- Updated `TODO.md` file.
+- Rewrited comparators. Now you can use `IDEComparator` without adding to global path. Also you can add custom diff tool.
+- Rewrited Scrubbers: regex scrubber, date scrubber.
+- Now, first run automatically create approved snapshot. You can approve another snapshot by setting `approveResult` to `true` and using Diff Tool.
+
 ## 0.4.6
 
 - Updated dependencies. Removed `dcli` package.
