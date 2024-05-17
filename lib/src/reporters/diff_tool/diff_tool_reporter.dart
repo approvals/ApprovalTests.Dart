@@ -13,18 +13,32 @@ class DiffReporter implements Reporter {
   @override
   Future<void> report(String approvedPath, String receivedPath) async {
     final DiffInfo diffInfo = _diffInfo;
+
     try {
+      await Future.wait([
+        _checkFileExists(approvedPath),
+        _checkFileExists(receivedPath),
+      ]);
+
       await Process.run(
         diffInfo.command,
         [diffInfo.arg, approvedPath, receivedPath],
       );
     } catch (e, st) {
+      if (e is PathNotFoundException) {
+        rethrow;
+      }
       throw IDEComparatorException(
-        message:
-            'Error during comparison via ${ide.name}. Please try check path to IDE. \n Current path: ${diffInfo.command}.',
+        message: 'Error during comparison via ${ide.name}. Please try check path to IDE. \n Current path: ${diffInfo.command}.',
         exception: e,
         stackTrace: st,
       );
+    }
+  }
+
+  Future<void> _checkFileExists(String path) async {
+    if (!ApprovalUtils.isFileExists(path)) {
+      throw PathNotFoundException(path, const OSError('File not found'));
     }
   }
 
