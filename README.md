@@ -75,45 +75,11 @@ How to use diff tools is just below, there is a `Comparator` class for that.
 #### • Via approveResult property
 If you want the result to be automatically saved after running the test, you need to use the `approveResult` property in `Options`:
 
-<!-- snippet: sample_verify_as_json_test -->
-<a id='snippet-sample_verify_as_json_test'></a>
-```dart
-void main() {
-  test('test complex JSON object', () {
-    final complexObject = {
-      'name': 'JsonTest',
-      'features': ['Testing', 'JSON'],
-      'version': 0.1,
-    };
-
-    Approvals.verifyAsJson(
-      complexObject,
-      options: const Options(
-        approveResult: true,
-      ),
-    );
-  });
-}
-```
-<sup><a href='/test/example/example_test.dart#L4-L21' title='Snippet source file'>snippet source</a> | <a href='#snippet-sample_verify_as_json_test' title='Start of snippet'>anchor</a></sup>
-<!-- endSnippet -->
+snippet: sample_verify_as_json_test
 
 this will result in the following file
-`example_test.test_JSON_object.approved`
-<!-- snippet: example_test.test_JSON_object.approved -->
-<a id='snippet-example_test.test_JSON_object.approved'></a>
-```txt
-{
-  "name": "JsonTest",
-  "features": [
-    "Testing",
-    "JSON"
-  ],
-  "version": 0.1
-}
-```
-<sup><a href='/test/example/example_test.test_JSON_object.approved#L1-L8' title='Snippet source file'>snippet source</a> | <a href='#snippet-example_test.test_JSON_object.approved' title='Start of snippet'>anchor</a></sup>
-<!-- endSnippet -->
+`example_test.test_JSON_object.approved.txt`
+snippet: example_test.test_JSON_object.approved.txt
 
 #### • Via file rename
 You can just rename the `.received` file to `.approved`.
@@ -168,73 +134,11 @@ And the `verify_methods` folder has small examples of using different `ApprovalT
 
 ### JSON example
 
-<!-- snippet: same_verify_as_json_test_with_model -->
-<a id='snippet-same_verify_as_json_test_with_model'></a>
-```dart
-void main() {
-  const jsonItem = JsonItem(
-    id: 1,
-    name: "JsonItem",
-    anotherItem: AnotherItem(id: 1, name: "AnotherItem"),
-    subItem: SubItem(
-      id: 1,
-      name: "SubItem",
-      anotherItems: [
-        AnotherItem(id: 1, name: "AnotherItem 1"),
-        AnotherItem(id: 2, name: "AnotherItem 2"),
-      ],
-    ),
-  );
-
-  test('Verify JSON output of an object', () {
-    Approvals.verifyAsJson(
-      jsonItem,
-      options: const Options(
-        deleteReceivedFile:
-            true, // Automatically delete the received file after the test.
-        approveResult:
-            true, // Approve the result automatically. You can remove this property after the approved file is created.
-      ),
-    );
-  });
-}
-```
-<sup><a href='/example/verify_methods/verify_as_json/verify_as_json_test.dart#L6-L34' title='Snippet source file'>snippet source</a> | <a href='#snippet-same_verify_as_json_test_with_model' title='Start of snippet'>anchor</a></sup>
-<!-- endSnippet -->
+snippet: same_verify_as_json_test_with_model
 
 this will result in the following file
 `verify_as_json_test.verify_model.approved.txt`
-
-<!-- snippet: verify_as_json_test.verify_model.approved.txt -->
-<a id='snippet-verify_as_json_test.verify_model.approved.txt'></a>
-```txt
-{
-  "jsonItem": {
-    "id": 1,
-    "name": "JsonItem",
-    "subItem": {
-      "id": 1,
-      "name": "SubItem",
-      "anotherItems": [
-        {
-          "id": 1,
-          "name": "AnotherItem 1"
-        },
-        {
-          "id": 2,
-          "name": "AnotherItem 2"
-        }
-      ]
-    },
-    "anotherItem": {
-      "id": 1,
-      "name": "AnotherItem"
-    }
-  }
-}
-```
-<sup><a href='/example/verify_methods/verify_as_json/verify_as_json_test.verify_model.approved.txt#L1-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-verify_as_json_test.verify_model.approved.txt' title='Start of snippet'>anchor</a></sup>
-<!-- endSnippet -->
+snippet: verify_as_json_test.verify_model.approved.txt
 
 <img src="https://github.com/yelmuratoff/packages_assets/blob/main/assets/approval_tests/passed.png?raw=true" alt="Passed test example" title="ApprovalTests" style="max-width: 800px;">
 
