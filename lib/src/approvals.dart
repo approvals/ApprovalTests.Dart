@@ -14,7 +14,8 @@ class Approvals {
   }) {
     try {
       // Get the file path without extension or use the provided file path
-      final completedPath = options.namer?.filePath ?? ApprovalUtils.filePath.split('.dart').first;
+      final completedPath = options.namer?.filePath ??
+          ApprovalUtils.filePath.split('.dart').first;
 
       // Create namer object with given or computed file name
       final namer = options.namer ?? makeNamer(completedPath);
@@ -27,12 +28,14 @@ class Approvals {
       // Write the content to a file whose path is specified in namer.received
       writer.writeToFile(namer.received);
 
-      if (options.approveResult || !ApprovalUtils.isFileExists(namer.approved)) {
+      if (options.approveResult ||
+          !ApprovalUtils.isFileExists(namer.approved)) {
         writer.writeToFile(namer.approved);
       }
 
       // Check if received file matches the approved file
-      final bool isFilesMatch = ApprovalUtils.filesMatch(namer.approved, namer.received);
+      final bool isFilesMatch =
+          ApprovalUtils.filesMatch(namer.approved, namer.received);
 
       // Log results and throw exception if files do not match
       if (!isFilesMatch) {

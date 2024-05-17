@@ -76,97 +76,6 @@ void main() {
         "$lines25 Group: Exception cases are starting $lines25",
       );
     });
-    // test('Method «verify» must throw PathNotFoundException', () {
-    //   expect(
-    //     () => helper.verify(
-    //       'Hello World',
-    //       'verify_exception',
-    //       expectException: true,
-    //     ),
-    //     throwsA(isA<PathNotFoundException>()),
-    //   );
-    //   ApprovalLogger.success(
-    //     "Test Passed: Method «verify» correctly throws PathNotFoundException as expected.",
-    //   );
-    // });
-
-    // test('Method «verifyAll» must throw PathNotFoundException', () {
-    //   expect(
-    //     () => helper.verifyAll(
-    //       ['Hello World', 'Hello World'],
-    //       'verify_exception',
-    //       expectException: true,
-    //     ),
-    //     throwsA(isA<PathNotFoundException>()),
-    //   );
-
-    //   ApprovalLogger.success(
-    //     "Test Passed: Method «verifyAll» correctly throws PathNotFoundException as expected.",
-    //   );
-    // });
-
-    // test('Method «verifyAsJson» must throw PathNotFoundException', () {
-    //   expect(
-    //     () => helper.verifyAsJson(
-    //       {"message": "Hello World"},
-    //       'verify_as_json_exception',
-    //       expectException: true,
-    //     ),
-    //     throwsA(isA<PathNotFoundException>()),
-    //   );
-
-    //   ApprovalLogger.success(
-    //     "Test Passed: Method «verifyAsJson» correctly throws PathNotFoundException as expected.",
-    //   );
-    // });
-
-    // test('Method «verifyAllCombinations» must throw PathNotFoundException', () {
-    //   expect(
-    //     () => helper.verifyAllCombinations(
-    //       [
-    //         [1, 2],
-    //         [3, 4],
-    //       ],
-    //       'verify_all_combinations_exception',
-    //       expectException: true,
-    //     ),
-    //     throwsA(isA<PathNotFoundException>()),
-    //   );
-
-    //   ApprovalLogger.success(
-    //     "Test Passed: Method «verifyAllCombinations» correctly throws PathNotFoundException as expected.",
-    //   );
-    // });
-
-    // test("Method «verifySequence» must throw PathNotFoundException", () {
-    //   expect(
-    //     () => helper.verifySequence(
-    //       [1, 2, 3],
-    //       'verify_sequence_exception',
-    //       expectException: true,
-    //     ),
-    //     throwsA(isA<PathNotFoundException>()),
-    //   );
-
-    //   ApprovalLogger.success(
-    //     "Test Passed: Method «verifySequence» correctly throws PathNotFoundException as expected.",
-    //   );
-    // });
-
-    // test("Method «verifyQuery» must throw PathNotFoundException", () async {
-    //   expect(
-    //     () => helper.verifyQuery(
-    //       dbQuery,
-    //       'verify_query_exception',
-    //       expectException: true,
-    //     ),
-    //     throwsA(isA<PathNotFoundException>()),
-    //   );
-
-    //   ApprovalLogger.success(
-    //     "Test Passed: Method «verifyQuery» correctly throws PathNotFoundException as expected.",
-    //   );
-    // });
 
     test("Method «verify» must throw DoesntMatchException", () {
       expect(
@@ -203,20 +112,6 @@ void main() {
     setUpAll(() {
       ApprovalLogger.log("$lines25 Group: Minor cases are starting $lines25");
     });
-    // test('Verify method without initial path: PathNotFoundException', () {
-    //   expect(
-    //     () => helper.verify(
-    //       'Hello World',
-    //       'verify_exception',
-    //       expectException: true,
-    //       useDefaultPath: false,
-    //     ),
-    //     throwsA(isA<PathNotFoundException>()),
-    //   );
-    //   ApprovalLogger.success(
-    //     "Test Passed: The method was successfully verified for absence of an initial path — PathNotFoundException was thrown.",
-    //   );
-    // });
 
     test('Simulate file not found error during comparison. Must throw CommandLineComparatorException.', () async {
       const comparator = CommandLineComparator();

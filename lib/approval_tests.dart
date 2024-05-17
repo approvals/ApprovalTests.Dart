@@ -27,11 +27,11 @@ part 'src/namer/namer.dart';
 part 'src/core/approval_number.dart';
 part 'src/namer/file_namer_options.dart';
 
-part 'src/comparator/comparator.dart';
-part 'src/comparator/command_line_comparator.dart';
-part 'src/comparator/ide_comparator.dart';
-part 'src/comparator/diff_info.dart';
-part 'src/comparator/diff_tools.dart';
+part 'src/reporters/comparator.dart';
+part 'src/reporters/command_line_comparator.dart';
+part 'src/reporters/ide_comparator.dart';
+part 'src/reporters/diff_info.dart';
+part 'src/reporters/diff_tools.dart';
 
 part 'src/exceptions/doesnt_match_exception.dart';
 part 'src/exceptions/command_line_comparator_exception.dart';

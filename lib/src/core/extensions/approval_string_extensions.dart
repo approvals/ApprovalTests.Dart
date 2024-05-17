@@ -10,6 +10,7 @@ extension StringExtensions on String {
     required String Function(String) replacementProvider,
   }) {
     final regExp = RegExp(matchingPattern);
-    return replaceAllMapped(regExp, (match) => replacementProvider(match.group(0)!));
+    return replaceAllMapped(
+        regExp, (match) => replacementProvider(match.group(0)!),);
   }
 }

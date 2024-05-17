@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 // begin-snippet: sample_verify_as_json_test
 void main() {
-  test('test complex JSON object', () {
+  test('test JSON object', () {
     final complexObject = {
       'name': 'JsonTest',
       'features': ['Testing', 'JSON'],
@@ -12,9 +12,6 @@ void main() {
 
     Approvals.verifyAsJson(
       complexObject,
-      options: const Options(
-        approveResult: true,
-      ),
     );
   });
 }

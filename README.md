@@ -99,9 +99,9 @@ void main() {
 <!-- endSnippet -->
 
 this will result in the following file
-`example_test.approved.txt`
-<!-- snippet: example_test.approved.txt -->
-<a id='snippet-example_test.approved.txt'></a>
+`example_test.test_JSON_object.approved`
+<!-- snippet: example_test.test_JSON_object.approved -->
+<a id='snippet-example_test.test_JSON_object.approved'></a>
 ```txt
 {
   "name": "JsonTest",
@@ -112,7 +112,7 @@ this will result in the following file
   "version": 0.1
 }
 ```
-<sup><a href='/test/example/example_test.approved.txt#L1-L8' title='Snippet source file'>snippet source</a> | <a href='#snippet-example_test.approved.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/test/example/example_test.test_JSON_object.approved#L1-L8' title='Snippet source file'>snippet source</a> | <a href='#snippet-example_test.test_JSON_object.approved' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 #### • Via file rename
@@ -203,10 +203,10 @@ void main() {
 <!-- endSnippet -->
 
 this will result in the following file
-`verify_as_json_test.approved.txt`
+`verify_as_json_test.verify_model.approved.txt`
 
-<!-- snippet: verify_as_json_test.approved.txt -->
-<a id='snippet-verify_as_json_test.approved.txt'></a>
+<!-- snippet: verify_as_json_test.verify_model.approved.txt -->
+<a id='snippet-verify_as_json_test.verify_model.approved.txt'></a>
 ```txt
 {
   "jsonItem": {
@@ -233,7 +233,7 @@ this will result in the following file
   }
 }
 ```
-<sup><a href='/example/verify_methods/verify_as_json/verify_as_json_test.approved.txt#L1-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-verify_as_json_test.approved.txt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/example/verify_methods/verify_as_json/verify_as_json_test.verify_model.approved.txt#L1-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-verify_as_json_test.verify_model.approved.txt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <img src="https://github.com/yelmuratoff/packages_assets/blob/main/assets/approval_tests/passed.png?raw=true" alt="Passed test example" title="ApprovalTests" style="max-width: 800px;">

@@ -13,7 +13,10 @@ class ScrubWithRegEx implements ApprovalScrubber {
         replacementFunction = null;
 
   /// Creates a `ScrubWithRegEx` with a custom regular expression pattern and replacement function.
-  const ScrubWithRegEx.custom({required this.pattern, required this.replacementFunction});
+  const ScrubWithRegEx.custom({
+    required this.pattern,
+    required this.replacementFunction,
+  });
 
   @override
   String scrub(String input) => input

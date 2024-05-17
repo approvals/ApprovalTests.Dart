@@ -2,7 +2,7 @@ import 'package:approval_tests/approval_tests.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('Verify all combinations of input values', () {
+  test('verify combinations', () {
     const List<List<int>> inputs = [
       [1, 2],
       [3, 4],
