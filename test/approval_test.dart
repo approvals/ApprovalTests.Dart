@@ -92,7 +92,8 @@ void main() {
       );
     });
 
-    test("Method «verify» must throw DoesntMatchException with error handling", () {
+    test("Method «verify» must throw DoesntMatchException with error handling",
+        () {
       expect(
         () => helper.verify(
           'Hello W0rld',
@@ -113,8 +114,10 @@ void main() {
       ApprovalLogger.log("$lines25 Group: Minor cases are starting $lines25");
     });
 
-    test('Simulate file not found error during comparison. Must throw CommandLineComparatorException.', () async {
-      const comparator = CommandLineComparator();
+    test(
+        'Simulate file not found error during comparison. Must throw CommandLineComparatorException.',
+        () async {
+      const comparator = FileComparator();
 
       // Setup: paths to non-existent files
       const nonExistentApprovedPath = 'path/to/nonexistent/approved.txt';
@@ -134,8 +137,10 @@ void main() {
       );
     });
 
-    test('Simulate file not found error during comparison. Must throw IDEComparatorException.', () async {
-      const comparator = IDEComparator();
+    test(
+        'Simulate file not found error during comparison. Must throw IDEComparatorException.',
+        () async {
+      const reporter = DiffReporter();
 
       // Setup: paths to non-existent files
       const nonExistentApprovedPath = 'path/to/nonexistent/approved.txt';
@@ -143,9 +148,9 @@ void main() {
 
       // Expect an exception to be thrown
       expect(
-        () => comparator.compare(
-          approvedPath: nonExistentApprovedPath,
-          receivedPath: nonExistentReceivedPath,
+        () => reporter.report(
+          nonExistentApprovedPath,
+          nonExistentReceivedPath,
         ),
         throwsA(isA<IDEComparatorException>()),
       );
@@ -155,13 +160,13 @@ void main() {
       );
     });
 
-    test('verify string with IDEComparator', () {
+    test('verify string with DiffReporter', () {
       expect(
         () => helper.verify(
           'Hello W0rld',
           'verify',
           deleteReceivedFile: false,
-          comparator: const IDEComparator(),
+          reporter: const DiffReporter(),
         ),
         throwsA(isA<DoesntMatchException>()),
       );

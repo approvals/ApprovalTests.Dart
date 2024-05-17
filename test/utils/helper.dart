@@ -27,8 +27,8 @@ class ApprovalTestHelper {
     bool approveResult = false,
     bool deleteReceivedFile = true,
     bool useDefaultPath = true,
-    Comparator comparator = const CommandLineComparator(),
     ApprovalScrubber scrubber = const ScrubNothing(),
+    Reporter reporter = const CommandLineReporter(),
   }) {
     Approvals.verify(
       content,
@@ -38,7 +38,7 @@ class ApprovalTestHelper {
         approveResult: approveResult,
         deleteReceivedFile: deleteReceivedFile,
         useDefaultPath: useDefaultPath,
-        comparator: comparator,
+        reporter: reporter,
         scrubber: scrubber,
       ),
     );
@@ -144,7 +144,7 @@ class ApprovalTestHelper {
     required bool deleteReceivedFile,
     bool useDefaultPath = true,
     ApprovalScrubber scrubber = const ScrubNothing(),
-    Comparator comparator = const CommandLineComparator(),
+    Reporter reporter = const CommandLineReporter(),
   }) =>
       Options(
         namer: useDefaultPath
@@ -159,7 +159,7 @@ class ApprovalTestHelper {
         deleteReceivedFile: deleteReceivedFile,
         approveResult: approveResult,
         logErrors: !expectException,
-        comparator: comparator,
+        reporter: reporter,
         scrubber: scrubber,
       );
 }

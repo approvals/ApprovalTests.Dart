@@ -11,6 +11,8 @@ extension StringExtensions on String {
   }) {
     final regExp = RegExp(matchingPattern);
     return replaceAllMapped(
-        regExp, (match) => replacementProvider(match.group(0)!),);
+      regExp,
+      (match) => replacementProvider(match.group(0)!),
+    );
   }
 }

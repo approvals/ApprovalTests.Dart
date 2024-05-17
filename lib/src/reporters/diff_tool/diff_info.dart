@@ -1,4 +1,4 @@
-part of '../../../approval_tests.dart';
+part of '../../../../approval_tests.dart';
 
 /// `DiffInfo` is a class for storing information about a diff tool.
 class DiffInfo {

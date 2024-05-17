@@ -1,4 +1,4 @@
-part of '../../../approval_tests.dart';
+part of '../../../../approval_tests.dart';
 
 /// `MacDiffTools` contains diff tools available on macOS.
 final class MacDiffTools {

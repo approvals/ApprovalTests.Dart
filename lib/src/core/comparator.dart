@@ -5,7 +5,7 @@ abstract interface class Comparator {
   const Comparator();
 
   /// A method named `compare` for comparing two files.
-  Future<void> compare({
+  bool compare({
     required String approvedPath,
     required String receivedPath,
     bool isLogError = true,
