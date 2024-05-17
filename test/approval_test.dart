@@ -94,8 +94,7 @@ void main() {
       );
     });
 
-    test("Method «verify» must throw DoesntMatchException with error handling",
-        () {
+    test("Method «verify» must throw DoesntMatchException with error handling", () {
       expect(
         () => helper.verify(
           'Hello W0rld',
@@ -116,9 +115,7 @@ void main() {
       ApprovalLogger.log("$lines25 Group: Minor cases are starting $lines25");
     });
 
-    test(
-        'Simulate file not found error during comparison. Must throw CommandLineComparatorException.',
-        () async {
+    test('Simulate file not found error during comparison. Must throw CommandLineComparatorException.', () async {
       const comparator = FileComparator();
 
       // Setup: paths to non-existent files
@@ -139,9 +136,7 @@ void main() {
       );
     });
 
-    test(
-        'Simulate file not found error during comparison. Must throw IDEComparatorException.',
-        () async {
+    test('Simulate file not found error during comparison. Must throw IDEComparatorException.', () async {
       const reporter = DiffReporter();
 
       // Setup: paths to non-existent files
@@ -178,34 +173,30 @@ void main() {
       );
     });
 
-    if (Platform.isLinux) {
-      test(
-          'Verify string with DiffReporter. Must throw IDEComparatorException.',
-          () async {
-        const reporter = DiffReporter(
-          customDiffInfo: LinuxDiffTools.visualStudioCode,
-        );
+    // if (Platform.isLinux) {
+    test('Verify string with DiffReporter. Must throw IDEComparatorException.', () async {
+      const reporter = DiffReporter(
+        customDiffInfo: LinuxDiffTools.visualStudioCode,
+      );
 
-        // Setup: paths to non-existent files
-        const nonExistentApprovedPath =
-            'test/approved_files/approval_test.verify.approved.txt';
-        const nonExistentReceivedPath =
-            'test/approved_files/approval_test.verify.received.txt';
+      // Setup: paths to non-existent files
+      const nonExistentApprovedPath = 'test/approved_files/approval_test.verify.approved.txt';
+      const nonExistentReceivedPath = 'test/approved_files/approval_test.verify.received.txt';
 
-        // Expect an exception to be thrown
-        expect(
-          () => reporter.report(
-            nonExistentApprovedPath,
-            nonExistentReceivedPath,
-          ),
-          throwsA(isA<ProcessException>()),
-        );
+      // Expect an exception to be thrown
+      expect(
+        () => reporter.report(
+          nonExistentApprovedPath,
+          nonExistentReceivedPath,
+        ),
+        throwsA(isA<ProcessException>()),
+      );
 
-        ApprovalLogger.success(
-          "Test Passed: Successfully handled a file not found error during comparison.",
-        );
-      });
-    }
+      ApprovalLogger.success(
+        "Test Passed: Successfully handled a file not found error during comparison.",
+      );
+    });
+    // }
 
     test('Verify string with scrubber', () {
       helper.verify(
