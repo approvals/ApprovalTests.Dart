@@ -29,7 +29,8 @@ class DiffReporter implements Reporter {
         rethrow;
       }
       throw IDEComparatorException(
-        message: 'Error during comparison via ${ide.name}. Please try check path to IDE. \n Current path: ${diffInfo.command}.',
+        message:
+            'Error during comparison via ${ide.name}. Please try check path to IDE. \n Current path: ${diffInfo.command}.',
         exception: e,
         stackTrace: st,
       );

@@ -27,7 +27,6 @@ part 'src/exceptions/doesnt_match_exception.dart';
 part 'src/exceptions/ide_comparator_exception.dart';
 part 'src/namer/file_namer_options.dart';
 part 'src/namer/namer.dart';
-part 'src/reporters/command_line/colorize.dart';
 part 'src/reporters/command_line/command_line_reporter.dart';
 part 'src/reporters/diff_tool/diff_info.dart';
 part 'src/reporters/diff_tool/diff_tool_reporter.dart';

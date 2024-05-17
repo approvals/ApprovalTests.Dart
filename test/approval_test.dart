@@ -94,7 +94,8 @@ void main() {
       );
     });
 
-    test("Method «verify» must throw DoesntMatchException with error handling", () {
+    test("Method «verify» must throw DoesntMatchException with error handling",
+        () {
       expect(
         () => helper.verify(
           'Hello W0rld',
@@ -115,7 +116,9 @@ void main() {
       ApprovalLogger.log("$lines25 Group: Minor cases are starting $lines25");
     });
 
-    test('Simulate file not found error during comparison. Must throw CommandLineComparatorException.', () async {
+    test(
+        'Simulate file not found error during comparison. Must throw CommandLineComparatorException.',
+        () async {
       const comparator = FileComparator();
 
       // Setup: paths to non-existent files
@@ -136,7 +139,9 @@ void main() {
       );
     });
 
-    test('Simulate file not found error during comparison. Must throw IDEComparatorException.', () async {
+    test(
+        'Simulate file not found error during comparison. Must throw IDEComparatorException.',
+        () async {
       const reporter = DiffReporter();
 
       // Setup: paths to non-existent files

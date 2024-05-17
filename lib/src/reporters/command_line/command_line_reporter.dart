@@ -39,7 +39,11 @@ class CommandLineReporter implements Reporter {
     }
   }
 
-  String _highlightDifference(String approvedLine, String receivedLine, {bool isApprovedFile = false}) {
+  String _highlightDifference(
+    String approvedLine,
+    String receivedLine, {
+    bool isApprovedFile = false,
+  }) {
     // Create a new instance of DiffMatchPatch
     final differ = DiffMatchPatch();
 
