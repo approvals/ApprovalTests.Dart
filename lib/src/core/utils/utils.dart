@@ -34,7 +34,6 @@ final class ApprovalUtils {
 
     if (match != null) {
       final filePath = Uri.tryParse(match.group(0)!);
-      ApprovalLogger.log('Running test: $filePath');
       return filePath!.toFilePath();
     } else {
       throw Exception('Could not find file path');
@@ -46,6 +45,11 @@ final class ApprovalUtils {
   }) {
     final File file = File(path);
     return file.readAsStringSync().trim();
+  }
+
+  static bool isFileExists(String path) {
+    final File file = File(path);
+    return file.existsSync();
   }
 
   static String lines(int count) => List.filled(count, '=').join();

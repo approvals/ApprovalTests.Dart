@@ -4,13 +4,14 @@ part of '../../approval_tests.dart';
 ///
 /// Available IDEs:
 /// - `Visual Studio Code`
-/// - `IntelliJ IDEA`
 /// - `Android Studio`
 final class IDEComparator extends Comparator {
   final ComparatorIDE ide;
+  final DiffInfo? customDiffInfo;
 
   const IDEComparator({
-    required this.ide,
+    this.ide = ComparatorIDE.vsCode,
+    this.customDiffInfo,
   });
 
   @override
@@ -28,10 +29,11 @@ final class IDEComparator extends Comparator {
           'Files not found for comparison. Please check the paths: \n\n Approved file path: $approvedPath, \n\n Received file path: $receivedPath.',
         );
       }
+      final DiffInfo diffInfo = _diffInfo;
 
       await Process.run(
-        ide.command,
-        [ide.argument, approvedPath, receivedPath],
+        diffInfo.command,
+        [diffInfo.arg, approvedPath, receivedPath],
       );
     } catch (e, st) {
       throw IDEComparatorException(
@@ -40,6 +42,29 @@ final class IDEComparator extends Comparator {
         exception: e,
         stackTrace: st,
       );
+    }
+  }
+
+  DiffInfo get _diffInfo {
+    if (customDiffInfo != null) {
+      return customDiffInfo!;
+    } else {
+      if (Platform.isMacOS) {
+        return switch (ide) {
+          ComparatorIDE.vsCode => MacDiffTools.visualStudioCode,
+          ComparatorIDE.studio => MacDiffTools.androidStudio,
+        };
+      } else if (Platform.isWindows) {
+        return switch (ide) {
+          ComparatorIDE.vsCode => WindowsDiffTools.visualStudioCode,
+          ComparatorIDE.studio => WindowsDiffTools.androidStudio,
+        };
+      } else {
+        return switch (ide) {
+          ComparatorIDE.vsCode => LinuxDiffTools.visualStudioCode,
+          ComparatorIDE.studio => LinuxDiffTools.androidStudio,
+        };
+      }
     }
   }
 

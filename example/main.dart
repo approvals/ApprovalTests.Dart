@@ -3,13 +3,11 @@ import 'package:test/test.dart';
 
 void main() {
   group('Fizz Buzz', () {
-    test("Verify all combinations", () {
+    test("verify combinations", () {
       Approvals.verifyAll(
         [3, 5, 15],
         options: const Options(
-          comparator: IDEComparator(
-            ide: ComparatorIDE.visualStudioCode,
-          ),
+          comparator: IDEComparator(),
           deleteReceivedFile: true,
         ),
         processor: (items) => fizzBuzz(items).toString(),

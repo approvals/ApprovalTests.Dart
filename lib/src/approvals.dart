@@ -3,7 +3,7 @@ part of '../approval_tests.dart';
 /// `Approvals` is a class that provides methods to verify the content of a response.
 class Approvals {
   // Factory method to create an instance of ApprovalNamer with given file name
-  static ApprovalNamer makeNamer(String file) => Namer(file);
+  static ApprovalNamer makeNamer(String filePath) => Namer(filePath: filePath);
 
   // ================== Verify methods ==================
 
@@ -14,19 +14,22 @@ class Approvals {
   }) {
     try {
       // Get the file path without extension or use the provided file path
-      final completedPath =
-          options.filesPath ?? ApprovalUtils.filePath.split('.dart').first;
+      final completedPath = options.namer?.filePath ??
+          ApprovalUtils.filePath.split('.dart').first;
 
       // Create namer object with given or computed file name
-      final namer = makeNamer(options.filesPath ?? completedPath);
+      final namer = options.namer ?? makeNamer(completedPath);
 
       // Create writer object with scrubbed response and file extension retrieved from options
-      final writer = ApprovalTextWriter(options.scrub(response), "txt");
+      final writer = ApprovalTextWriter(
+        options.scrubber.scrub(response),
+      );
 
       // Write the content to a file whose path is specified in namer.received
       writer.writeToFile(namer.received);
 
-      if (options.approveResult) {
+      if (options.approveResult ||
+          !ApprovalUtils.isFileExists(namer.approved)) {
         writer.writeToFile(namer.approved);
       }
 
@@ -65,11 +68,11 @@ class Approvals {
   /// `_deleteFileAfterTest` method to delete the received file after the test.
   static void _deleteFileAfterTest(Options options) {
     if (options.deleteReceivedFile) {
-      if (options.filesPath != null) {
-        ApprovalUtils.deleteFile(Namer(options.filesPath!).received);
+      if (options.namer != null) {
+        ApprovalUtils.deleteFile(options.namer!.received);
       } else {
         ApprovalUtils.deleteFile(
-          Namer(ApprovalUtils.filePath.split('.dart').first).received,
+          Namer(filePath: ApprovalUtils.filePath.split('.dart').first).received,
         );
       }
     }

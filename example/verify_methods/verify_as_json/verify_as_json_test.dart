@@ -19,14 +19,12 @@ void main() {
     ),
   );
 
-  test('Verify JSON output of an object', () {
+  test('verify model', () {
     Approvals.verifyAsJson(
       jsonItem,
       options: const Options(
-        deleteReceivedFile:
-            true, // Automatically delete the received file after the test.
-        approveResult:
-            true, // Approve the result automatically. You can remove this property after the approved file is created.
+        deleteReceivedFile: true, // Automatically delete the received file after the test.
+        approveResult: true, // Approve the result automatically. You can remove this property after the approved file is created.
       ),
     );
   });

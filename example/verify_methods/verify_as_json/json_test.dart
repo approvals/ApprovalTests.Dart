@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('Approval Tests for Complex Objects', () {
-    test('test complex JSON object', () {
+    test('test JSON object', () {
       const complexObject = {
         'name': 'JsonTest',
         'features': ['Testing', 'JSON'],
