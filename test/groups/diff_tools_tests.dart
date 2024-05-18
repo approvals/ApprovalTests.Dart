@@ -50,7 +50,7 @@ void diffToolsTests({
           existentApprovedPath,
           existentReceivedPath,
         ),
-        throwsA(Platform.isLinux ? null : isA<ProcessException>()),
+        Platform.isLinux ? returnsNormally : throwsA(isA<ProcessException>()),
       );
 
       ApprovalLogger.success(
