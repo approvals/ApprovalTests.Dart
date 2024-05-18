@@ -3,8 +3,7 @@ part of '../../../../approval_tests.dart';
 /// `MacDiffTools` contains diff tools available on macOS.
 final class MacDiffTools {
   static const DiffInfo visualStudioCode = DiffInfo(
-    command:
-        '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code',
+    command: '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code',
     arg: '-d',
     name: 'code',
   );
@@ -28,23 +27,21 @@ final class WindowsDiffTools {
   static const DiffInfo androidStudio = DiffInfo(
     command: 'C:\\Program Files\\Android\\Android Studio\\bin\\studio64.exe',
     arg: 'diff',
-    name: 'studio',
+    name: 'studio64',
   );
 }
 
 /// `LinuxDiffTools` contains diff tools available on Linux.
 final class LinuxDiffTools {
-  // TODO: check correct path for Visual Studio Code on Linux
   static const DiffInfo visualStudioCode = DiffInfo(
     command: '/snap/bin/code',
     arg: '-d',
     name: 'code',
   );
 
-  // TODO: check correct path for Android Studio on Linux
   static const DiffInfo androidStudio = DiffInfo(
-    command: '/snap/bin/studio',
+    command: '/snap/bin/android-studio',
     arg: 'diff',
-    name: 'studio',
+    name: 'android-studio',
   );
 }
