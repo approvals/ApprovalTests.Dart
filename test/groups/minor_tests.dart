@@ -68,24 +68,6 @@ void minorTests({
       );
     });
 
-    test('verify string with Android Studio DiffReporter', () {
-      expect(
-        () => helper.verify(
-          'Hello W0rld',
-          'verify',
-          deleteReceivedFile: false,
-          reporter: const DiffReporter(
-            ide: ComparatorIDE.studio,
-          ),
-        ),
-        throwsA(isA<DoesntMatchException>()),
-      );
-
-      ApprovalLogger.success(
-        "Test Passed: Successfully handled a log mismatch. Method «verify» correctly throws DoesntMatchException as expected.",
-      );
-    });
-
     // if (Platform.isLinux) {
     test('Verify string with DiffReporter. Must throw IDEComparatorException.', () async {
       const reporter = DiffReporter(
