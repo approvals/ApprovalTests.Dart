@@ -7,8 +7,7 @@ final class ApprovalUtils {
     final int green = int.parse(hex.substring(2, 4), radix: 16);
     final int blue = int.parse(hex.substring(4, 6), radix: 16);
 
-    final AnsiPen pen = AnsiPen()
-      ..rgb(r: red / 255, g: green / 255, b: blue / 255);
+    final AnsiPen pen = AnsiPen()..rgb(r: red / 255, g: green / 255, b: blue / 255);
     return pen;
   }
 
@@ -48,6 +47,14 @@ final class ApprovalUtils {
       }
     } catch (_) {
       rethrow;
+    }
+  }
+
+  static String get commandWhere {
+    if (Platform.isWindows) {
+      return 'where';
+    } else {
+      return 'which';
     }
   }
 }

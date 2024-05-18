@@ -5,11 +5,13 @@ final class MacDiffTools {
   static const DiffInfo visualStudioCode = DiffInfo(
     command: '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code',
     arg: '-d',
+    name: 'code',
   );
 
   static const DiffInfo androidStudio = DiffInfo(
     command: '/Applications/Android Studio.app/Contents/MacOS/studio',
     arg: 'diff',
+    name: 'studio',
   );
 }
 
@@ -18,12 +20,14 @@ final class WindowsDiffTools {
   static const DiffInfo visualStudioCode = DiffInfo(
     command: 'C:\\Program Files\\Microsoft VS Code\\Code.exe',
     arg: '-d',
+    name: 'code',
   );
 
   // TODO: check correct path for Android Studio on Windows
   static const DiffInfo androidStudio = DiffInfo(
     command: 'C:\\Program Files\\Android\\Android Studio\\bin\\studio64.exe',
     arg: 'diff',
+    name: 'studio',
   );
 }
 
@@ -33,11 +37,13 @@ final class LinuxDiffTools {
   static const DiffInfo visualStudioCode = DiffInfo(
     command: '/snap/bin/code',
     arg: '-d',
+    name: 'code',
   );
 
   // TODO: check correct path for Android Studio on Linux
   static const DiffInfo androidStudio = DiffInfo(
     command: '/snap/bin/studio',
     arg: 'diff',
+    name: 'studio',
   );
 }
