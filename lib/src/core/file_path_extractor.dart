@@ -15,9 +15,14 @@ class FilePathExtractor {
       final match = uriRegExp.firstMatch(stackTraceString);
 
       if (match != null) {
-        final rawPath = match.group(1)!;
-        final filePath = isWindows ? Uri.file(rawPath, windows: true).toFilePath(windows: true) : Uri.file(rawPath).toFilePath();
-        return filePath;
+        if (isWindows) {
+          final rawPath = match.group(1)!;
+          final filePath = Uri.file(rawPath, windows: true).toFilePath(windows: true);
+          return filePath;
+        } else {
+          final filePath = Uri.tryParse('file:///${match.group(1)!}');
+          return filePath!.toFilePath();
+        }
       } else {
         throw FileNotFoundException(
           message: 'File not found in stack trace',
@@ -32,5 +37,5 @@ class FilePathExtractor {
   static bool isWindows = Platform.isWindows;
 
   static const String _windowsPattern = r'file:///([a-zA-Z]:/[^:\s]+)';
-  static const String _linuxMacOSPattern = r'file:///([^:\s]+)';
+  static const String _linuxMacOSPattern = r'file:\/\/\/([^\s:]+)';
 }
