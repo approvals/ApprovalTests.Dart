@@ -89,7 +89,11 @@ void minorTests({
     // if (Platform.isLinux) {
     test('Verify string with DiffReporter. Must throw IDEComparatorException.', () async {
       const reporter = DiffReporter(
-        customDiffInfo: LinuxDiffTools.visualStudioCode,
+        customDiffInfo: DiffInfo(
+          command: '/usr/bin/code',
+          arg: '-d',
+          name: 'code',
+        ),
       );
 
       // Setup: paths to non-existent files
