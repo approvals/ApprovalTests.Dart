@@ -55,8 +55,7 @@ class ApprovalTestHelper {
   }) {
     Approvals.verifyAll(
       contents,
-      processor: (item) => item
-          .toString(), // Simple processor function that returns the item itself.
+      processor: (item) => item.toString(), // Simple processor function that returns the item itself.
       options: _getOptions(
         testName,
         expectException: expectException,
@@ -167,9 +166,17 @@ class ApprovalTestHelper {
         scrubber: scrubber,
       );
 
+  String get fakeStackTracePath {
+    if (Platform.isWindows) {
+      return 'file:///C:/path/to/file.dart:10:11\nother stack trace lines...';
+    } else {
+      return 'file:///path/to/file.dart:10:11\nother stack trace lines...';
+    }
+  }
+
   String get testPath {
     if (Platform.isWindows) {
-      return '\\path\\to\\file.dart';
+      return 'C:\\path\\to\\file.dart';
     } else {
       return '/path/to/file.dart';
     }

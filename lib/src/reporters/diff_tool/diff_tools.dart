@@ -18,7 +18,7 @@ final class MacDiffTools {
 /// `WindowsDiffTools` contains diff tools available on Windows.
 final class WindowsDiffTools {
   static const DiffInfo visualStudioCode = DiffInfo(
-    command: 'C:\\Program Files\\Microsoft VS Code\\bin\\code',
+    command: 'C:\\Program Files\\Microsoft VS Code\\bin\\code.cmd',
     arg: '-d',
     name: 'code',
   );

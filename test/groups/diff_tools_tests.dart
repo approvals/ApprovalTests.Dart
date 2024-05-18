@@ -26,7 +26,7 @@ void diffToolsTests({
           existentApprovedPath,
           existentReceivedPath,
         ),
-        throwsA(isA<ProcessException>()),
+        Platform.isWindows ? returnsNormally : throwsA(isA<ProcessException>()),
       );
 
       ApprovalLogger.success(

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:approval_tests/approval_tests.dart';
 import 'package:test/test.dart';
+import 'package:path/path.dart' as p;
 
 // Import project-specific dependencies
 import 'models/item.dart';
