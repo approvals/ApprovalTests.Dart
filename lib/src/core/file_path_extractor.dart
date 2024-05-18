@@ -10,14 +10,15 @@ class FilePathExtractor {
   String get filePath {
     try {
       final stackTraceString = _stackTraceFetcher.currentStackTrace;
-      ApprovalLogger.log(stackTraceString);
-      final uriRegExp = RegExp(isWindows ? _windowsPattern : _linuxMacOSPattern);
+      final uriRegExp =
+          RegExp(isWindows ? _windowsPattern : _linuxMacOSPattern);
       final match = uriRegExp.firstMatch(stackTraceString);
 
       if (match != null) {
         if (isWindows) {
           final rawPath = match.group(1)!;
-          final filePath = Uri.file(rawPath, windows: true).toFilePath(windows: true);
+          final filePath =
+              Uri.file(rawPath, windows: true).toFilePath(windows: true);
           return filePath;
         } else {
           final filePath = Uri.tryParse('file:///${match.group(1)!}');

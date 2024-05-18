@@ -38,3 +38,4 @@ part 'src/core/file_path_extractor.dart';
 part 'src/exceptions/file_not_found_exception.dart';
 part 'src/core/stack_trace_fetcher/fetcher.dart';
 part 'src/core/platform_wrapper.dart';
+part 'src/exceptions/no_diff_tool_exception.dart';

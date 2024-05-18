@@ -30,7 +30,7 @@ class CommandLineReporter implements Reporter {
             'Approved file, line ${i + 1}: ${_highlightDifference(approvedLine, receivedLine, isApprovedFile: true)}',
           );
           buffer.writeln(
-            'Received file, line ${i + 1}: ${_highlightDifference(approvedLine, receivedLine)} \n',
+            'Received file, line ${i + 1}: ${_highlightDifference(approvedLine, receivedLine)}',
           );
         }
       }

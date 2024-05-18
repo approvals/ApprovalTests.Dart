@@ -1,9 +1,9 @@
-part of '../approval_test.dart';
+import 'package:approval_tests/approval_tests.dart';
+import 'package:test/test.dart';
 
-void exceptionTests({
-  required ApprovalTestHelper helper,
-  required String lines25,
-}) {
+import '../approval_test.dart';
+
+void main() {
   group('Approvals: test for exceptions |', () {
     setUpAll(() {
       ApprovalLogger.log(

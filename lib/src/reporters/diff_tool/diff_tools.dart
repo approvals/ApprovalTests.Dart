@@ -3,7 +3,8 @@ part of '../../../../approval_tests.dart';
 /// `MacDiffTools` contains diff tools available on macOS.
 final class MacDiffTools {
   static const DiffInfo visualStudioCode = DiffInfo(
-    command: '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code',
+    command:
+        '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code',
     arg: '-d',
     name: 'code',
   );
@@ -23,7 +24,6 @@ final class WindowsDiffTools {
     name: 'code',
   );
 
-  // TODO: check correct path for Android Studio on Windows
   static const DiffInfo androidStudio = DiffInfo(
     command: 'C:\\Program Files\\Android\\Android Studio\\bin\\studio64.exe',
     arg: 'diff',

@@ -1,12 +1,12 @@
 part of '../../approval_tests.dart';
 
-/// `FileNotFoundException` is thrown when a file is not found.
-class FileNotFoundException implements Exception {
+/// `NoDiffToolException` is thrown when a diff tool is not found.
+class NoDiffToolException implements Exception {
   final String message;
 
   final StackTrace? stackTrace;
 
-  FileNotFoundException({
+  NoDiffToolException({
     required this.message,
     this.stackTrace,
   });

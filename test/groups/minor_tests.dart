@@ -1,16 +1,19 @@
-part of '../approval_test.dart';
+import 'dart:io';
 
-void minorTests({
-  required final ApprovalTestHelper helper,
-  required final DateTime dateTime,
-  required final String lines25,
-}) {
+import 'package:approval_tests/approval_tests.dart';
+import 'package:test/test.dart';
+
+import '../approval_test.dart';
+
+void main() {
+  final dateTime = DateTime(2021, 10, 10, 10, 10, 10);
+
   group('Approvals: test of other minor things |', () {
     setUpAll(() {
       ApprovalLogger.log("$lines25 Group: Minor tests are starting $lines25");
     });
 
-    test('Simulate file not found error during comparison. Must throw PathNotFoundException.', () async {
+    test('Simulate file not found error during comparison', () async {
       const comparator = FileComparator();
 
       // Setup: paths to non-existent files
@@ -27,11 +30,11 @@ void minorTests({
       );
 
       ApprovalLogger.success(
-        "Test Passed: Successfully handled a file not found error during comparison.",
+        "Test Passed: Successfully handled a file not found error during comparison with FileComparator. Method «compare» correctly throws PathNotFoundException as expected.",
       );
     });
 
-    test('Simulate file not found error during comparison. Must throw IDEComparatorException.', () async {
+    test('Simulate file not found error during reporting.', () async {
       const reporter = DiffReporter();
 
       // Setup: paths to non-existent files
@@ -48,11 +51,11 @@ void minorTests({
       );
 
       ApprovalLogger.success(
-        "Test Passed: Successfully handled a file not found error during comparison.",
+        "Test Passed: Successfully handled a file not found error during reporting. Method «report» correctly throws PathNotFoundException as expected.",
       );
     });
 
-    test('verify string with VS Code DiffReporter', () {
+    test('verify string using VS Code DiffReporter', () {
       expect(
         () => helper.verify(
           'Hello W0rld',
@@ -68,7 +71,7 @@ void minorTests({
       );
     });
 
-    test('verify string with Android Studio DiffReporter', () {
+    test('verify string using Android Studio DiffReporter', () {
       expect(
         () => helper.verify(
           'Hello W0rld',
@@ -86,8 +89,7 @@ void minorTests({
       );
     });
 
-    // if (Platform.isLinux) {
-    test('Verify string with DiffReporter. Must throw IDEComparatorException.', () async {
+    test('Verify string with not correct DiffInfo.', () async {
       const reporter = DiffReporter(
         customDiffInfo: DiffInfo(
           command: '/usr/bin/code',
@@ -96,11 +98,9 @@ void minorTests({
         ),
       );
 
-      // Setup: paths to non-existent files
       const existentApprovedPath = 'test/approved_files/approval_test.verify.approved.txt';
       const existentReceivedPath = 'test/approved_files/approval_test.verify.received.txt';
 
-      // Expect an exception to be thrown
       expect(
         () => reporter.report(
           existentApprovedPath,
@@ -110,10 +110,9 @@ void minorTests({
       );
 
       ApprovalLogger.success(
-        "Test Passed: Successfully handled a file not found error during comparison.",
+        "Test Passed: Successfully handled ProcessException for not correct DiffInfo.",
       );
     });
-    // }
 
     test('Verify string with scrubber', () {
       helper.verify(
@@ -143,7 +142,7 @@ void minorTests({
       );
     });
 
-    test('returns correct file path', () {
+    test('Returns correct file path', () {
       final fakeStackTraceFetcher = FakeStackTraceFetcher(
         helper.fakeStackTracePath,
       );
@@ -157,7 +156,7 @@ void minorTests({
       );
     });
 
-    test('throws FileNotFoundException when no file path in stack trace', () {
+    test('Throws FileNotFoundException when no file path in stack trace', () {
       const fakeStackTraceFetcher = FakeStackTraceFetcher(
         'no file path in this stack trace\nother stack trace lines...',
       );
@@ -174,7 +173,7 @@ void minorTests({
       );
     });
 
-    test('verify without namer', () {
+    test('Verify without namer', () {
       Approvals.verify(
         'Hello World',
         options: const Options(

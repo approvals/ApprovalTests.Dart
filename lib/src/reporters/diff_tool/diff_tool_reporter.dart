@@ -67,12 +67,17 @@ class DiffReporter implements Reporter {
           ComparatorIDE.vsCode => WindowsDiffTools.visualStudioCode,
           ComparatorIDE.studio => WindowsDiffTools.androidStudio,
         };
-      } else {
+      } else if (platformWrapper.isLinux) {
         return switch (ide) {
           ComparatorIDE.vsCode => LinuxDiffTools.visualStudioCode,
           ComparatorIDE.studio => LinuxDiffTools.androidStudio,
         };
       }
     }
+    throw NoDiffToolException(
+      message:
+          'Diff tool is not supported on this platform. Please add customDiffInfo.',
+      stackTrace: StackTrace.current,
+    );
   }
 }
