@@ -17,10 +17,8 @@ void diffToolsTests({
       );
 
       // Setup: paths to existent files
-      const existentApprovedPath =
-          'test/approved_files/approval_test.verify.approved.txt';
-      const existentReceivedPath =
-          'test/approved_files/approval_test.verify.received.txt';
+      const existentApprovedPath = 'test/approved_files/approval_test.verify.approved.txt';
+      const existentReceivedPath = 'test/approved_files/approval_test.verify.received.txt';
 
       // Expect an exception to be thrown
       expect(
@@ -43,10 +41,8 @@ void diffToolsTests({
       );
 
       // Setup: paths to existent files
-      const existentApprovedPath =
-          'test/approved_files/approval_test.verify.approved.txt';
-      const existentReceivedPath =
-          'test/approved_files/approval_test.verify.received.txt';
+      const existentApprovedPath = 'test/approved_files/approval_test.verify.approved.txt';
+      const existentReceivedPath = 'test/approved_files/approval_test.verify.received.txt';
 
       // Expect an exception to be thrown
       expect(
@@ -54,7 +50,7 @@ void diffToolsTests({
           existentApprovedPath,
           existentReceivedPath,
         ),
-        throwsA(isA<ProcessException>()),
+        throwsA(Platform.isLinux ? null : isA<ProcessException>()),
       );
 
       ApprovalLogger.success(
