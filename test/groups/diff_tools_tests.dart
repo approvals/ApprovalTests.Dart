@@ -6,6 +6,9 @@ import 'package:test/test.dart';
 import '../approval_test.dart';
 
 void main() {
+  final isWindows = Platform.isWindows;
+  final isLinux = Platform.isLinux;
+
   group('Approvals: test for Diff Tools', () {
     setUpAll(() {
       ApprovalLogger.log(
@@ -18,13 +21,10 @@ void main() {
         ide: ComparatorIDE.studio,
         platformWrapper: WindowsPlatformWrapper(),
       );
-      final isWindows = reporter.platformWrapper.isWindows;
 
       // Setup: paths to existent files
-      const existentApprovedPath =
-          'test/approved_files/approval_test.verify.approved.txt';
-      const existentReceivedPath =
-          'test/approved_files/approval_test.verify.received.txt';
+      const existentApprovedPath = 'test/approved_files/approval_test.verify.approved.txt';
+      const existentReceivedPath = 'test/approved_files/approval_test.verify.received.txt';
 
       // Expect an exception to be thrown
       expect(
@@ -46,13 +46,9 @@ void main() {
         platformWrapper: LinuxPlatformWrapper(),
       );
 
-      final isLinux = reporter.platformWrapper.isLinux;
-
       // Setup: paths to existent files
-      const existentApprovedPath =
-          'test/approved_files/approval_test.verify.approved.txt';
-      const existentReceivedPath =
-          'test/approved_files/approval_test.verify.received.txt';
+      const existentApprovedPath = 'test/approved_files/approval_test.verify.approved.txt';
+      const existentReceivedPath = 'test/approved_files/approval_test.verify.received.txt';
 
       // Expect an exception to be thrown
       expect(
@@ -75,10 +71,8 @@ void main() {
       );
 
       // Setup: paths to existent files
-      const existentApprovedPath =
-          'test/approved_files/approval_test.verify.approved.txt';
-      const existentReceivedPath =
-          'test/approved_files/approval_test.verify.received.txt';
+      const existentApprovedPath = 'test/approved_files/approval_test.verify.approved.txt';
+      const existentReceivedPath = 'test/approved_files/approval_test.verify.received.txt';
 
       // Expect an exception to be thrown
       expect(

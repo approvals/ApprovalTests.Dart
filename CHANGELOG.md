@@ -1,4 +1,4 @@
-## 5.0.0
+## 0.5.0
 
 - Updated documentation.
 - Updated dependencies.
@@ -7,6 +7,12 @@
 - Rewrited comparators. Now you can use `IDEComparator` without adding to global path. Also you can add custom diff tool.
 - Rewrited Scrubbers: regex scrubber, date scrubber.
 - Now, first run automatically create approved snapshot. You can approve another snapshot by setting `approveResult` to `true` and using Diff Tool.
+- Completely rewritten `CommandLineReporter`.
+There were changes with the comparison method, as well as highlighting by color the places where there are differences. Green - approved. White text on red background - Differences in received file.
+- Internal updates such as:
+   - Adding android studio installation via github actions to test Diff Reporter on different devices.
+   - Full code test coverage after significant changes.
+   - Changes to getting file name and path depending on platform.
 
 ## 0.4.6
 
