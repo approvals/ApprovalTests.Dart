@@ -28,6 +28,17 @@ jobs:
             choco install vscode
           fi
         shell: bash
+      
+      - name: Verify Visual Studio Code installation
+        run: |
+          if [[ "${{ runner.os }}" == "Linux" ]]; then
+            /snap/bin/code --version
+          elif [[ "${{ runner.os }}" == "macOS" ]]; then
+            /Applications/Visual Studio Code.app/Contents/Resources/app/bin/code --version
+          elif [[ "${{ runner.os }}" == "Windows" ]]; then
+            "C:\\Program Files\\Microsoft VS Code\\Code.exe" --version
+          fi
+        shell: bash
 
       - name: Build and test
         run: |
