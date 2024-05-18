@@ -54,7 +54,7 @@ jobs:
       - name: Verify Android Studio installation
         run: |
           if [[ "${{ runner.os }}" == "Linux" ]]; then
-            /snap/bin/studio --version
+            /snap/bin/android-studio --version
           elif [[ "${{ runner.os }}" == "macOS" ]]; then
             "/Applications/Android Studio.app/Contents/MacOS/studio" --version
           elif [[ "${{ runner.os }}" == "Windows" ]]; then
