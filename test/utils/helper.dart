@@ -55,8 +55,7 @@ class ApprovalTestHelper {
   }) {
     Approvals.verifyAll(
       contents,
-      processor: (item) => item
-          .toString(), // Simple processor function that returns the item itself.
+      processor: (item) => item.toString(), // Simple processor function that returns the item itself.
       options: _getOptions(
         testName,
         expectException: expectException,
@@ -166,4 +165,12 @@ class ApprovalTestHelper {
         reporter: reporter,
         scrubber: scrubber,
       );
+
+  String get testPath {
+    if (Platform.isWindows) {
+      return '\\path\\to\\file.dart';
+    } else {
+      return '/path/to/file.dart';
+    }
+  }
 }
