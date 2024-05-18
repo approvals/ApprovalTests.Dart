@@ -17,6 +17,9 @@ class Options {
   /// A final bool variable `deleteReceivedFile` used to determine if the received file should be deleted after passed test.
   final bool deleteReceivedFile;
 
+  /// A final bool variable `deleteApprovedFile` used to determine if the approved file should be deleted after passed test.
+  final bool deleteApprovedFile;
+
   /// A final variable `namer` of type `Namer` used to set the name and path of the file.
   final Namer? namer;
 
@@ -33,6 +36,7 @@ class Options {
     this.comparator = const FileComparator(),
     this.reporter = const CommandLineReporter(),
     this.deleteReceivedFile = false,
+    this.deleteApprovedFile = false,
     this.namer,
     this.logErrors = true,
     this.logResults = true,

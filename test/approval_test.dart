@@ -10,6 +10,7 @@ import 'queries/db_request_query.dart';
 
 part 'utils/helper.dart';
 part 'constants/lines.dart';
+part 'utils/testable_file_path_extractor.dart';
 
 void main() {
   /// ================== Init fields ==================
@@ -38,6 +39,7 @@ void main() {
       helper.verify(
         'Hello World',
         'verify',
+        approveResult: true,
       );
     });
 
@@ -116,7 +118,7 @@ void main() {
       ApprovalLogger.log("$lines25 Group: Minor cases are starting $lines25");
     });
 
-    test('Simulate file not found error during comparison. Must throw CommandLineComparatorException.', () async {
+    test('Simulate file not found error during comparison. Must throw PathNotFoundException.', () async {
       const comparator = FileComparator();
 
       // Setup: paths to non-existent files
@@ -224,6 +226,39 @@ void main() {
         'verify_date_scrub',
         scrubber: const ScrubDates(),
         deleteReceivedFile: false,
+      );
+    });
+
+    test('returns correct file path', () {
+      const fakeStackTraceFetcher = FakeStackTraceFetcher('file:///path/to/file.dart:10:11\nother stack trace lines...');
+
+      const filePathExtractor = FilePathExtractor(stackTraceFetcher: fakeStackTraceFetcher);
+      final filePath = filePathExtractor.filePath;
+
+      expect(filePath, '/path/to/file.dart');
+      ApprovalLogger.success(
+        "Test Passed: Successfully extracted the file path from the stack trace.",
+      );
+    });
+
+    test('throws FileNotFoundException when no file path in stack trace', () {
+      const fakeStackTraceFetcher = FakeStackTraceFetcher('no file path in this stack trace\nother stack trace lines...');
+
+      const filePathExtractor = FilePathExtractor(stackTraceFetcher: fakeStackTraceFetcher);
+
+      expect(() => filePathExtractor.filePath, throwsA(isA<FileNotFoundException>()));
+
+      ApprovalLogger.success(
+        "Test Passed: Successfully handled a file not found error during comparison.",
+      );
+    });
+
+    test('verify without namer', () {
+      Approvals.verify(
+        'Hello World',
+        options: const Options(
+          deleteReceivedFile: true,
+        ),
       );
     });
   });

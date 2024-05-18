@@ -7,8 +7,7 @@ final class ApprovalUtils {
     final int green = int.parse(hex.substring(2, 4), radix: 16);
     final int blue = int.parse(hex.substring(4, 6), radix: 16);
 
-    final AnsiPen pen = AnsiPen()
-      ..rgb(r: red / 255, g: green / 255, b: blue / 255);
+    final AnsiPen pen = AnsiPen()..rgb(r: red / 255, g: green / 255, b: blue / 255);
     return pen;
   }
 
@@ -22,21 +21,6 @@ final class ApprovalUtils {
       return result;
     } catch (e) {
       rethrow;
-    }
-  }
-
-  // Property that gets the file path of the current file.
-  static String get filePath {
-    final stackTraceString = StackTrace.current.toString();
-    final uriRegExp = RegExp(r'file:\/\/\/([^:]*):');
-
-    final match = uriRegExp.firstMatch(stackTraceString);
-
-    if (match != null) {
-      final filePath = Uri.tryParse(match.group(0)!);
-      return filePath!.toFilePath();
-    } else {
-      throw Exception('Could not find file path');
     }
   }
 
