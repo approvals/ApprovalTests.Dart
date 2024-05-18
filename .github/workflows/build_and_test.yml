@@ -43,7 +43,7 @@ jobs:
       - name: Setup Android Studio
         run: |
           if [[ "${{ runner.os }}" == "Linux" ]]; then
-            sudo snap install androidstudio --classic
+            sudo snap install studio --classic
           elif [[ "${{ runner.os }}" == "macOS" ]]; then
             brew install --cask android-studio
           elif [[ "${{ runner.os }}" == "Windows" ]]; then
