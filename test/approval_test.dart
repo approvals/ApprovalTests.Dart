@@ -18,6 +18,7 @@ void main() {
   const dbQuery = DatabaseRequestQuery("1");
   const lines25 = _Lines.lines25;
   const lines30 = _Lines.lines30;
+  final dateTime = DateTime(2021, 10, 10, 10, 10, 10);
 
   /// ================== Set up ==================
 
@@ -203,6 +204,26 @@ void main() {
         '  Hello    World  \t\n ',
         'verify_scrub',
         scrubber: const ScrubWithRegEx(),
+      );
+    });
+
+    test('Verify string with custom scrubber', () {
+      helper.verify(
+        '  Hello    World  \t\n ',
+        'verify_custom_scrub',
+        scrubber: ScrubWithRegEx.custom(
+          pattern: r'\s+',
+          replacementFunction: (match) => '-',
+        ),
+      );
+    });
+
+    test('Verify string with date scrubber', () {
+      helper.verifyAll(
+        [dateTime, DateTime.now()],
+        'verify_date_scrub',
+        scrubber: const ScrubDates(),
+        deleteReceivedFile: false,
       );
     });
   });

@@ -45,21 +45,24 @@ class ApprovalTestHelper {
   }
 
   void verifyAll(
-    List<String> contents,
+    List<dynamic> contents,
     String testName, {
     bool expectException = false,
     bool approveResult = false,
     bool deleteReceivedFile = true,
+    ApprovalScrubber scrubber = const ScrubNothing(),
+    Reporter reporter = const CommandLineReporter(),
   }) {
     Approvals.verifyAll(
       contents,
-      processor: (item) =>
-          item, // Simple processor function that returns the item itself.
+      processor: (item) => item.toString(), // Simple processor function that returns the item itself.
       options: _getOptions(
         testName,
         expectException: expectException,
         approveResult: approveResult,
         deleteReceivedFile: deleteReceivedFile,
+        scrubber: scrubber,
+        reporter: reporter,
       ),
     );
   }
@@ -102,7 +105,7 @@ class ApprovalTestHelper {
   }
 
   void verifySequence(
-    List<int> sequence,
+    List<dynamic> sequence,
     String testName, {
     bool expectException = false,
     bool approveResult = false,
