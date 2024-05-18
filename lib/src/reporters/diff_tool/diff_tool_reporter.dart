@@ -4,10 +4,12 @@ part of '../../../approval_tests.dart';
 class DiffReporter implements Reporter {
   final ComparatorIDE ide;
   final DiffInfo? customDiffInfo;
+  final IPlatformWrapper platformWrapper;
 
   const DiffReporter({
     this.ide = ComparatorIDE.vsCode,
     this.customDiffInfo,
+    this.platformWrapper = const PlatformWrapper(),
   });
 
   @override
@@ -32,10 +34,9 @@ class DiffReporter implements Reporter {
       if (e is ProcessException) {
         final ProcessResult result = await Process.run('which', ['code']);
         ApprovalLogger.exception(
-          'Error during comparison via ${ide.name}. Please try check path of IDE. \n Current path: ${diffInfo.command} with arg: "${diffInfo.arg}" \n Path to IDE: ${result.stdout} \n Please, add path to customDiffInfo.',
+          'Error during comparison via ${ide.name}. Please try check path of IDE. \n Current path: ${diffInfo.command} with arg: "${diffInfo.arg}" \n Path to IDE (${Platform.operatingSystem}): ${result.stdout} \n Please, add path to customDiffInfo.',
           stackTrace: st,
         );
-        rethrow;
       }
       rethrow;
     }
@@ -55,12 +56,12 @@ class DiffReporter implements Reporter {
     if (customDiffInfo != null) {
       return customDiffInfo!;
     } else {
-      if (Platform.isMacOS) {
+      if (platformWrapper.isMacOS) {
         return switch (ide) {
           ComparatorIDE.vsCode => MacDiffTools.visualStudioCode,
           ComparatorIDE.studio => MacDiffTools.androidStudio,
         };
-      } else if (Platform.isWindows) {
+      } else if (platformWrapper.isWindows) {
         return switch (ide) {
           ComparatorIDE.vsCode => WindowsDiffTools.visualStudioCode,
           ComparatorIDE.studio => WindowsDiffTools.androidStudio,
