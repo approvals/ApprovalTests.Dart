@@ -10,7 +10,9 @@ void minorTests({
       ApprovalLogger.log("$lines25 Group: Minor tests are starting $lines25");
     });
 
-    test('Simulate file not found error during comparison. Must throw PathNotFoundException.', () async {
+    test(
+        'Simulate file not found error during comparison. Must throw PathNotFoundException.',
+        () async {
       const comparator = FileComparator();
 
       // Setup: paths to non-existent files
@@ -31,7 +33,9 @@ void minorTests({
       );
     });
 
-    test('Simulate file not found error during comparison. Must throw IDEComparatorException.', () async {
+    test(
+        'Simulate file not found error during comparison. Must throw IDEComparatorException.',
+        () async {
       const reporter = DiffReporter();
 
       // Setup: paths to non-existent files
@@ -87,7 +91,8 @@ void minorTests({
     });
 
     // if (Platform.isLinux) {
-    test('Verify string with DiffReporter. Must throw IDEComparatorException.', () async {
+    test('Verify string with DiffReporter. Must throw IDEComparatorException.',
+        () async {
       const reporter = DiffReporter(
         customDiffInfo: DiffInfo(
           command: '/usr/bin/code',
@@ -97,8 +102,10 @@ void minorTests({
       );
 
       // Setup: paths to non-existent files
-      const existentApprovedPath = 'test/approved_files/approval_test.verify.approved.txt';
-      const existentReceivedPath = 'test/approved_files/approval_test.verify.received.txt';
+      const existentApprovedPath =
+          'test/approved_files/approval_test.verify.approved.txt';
+      const existentReceivedPath =
+          'test/approved_files/approval_test.verify.received.txt';
 
       // Expect an exception to be thrown
       expect(
@@ -148,7 +155,8 @@ void minorTests({
         'file:///path/to/file.dart:10:11\nother stack trace lines...',
       );
 
-      const filePathExtractor = FilePathExtractor(stackTraceFetcher: fakeStackTraceFetcher);
+      const filePathExtractor =
+          FilePathExtractor(stackTraceFetcher: fakeStackTraceFetcher);
       final filePath = filePathExtractor.filePath;
 
       expect(filePath, helper.testPath);
@@ -162,7 +170,8 @@ void minorTests({
         'no file path in this stack trace\nother stack trace lines...',
       );
 
-      const filePathExtractor = FilePathExtractor(stackTraceFetcher: fakeStackTraceFetcher);
+      const filePathExtractor =
+          FilePathExtractor(stackTraceFetcher: fakeStackTraceFetcher);
 
       expect(
         () => filePathExtractor.filePath,

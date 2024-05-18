@@ -32,7 +32,8 @@ class DiffReporter implements Reporter {
         rethrow;
       }
       if (e is ProcessException) {
-        final ProcessResult result = await Process.run(ApprovalUtils.commandWhere, [diffInfo.command]);
+        final ProcessResult result =
+            await Process.run(ApprovalUtils.commandWhere, [diffInfo.command]);
         ApprovalLogger.exception(
           'Error during comparison via ${ide.name}. Please try check path of IDE. \n Current path: ${diffInfo.command} with arg: "${diffInfo.arg}" \n Path to IDE (${Platform.operatingSystem}): ${result.stdout} \n Please, add path to customDiffInfo.',
           stackTrace: st,

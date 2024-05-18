@@ -10,13 +10,15 @@ class FilePathExtractor {
   String get filePath {
     try {
       final stackTraceString = _stackTraceFetcher.currentStackTrace;
-      final uriRegExp = RegExp(r'file:\/\/\/([^\s:]+)');
-
+      // ApprovalLogger.log('Stack trace: $stackTraceString');
+      //final uriRegExp = RegExp(r'file:\/\/\/([^\s:]+)');
+      final uriRegExp = RegExp(r'file://(/[a-zA-Z]:[^\s]*)');
       final match = uriRegExp.firstMatch(stackTraceString);
 
       if (match != null) {
-        final filePath = Uri.tryParse('file:///${match.group(1)!}');
-        return filePath!.toFilePath();
+        final rawPath = match.group(1)!.replaceAll(RegExp(r':\d+:\d+\)$'), '');
+        final filePath = Uri.parse('file://$rawPath');
+        return filePath.toFilePath(windows: Platform.isWindows);
       } else {
         throw FileNotFoundException(
           message: 'File not found in stack trace',

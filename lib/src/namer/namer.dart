@@ -17,9 +17,7 @@ final class Namer implements ApprovalNamer {
     if (options != null) {
       return options!.approved;
     }
-    return addTestName
-        ? '$filePath.$currentTestName.$approvedExtension'
-        : '$filePath.$approvedExtension';
+    return addTestName ? '$filePath.$currentTestName.$approvedExtension' : '$filePath.$approvedExtension';
   }
 
   @override
@@ -27,9 +25,7 @@ final class Namer implements ApprovalNamer {
     if (options != null) {
       return options!.approvedFileName;
     }
-    return addTestName
-        ? '$_fileName.$currentTestName.$approvedExtension'
-        : '$_fileName.$approvedExtension';
+    return addTestName ? '$_fileName.$currentTestName.$approvedExtension' : '$_fileName.$approvedExtension';
   }
 
   @override
@@ -37,9 +33,7 @@ final class Namer implements ApprovalNamer {
     if (options != null) {
       return options!.received;
     }
-    return addTestName
-        ? '$filePath.$currentTestName.$receivedExtension'
-        : '$filePath.$receivedExtension';
+    return addTestName ? '$filePath.$currentTestName.$receivedExtension' : '$filePath.$receivedExtension';
   }
 
   @override
@@ -47,9 +41,7 @@ final class Namer implements ApprovalNamer {
     if (options != null) {
       return options!.receivedFileName;
     }
-    return addTestName
-        ? '$_fileName.$currentTestName.$receivedExtension'
-        : '$_fileName.$receivedExtension';
+    return addTestName ? '$_fileName.$currentTestName.$receivedExtension' : '$_fileName.$receivedExtension';
   }
 
   @override
@@ -58,7 +50,11 @@ final class Namer implements ApprovalNamer {
     return testName == null ? '' : testName.replaceAll(' ', '_');
   }
 
-  String get _fileName => filePath!.split('/').last.split('.dart').first;
+  String get _fileName {
+    final path = filePath!;
+    final separator = Platform.isWindows ? '\\' : '/';
+    return path.split(separator).last.split('.dart').first;
+  }
 
   static const String approvedExtension = 'approved.txt';
 
