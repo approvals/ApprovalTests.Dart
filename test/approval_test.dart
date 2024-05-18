@@ -97,7 +97,8 @@ void main() {
       );
     });
 
-    test("Method «verify» must throw DoesntMatchException with error handling", () {
+    test("Method «verify» must throw DoesntMatchException with error handling",
+        () {
       expect(
         () => helper.verify(
           'Hello W0rld',
@@ -118,7 +119,9 @@ void main() {
       ApprovalLogger.log("$lines25 Group: Minor cases are starting $lines25");
     });
 
-    test('Simulate file not found error during comparison. Must throw PathNotFoundException.', () async {
+    test(
+        'Simulate file not found error during comparison. Must throw PathNotFoundException.',
+        () async {
       const comparator = FileComparator();
 
       // Setup: paths to non-existent files
@@ -139,7 +142,9 @@ void main() {
       );
     });
 
-    test('Simulate file not found error during comparison. Must throw IDEComparatorException.', () async {
+    test(
+        'Simulate file not found error during comparison. Must throw IDEComparatorException.',
+        () async {
       const reporter = DiffReporter();
 
       // Setup: paths to non-existent files
@@ -177,14 +182,17 @@ void main() {
     });
 
     // if (Platform.isLinux) {
-    test('Verify string with DiffReporter. Must throw IDEComparatorException.', () async {
+    test('Verify string with DiffReporter. Must throw IDEComparatorException.',
+        () async {
       const reporter = DiffReporter(
         customDiffInfo: LinuxDiffTools.visualStudioCode,
       );
 
       // Setup: paths to non-existent files
-      const nonExistentApprovedPath = 'test/approved_files/approval_test.verify.approved.txt';
-      const nonExistentReceivedPath = 'test/approved_files/approval_test.verify.received.txt';
+      const nonExistentApprovedPath =
+          'test/approved_files/approval_test.verify.approved.txt';
+      const nonExistentReceivedPath =
+          'test/approved_files/approval_test.verify.received.txt';
 
       // Expect an exception to be thrown
       expect(
@@ -230,9 +238,11 @@ void main() {
     });
 
     test('returns correct file path', () {
-      const fakeStackTraceFetcher = FakeStackTraceFetcher('file:///path/to/file.dart:10:11\nother stack trace lines...');
+      const fakeStackTraceFetcher = FakeStackTraceFetcher(
+          'file:///path/to/file.dart:10:11\nother stack trace lines...',);
 
-      const filePathExtractor = FilePathExtractor(stackTraceFetcher: fakeStackTraceFetcher);
+      const filePathExtractor =
+          FilePathExtractor(stackTraceFetcher: fakeStackTraceFetcher);
       final filePath = filePathExtractor.filePath;
 
       expect(filePath, '/path/to/file.dart');
@@ -242,11 +252,14 @@ void main() {
     });
 
     test('throws FileNotFoundException when no file path in stack trace', () {
-      const fakeStackTraceFetcher = FakeStackTraceFetcher('no file path in this stack trace\nother stack trace lines...');
+      const fakeStackTraceFetcher = FakeStackTraceFetcher(
+          'no file path in this stack trace\nother stack trace lines...',);
 
-      const filePathExtractor = FilePathExtractor(stackTraceFetcher: fakeStackTraceFetcher);
+      const filePathExtractor =
+          FilePathExtractor(stackTraceFetcher: fakeStackTraceFetcher);
 
-      expect(() => filePathExtractor.filePath, throwsA(isA<FileNotFoundException>()));
+      expect(() => filePathExtractor.filePath,
+          throwsA(isA<FileNotFoundException>()),);
 
       ApprovalLogger.success(
         "Test Passed: Successfully handled a file not found error during comparison.",
