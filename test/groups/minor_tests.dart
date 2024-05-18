@@ -98,8 +98,10 @@ void main() {
         ),
       );
 
-      const existentApprovedPath = 'test/approved_files/approval_test.verify.approved.txt';
-      const existentReceivedPath = 'test/approved_files/approval_test.verify.received.txt';
+      const existentApprovedPath =
+          'test/approved_files/approval_test.verify.approved.txt';
+      const existentReceivedPath =
+          'test/approved_files/approval_test.verify.received.txt';
 
       expect(
         () => reporter.report(
@@ -147,7 +149,8 @@ void main() {
         helper.fakeStackTracePath,
       );
 
-      final filePathExtractor = FilePathExtractor(stackTraceFetcher: fakeStackTraceFetcher);
+      final filePathExtractor =
+          FilePathExtractor(stackTraceFetcher: fakeStackTraceFetcher);
       final filePath = filePathExtractor.filePath;
 
       expect(filePath, helper.testPath);
@@ -161,7 +164,8 @@ void main() {
         'no file path in this stack trace\nother stack trace lines...',
       );
 
-      const filePathExtractor = FilePathExtractor(stackTraceFetcher: fakeStackTraceFetcher);
+      const filePathExtractor =
+          FilePathExtractor(stackTraceFetcher: fakeStackTraceFetcher);
 
       expect(
         () => filePathExtractor.filePath,
