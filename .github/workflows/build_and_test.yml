@@ -11,14 +11,15 @@ jobs:
         os: [macos-latest, ubuntu-latest, windows-latest]
 
     steps:
-      - uses: actions/checkout@v4
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v4
 
-      - name: Set up Dart SDK
+      - name: 🐦 Set up Dart SDK
         uses: dart-lang/setup-dart@v1.4
         with:
           sdk: stable
 
-      - name: Setup Visual Studio Code
+      - name: 📦 Setup Visual Studio Code
         run: |
           if [[ "${{ runner.os }}" == "Linux" ]]; then
             sudo snap install code --classic
@@ -29,7 +30,7 @@ jobs:
           fi
         shell: bash
       
-      - name: Verify Visual Studio Code installation
+      - name: ✔️ Verify Visual Studio Code installation
         run: |
           if [[ "${{ runner.os }}" == "Linux" ]]; then
             /snap/bin/code --version
@@ -40,7 +41,7 @@ jobs:
           fi
         shell: bash
 
-      - name: Setup Android Studio
+      - name: 📦 Setup Android Studio
         run: |
           if [[ "${{ runner.os }}" == "Linux" ]]; then
             sudo snap install android-studio --classic
@@ -51,7 +52,7 @@ jobs:
           fi
         shell: bash
       
-      - name: Verify Android Studio installation
+      - name: ✔️ Verify Android Studio installation
         run: |
           if [[ "${{ runner.os }}" == "Linux" ]]; then
             /snap/bin/android-studio --version
@@ -62,10 +63,19 @@ jobs:
           fi
         shell: bash
 
-      - name: Build and test
+      - name: 📦 Install Dependencies
         run: |
-          ./bash/build_and_test.sh
-        shell: bash
+         dart pub global activate coverage
+         dart pub get
+
+      - name: ✨ Check Formatting
+        run: dart format --set-exit-if-changed .
+      
+      - name: 🕵️ Analyze
+        run: flutter analyze .
+
+      - name: 🧪 Run Tests
+        run: dart run test --coverage=./coverage && dart pub global run coverage:format_coverage --packages=.dart_tool/package_config.json --report-on=lib --lcov -o ./coverage/lcov.info -i ./coverage
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.4.0
