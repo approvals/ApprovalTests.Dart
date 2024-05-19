@@ -72,7 +72,7 @@ jobs:
         run: dart format --set-exit-if-changed .
       
       - name: 🕵️ Analyze
-        run: flutter analyze .
+        run: dart analyze .
 
       - name: 🧪 Run Tests
         run: dart run test --coverage=./coverage && dart pub global run coverage:format_coverage --packages=.dart_tool/package_config.json --report-on=lib --lcov -o ./coverage/lcov.info -i ./coverage
