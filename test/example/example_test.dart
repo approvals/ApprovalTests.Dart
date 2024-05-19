@@ -12,6 +12,9 @@ void main() {
 
     Approvals.verifyAsJson(
       complexObject,
+      options: const Options(
+        approveResult: true,
+      ),
     );
   });
 }

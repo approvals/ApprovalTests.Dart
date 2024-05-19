@@ -61,7 +61,9 @@ void main() {
           'Hello W0rld',
           'verify',
           deleteReceivedFile: false,
-          reporter: const DiffReporter(),
+          reporter: const DiffReporter(
+            ide: ComparatorIDE.studio, //  ComparatorIDE.vsCode
+          ),
         ),
         throwsA(isA<DoesntMatchException>()),
       );

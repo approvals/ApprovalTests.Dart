@@ -36,7 +36,10 @@ In normal unit testing, you say `expect(person.getAge(), 5)`. Approvals allow yo
 
 I am writing an implementation of **[Approval Tests](https://approvaltests.com/)** in Dart. If anyone wants to help, please **[text](https://t.me/yelmuratoff)** me. 🙏
 
-<!-- At the moment the package is **in development** and <u>not ready</u> to use. 🚧 -->
+## 📋 How it works
+
+- If the changed results match the approved file perfectly, the test passes.
+- If there's a difference, a reporter tool will highlight the mismatch and the test fails.
 
 ## 📦 Installation
 
@@ -61,6 +64,16 @@ It comes ready with:
 - A GitHub action to run tests and you can always check the status of the tests on the badge in the `README.md` file.
 
 ## 📚 How to use
+
+In order to use Approval Tests, the user needs to:
+
+1. Set up a test: This involves importing the Approval Tests library into your own code.
+
+2. Optionally, set up a reporter: Reporters are tools that highlight differences between approved and received files when a test fails. Although not necessary, they make it significantly easier to see what changes have caused a test to fail. The default reporter is the `CommandLineReporter`. You can also use the `DiffReporter` to compare the files in your IDE.
+
+3. Manage the "approved" file: When the test is run for the first time, an approved file is created automatically. This file will represent the expected outcome. Once the test results in a favorable outcome, the approved file should be updated to reflect these changes. A little bit below I wrote how to do it.
+
+This setup is useful because it shortens feedback loops, saving developers time by only highlighting what has been altered rather than requiring them to parse through their entire output to see what effect their changes had.
 
 ### Approving Results
 
@@ -115,38 +128,24 @@ this will result in the following file
 #### • Via file rename
 You can just rename the `.received` file to `.approved`.
 
-### Comparators
+### Reporters
 
-You can use different comparators to compare files. The default is `CommandLineComparator` which compares files in the console.
+Reporters are the part of Approval Tests that launch diff tools when things do not match. They are the part of the system that makes it easy to see what has changed.
+
+There are several reporters available in the package:
+- `CommandLineReporter` - This is the default reporter, which will output the diff in the terminal.
+- `DiffReporter` - This reporter will open the Diff Tool in your IDE.
+   - For Diff Reporter I using the default paths to the IDE, if something didn't work then you in the console see the expected correct path to the IDE and specify customDiffInfo. You can also contact me for help.
 
 <img src="https://github.com/yelmuratoff/packages_assets/blob/main/assets/approval_tests/diff_command_line.png?raw=true" alt="CommandLineComparator img" title="ApprovalTests" style="max-width: 500px;">
 
 
-To use `IDEComparator` you just need to add it to `options`:
+To use `DiffReporter` you just need to add it to `options`:
 ```dart
  options: const Options(
-   comparator: IDEComparator(
-      ide: ComparatorIDE.visualStudioCode,
-   ),
+   reporter: const DiffReporter(),
  ),
 ```
-
-But before you add an `IDEComparator` you need to do the initial customization:
-
-- **Visual Studio Code**
-  - For this method to work, you need to have Visual Studio Code installed on your machine.
-  - And you need to have the `code` command available in your terminal.
-  - To enable the `code` command, press `Cmd + Shift + P` and type `Shell Command: Install 'code' command in PATH`.
-
-- **IntelliJ IDEA**
-   - For this method to work, you need to have IntelliJ IDEA installed on your machine.
-   - And you need to have the `idea` command available in your terminal.
-   - To enable the `idea` command, you need to create the command-line launcher using `Tools - Create Command-line Launcher` in IntelliJ IDEA.
-
-- **Android Studio**
-   - For this method to work, you need to have Android Studio installed on your machine.
-   - And you need to have the `studio` command available in your terminal.
-   - To enable the `studio` command, you need to create the command-line launcher using `Tools - Create Command-line Launcher` in Android Studio.
 
 <div style="display: flex; justify-content: center; align-items: center;">
   <img src="https://github.com/yelmuratoff/packages_assets/blob/main/assets/approval_tests/diff_tool_vs_code.png?raw=true" alt="Visual Studio code img" style="width: 45%;margin-right: 1%;" />
