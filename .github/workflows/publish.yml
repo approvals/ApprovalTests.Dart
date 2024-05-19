@@ -15,14 +15,14 @@ jobs:
   create_release:
       runs-on: ubuntu-latest
       steps:
-        - name: Checkout code
+        - name: 📚 Git Checkout
           uses: actions/checkout@v4
   
-        - name: Get the latest tag
+        - name: 📎 Get the latest tag
           id: tag
           run: echo ::set-output name=tag::${GITHUB_REF##*/}
   
-        - name: Create GitHub release
+        - name: 📌 Create GitHub release
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           run: |

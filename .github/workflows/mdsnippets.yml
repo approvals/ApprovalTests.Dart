@@ -5,13 +5,17 @@ jobs:
   format_and_snippets:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: Run MarkdownSnippets
+
+    - name: 📚 Git Checkout
+      uses: actions/checkout@v4
+
+    - name: ♻️ Run MarkdownSnippets
       run: |
         dotnet tool install --global MarkdownSnippets.Tool
         mdsnippets ${GITHUB_WORKSPACE}
       shell: bash
-    - name: Git Commit and Push
+
+    - name: ⬆️ Git Commit and Push
       uses: github-actions-x/commit@v2.9
       with:
         github-token: "${secrets.GITHUB_TOKEN}"
