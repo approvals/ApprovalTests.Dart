@@ -47,7 +47,7 @@ Add the following to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  approval_tests: ^0.5.0
+  approval_tests: ^0.5.1
 ```
 
 ## 👀 Getting Started

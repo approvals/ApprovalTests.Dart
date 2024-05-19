@@ -1,10 +1,10 @@
-## 0.5.0
+## 0.5.1
 
 - Updated documentation.
 - Updated dependencies.
 - Updated `README.md` file.
 - Updated `TODO.md` file.
-- Rewrited comparators. Now you can use `IDEComparator` without adding to global path. Also you can add custom diff tool.
+- Rewrited comparators. Now it is only FileComparator.
 - Rewrited Scrubbers: regex scrubber, date scrubber.
 - Now, first run automatically create approved snapshot. You can approve another snapshot by setting `approveResult` to `true` and using Diff Tool.
 - Completely rewritten `CommandLineReporter`.
