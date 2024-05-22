@@ -6,10 +6,7 @@ This is the markdown todo file for Approval Tests.
 
 Tasks for the project are listed below:
 
-* [ ] Refactor the code based on ApprovalTests architectural rules: check reporters and comparators
 * [ ] Add more detailed documentation to the project
-* [ ] Test new comparators on Windows
-* [ ] Test new comparators on Linux
 
 # DONE
 
@@ -29,4 +26,7 @@ Tasks for the project are listed below:
 * [x] Cover the project completely with tests
 * [x] Add name of current test to the file name
 * [x] Rewrite comparators and reporters
+* [x] Test new comparators on Windows
+* [x] Test new comparators on Linux
+* [x] Refactor the code based on ApprovalTests architectural rules: check reporters and comparators
 * [x] Revise the implementation with getting the default file path. Now it works with primary delay. Read more: https://github.com/approvals/ApprovalTests.Dart/issues/3

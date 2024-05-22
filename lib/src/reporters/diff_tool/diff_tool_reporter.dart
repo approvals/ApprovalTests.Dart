@@ -4,6 +4,8 @@ part of '../../../approval_tests.dart';
 class DiffReporter implements Reporter {
   final ComparatorIDE ide;
   final DiffInfo? customDiffInfo;
+
+  /// Platform wrapper for testing purposes.
   final IPlatformWrapper platformWrapper;
 
   const DiffReporter({
