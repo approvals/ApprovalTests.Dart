@@ -1,4 +1,4 @@
-part of '../../approval_tests.dart';
+part of '../../../approval_tests.dart';
 
 class FilePathExtractor {
   final IStackTraceFetcher _stackTraceFetcher;

@@ -16,7 +16,7 @@ part 'src/core/approval_writer.dart';
 part 'src/core/comparator.dart';
 part 'src/core/enums/comporator_ide.dart';
 part 'src/core/extensions/approval_string_extensions.dart';
-part 'src/core/file_path_extractor.dart';
+part 'src/core/utils/file_path_extractor.dart';
 part 'src/core/logger/logger.dart';
 part 'src/core/options.dart';
 part 'src/core/platform_wrapper.dart';
