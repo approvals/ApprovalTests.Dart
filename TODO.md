@@ -7,6 +7,7 @@ This is the markdown todo file for Approval Tests.
 Tasks for the project are listed below:
 
 * [ ] Add more detailed documentation to the project
+* [ ] Add CLI for Reviewing and Approving Tests: https://github.com/approvals/ApprovalTests.Dart/issues/11
 
 # DONE
 
