@@ -8,7 +8,8 @@ extension StringApprovedExtension on String {
 
 extension DirectoryApprovedExtension on Directory {
   Set<File> filesWithExtension(String extension) {
-    final fileSystemEntities = listSync().where((entity) => entity is File && entity.path.endsWith(extension));
+    final fileSystemEntities = listSync()
+        .where((entity) => entity is File && entity.path.endsWith(extension));
     return fileSystemEntities.whereType<File>().toSet();
   }
 }

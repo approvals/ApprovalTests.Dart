@@ -13,7 +13,8 @@ void main() async {
   await for (final file in searchDirectory.list(recursive: true)) {
     if (file.path.endsWith('.received.txt')) {
       final reviewFile = file;
-      final approvedFileName = file.path.replaceAll('.received.txt', '.approved.txt');
+      final approvedFileName =
+          file.path.replaceAll('.received.txt', '.approved.txt');
       final approvedFile = File(approvedFileName);
 
       if (approvedFile.existsSync()) {
@@ -24,7 +25,9 @@ void main() async {
 
   await Future.wait(tasks);
 
-  ApprovalLogger.success('Review process completed: ${tasks.length} files reviewed.');
+  ApprovalLogger.success(
+    'Review process completed: ${tasks.length} files reviewed.',
+  );
 }
 
 /// Check of the files are different using "git diff"
@@ -34,7 +37,8 @@ Future<void> processFile(File approvedFile, FileSystemEntity reviewFile) async {
   ComparatorIDE comparatorIDE = ComparatorIDE.vsCode;
 
   if (resultString.isNotEmpty || resultString.isNotEmpty) {
-    final String fileNameWithoutExtension = approvedFile.path.split('/').last.split('.').first;
+    final String fileNameWithoutExtension =
+        approvedFile.path.split('/').last.split('.').first;
     GitReporter.printGitDiffs(fileNameWithoutExtension, resultString);
 
     String? firstCharacter;

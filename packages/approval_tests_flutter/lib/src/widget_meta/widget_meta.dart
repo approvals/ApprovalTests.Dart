@@ -11,17 +11,23 @@ class WidgetMeta {
   }) {
     _updateWidgetKey();
     widgetType = widget.runtimeType;
-    isWidgetTypeRegistered = registeredTypes.contains(widgetType) || registeredNames.contains(widgetType.toString());
+    isWidgetTypeRegistered = registeredTypes.contains(widgetType) ||
+        registeredNames.contains(widgetType.toString());
     _updateWidgetText();
     _updateMatcher();
 
-    assert(keyString.isNotEmpty || isWidgetTypeRegistered || widgetText.isNotEmpty, 'WidgetMeta widget is invalid');
+    assert(
+      keyString.isNotEmpty || isWidgetTypeRegistered || widgetText.isNotEmpty,
+      'WidgetMeta widget is invalid',
+    );
   }
 
   @override
   bool operator ==(Object other) {
     if (other is WidgetMeta) {
-      return keyString == other.keyString && widgetText == other.widgetText && widgetType == other.widgetType;
+      return keyString == other.keyString &&
+          widgetText == other.widgetText &&
+          widgetType == other.widgetType;
     } else {
       return false;
     }
@@ -111,7 +117,8 @@ class WidgetMeta {
         final strippedWidgetKey = originalWidgetKey.replaceAll("'", '');
         final startIndex = strippedWidgetKey.indexOf('[<');
         final endIndex = strippedWidgetKey.indexOf('>]');
-        final trimmedWidgetKey = strippedWidgetKey.substring(startIndex + 2, endIndex);
+        final trimmedWidgetKey =
+            strippedWidgetKey.substring(startIndex + 2, endIndex);
         final words = trimmedWidgetKey.split(RegExp("__|_"));
         words.removeWhere((word) => word == '');
 
@@ -142,14 +149,17 @@ class WidgetMeta {
   }
 
   bool _isWidgetKeyProperlyFormatted(String originalWidgetKey) =>
-      (originalWidgetKey.isCustomString || originalWidgetKey.isEnumString || originalWidgetKey.isValueKeyString) &&
+      (originalWidgetKey.isCustomString ||
+          originalWidgetKey.isEnumString ||
+          originalWidgetKey.isValueKeyString) &&
       originalWidgetKey.contains('[<') &&
       originalWidgetKey.contains('>]');
 }
 
 extension KeyString on String {
   bool get isCustomString => this.contains('__');
-  bool get isEnumString => this.contains('_') == false && this.contains('.') == true;
+  bool get isEnumString =>
+      this.contains('_') == false && this.contains('.') == true;
   bool get isValueKeyString => this.startsWith('[<') && this.endsWith('>]');
 }
 

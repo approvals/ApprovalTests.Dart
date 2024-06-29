@@ -9,7 +9,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 Set<String> registeredNames = {};
 
-const String instructions = '/// Replace your call to generateExpects with the code below.';
+const String instructions =
+    '/// Replace your call to generateExpects with the code below.';
 List<WidgetMeta> _previousWidgetMetas = [];
 List<String> _previousExpectStrings = [];
 bool _isEnStringReverseLookupLoaded = false;
@@ -128,7 +129,8 @@ Future<List<String>> collectWidgetsMetaData(
         tester: tester,
         verbose: verbose,
         silent: silent,
-        outputType: (outputMeta ?? false) ? OutputType.widgetMeta : OutputType.expects,
+        outputType:
+            (outputMeta ?? false) ? OutputType.widgetMeta : OutputType.expects,
       ),
     );
   }
@@ -146,17 +148,22 @@ Future<List<String>> _generateExpectsForWidgets(
   final text = <String>[];
 
   final currentWidgetMetas = _widgetMetasFromWidgets(widgets);
-  final deltaWidgetMetas = _getDeltaWidgetMetas(currentWidgetMetas, _previousWidgetMetas);
+  final deltaWidgetMetas =
+      _getDeltaWidgetMetas(currentWidgetMetas, _previousWidgetMetas);
   currentWidgetMetas.addAll(deltaWidgetMetas);
-  final currentExpectStrings = _outputStringsFromWidgetMetas(currentWidgetMetas, outputType, verbose);
-  final deltaExpectStrings = _getDeltaExpectStrings(currentExpectStrings, _previousExpectStrings);
+  final currentExpectStrings =
+      _outputStringsFromWidgetMetas(currentWidgetMetas, outputType, verbose);
+  final deltaExpectStrings =
+      _getDeltaExpectStrings(currentExpectStrings, _previousExpectStrings);
 
   if (!silent) {
     if (deltaExpectStrings.isEmpty) {
       if (_previousWidgetMetas.isEmpty) {
         text.add('/// No widget with keys or custom types found to test');
       } else {
-        text.add("/// No changes to widget with keys or custom types since the prior call to 'generateExpects'");
+        text.add(
+          "/// No changes to widget with keys or custom types since the prior call to 'generateExpects'",
+        );
       }
     } else {
       if (verbose && outputType == OutputType.expects) {
@@ -172,8 +179,13 @@ Future<List<String>> _generateExpectsForWidgets(
   return text;
 }
 
-List<String> _getDeltaExpectStrings(List<String> currentExpectStrings, List<String> previousExpectStrings) {
-  final deltaExpectStrings = currentExpectStrings.where((item) => !previousExpectStrings.contains(item)).toList();
+List<String> _getDeltaExpectStrings(
+  List<String> currentExpectStrings,
+  List<String> previousExpectStrings,
+) {
+  final deltaExpectStrings = currentExpectStrings
+      .where((item) => !previousExpectStrings.contains(item))
+      .toList();
 
   return deltaExpectStrings;
 }
@@ -197,7 +209,8 @@ List<WidgetMeta> _widgetMetasFromWidgets(List<Widget> widgets) {
   return widgetMetas;
 }
 
-bool _isProperlyFormattedKey(Widget widget) => widget.key.toString().indexOf('[<') == 0;
+bool _isProperlyFormattedKey(Widget widget) =>
+    widget.key.toString().indexOf('[<') == 0;
 
 /// The order to output expects
 enum _ExpectTypeOrder {
@@ -244,7 +257,9 @@ List<String> _outputStringsFromWidgetMetas(
     if (!generatedNonIntlTextComment && sortOrder(expectMeta) == 2) {
       generatedNonIntlTextComment = true;
       if (verbose) {
-        result.add('\t// No reverse lookup found for the text in the expect statements below');
+        result.add(
+          '\t// No reverse lookup found for the text in the expect statements below',
+        );
       }
     }
 
@@ -267,12 +282,18 @@ void _outputText(List<String> strings) {
   }
 }
 
-List<WidgetMeta> _getDeltaWidgetMetas(List<WidgetMeta> currentWidgetMetas, List<WidgetMeta> previousWidgetMetas) {
-  final deltaPreviousWidgetMetas = previousWidgetMetas.where((item) => !currentWidgetMetas.contains(item)).toList();
+List<WidgetMeta> _getDeltaWidgetMetas(
+  List<WidgetMeta> currentWidgetMetas,
+  List<WidgetMeta> previousWidgetMetas,
+) {
+  final deltaPreviousWidgetMetas = previousWidgetMetas
+      .where((item) => !currentWidgetMetas.contains(item))
+      .toList();
 
   // Matchers may have changed for the previous tests (e.g., findsOneWidget may now be findNothing), so update
-  final updatedDeltaPreviousWidgetMetas =
-      deltaPreviousWidgetMetas.map((widgetMeta) => WidgetMeta(widget: widgetMeta.widget)).toList();
+  final updatedDeltaPreviousWidgetMetas = deltaPreviousWidgetMetas
+      .map((widgetMeta) => WidgetMeta(widget: widgetMeta.widget))
+      .toList();
 
   return updatedDeltaPreviousWidgetMetas;
 }
@@ -303,7 +324,9 @@ List<Widget> _getWidgetsForExpects(
     if (isEmptyTextWidget(widget)) {
       result = false;
     } else {
-      result = (widget.key != null && (widget.key.toString().isCustomString || widget.key.toString().isEnumString)) ||
+      result = (widget.key != null &&
+              (widget.key.toString().isCustomString ||
+                  widget.key.toString().isEnumString)) ||
           registeredTypes.contains(widget.runtimeType) ||
           widgetNames.contains(widget.runtimeType.toString()) ||
           WidgetMeta.isTextEnabled(widget);
@@ -324,13 +347,20 @@ List<String> _expectStringsFromExpectMeta(ExpectMeta expectMeta) {
   final expects = <String>[];
 
   // Number of attributes (e.g., Type, key, text) to match in expect
-  final int attributesToMatchCount = (expectMeta.widgetMeta.keyString.isNotEmpty ? 1 : 0) +
-      (expectMeta.widgetMeta.widgetText.isNotEmpty ? 1 : 0) +
-      (expectMeta.widgetMeta.isWidgetTypeRegistered ? 1 : 0);
+  final int attributesToMatchCount =
+      (expectMeta.widgetMeta.keyString.isNotEmpty ? 1 : 0) +
+          (expectMeta.widgetMeta.widgetText.isNotEmpty ? 1 : 0) +
+          (expectMeta.widgetMeta.isWidgetTypeRegistered ? 1 : 0);
 
   if (attributesToMatchCount >= 1) {
-    if (_haveEnString(expectMeta.widgetMeta.widgetText) || attributesToMatchCount >= 2) {
-      expects.addAll(_generateExpectWidgets(expectMeta.widgetMeta, attributesToMatchCount));
+    if (_haveEnString(expectMeta.widgetMeta.widgetText) ||
+        attributesToMatchCount >= 2) {
+      expects.addAll(
+        _generateExpectWidgets(
+          expectMeta.widgetMeta,
+          attributesToMatchCount,
+        ),
+      );
     } else {
       expects.add(_generateExpect(expectMeta.widgetMeta));
     }
@@ -355,14 +385,17 @@ String _generateExpect(WidgetMeta widgetMeta) {
       generatedExpect =
           '\texpect(find.byKey(const ValueKey(${widgetMeta.keyString})), ${widgetMeta.matcherType.matcherName});';
     } else if (widgetMeta.keyType == KeyType.stringValueKey) {
-      generatedExpect = '\texpect(find.byKey(${widgetMeta.keyString}), ${widgetMeta.matcherType.matcherName});';
+      generatedExpect =
+          '\texpect(find.byKey(${widgetMeta.keyString}), ${widgetMeta.matcherType.matcherName});';
     } else {
       throw Exception('Unexpected keyType');
     }
   } else if (widgetMeta.widgetText.isNotEmpty) {
-    generatedExpect = "\texpect(find.text('${widgetMeta.widgetText}'), ${widgetMeta.matcherType.matcherName});";
+    generatedExpect =
+        "\texpect(find.text('${widgetMeta.widgetText}'), ${widgetMeta.matcherType.matcherName});";
   } else if (widgetMeta.isWidgetTypeRegistered) {
-    generatedExpect = '\texpect(find.byType(${widgetMeta.widgetType}), ${widgetMeta.matcherType.matcherName});';
+    generatedExpect =
+        '\texpect(find.byType(${widgetMeta.widgetType}), ${widgetMeta.matcherType.matcherName});';
   } else {
     generatedExpect = '(Internal error. Expect not generated.)';
   }
@@ -414,7 +447,8 @@ List<String> _generateExpectWidgets(
     buffer.write(', matcher: ${widgetMeta.matcherType.matcherName},');
   }
 
-  bool haveMoreAttributesToProcess() => ++attributesWrittenToBuffer < attributesToMatch;
+  bool haveMoreAttributesToProcess() =>
+      ++attributesWrittenToBuffer < attributesToMatch;
 
   buffer.write('\ttester.expectWidget(');
 
@@ -449,7 +483,9 @@ List<String> _generateExpectWidgets(
   } else {
     final bufferString = buffer.toString();
     if (intlKeys!.length > 1) {
-      result.add('\t// Multiple matches for "${widgetMeta.widgetText}" in string_en.json. Pick one.');
+      result.add(
+        '\t// Multiple matches for "${widgetMeta.widgetText}" in string_en.json. Pick one.',
+      );
     }
     for (final intlKey in intlKeys!) {
       result.add(bufferString.replaceAll(intlPlaceHolder, intlKey));

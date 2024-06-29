@@ -6,7 +6,8 @@ class GitReporter implements Reporter {
 
   @override
   Future<void> report(String approvedPath, String receivedPath) async {
-    const DiffInfo diffInfo = DiffInfo(name: "Git", command: 'git', arg: 'diff --no-index');
+    const DiffInfo diffInfo =
+        DiffInfo(name: "Git", command: 'git', arg: 'diff --no-index');
 
     try {
       await Future.wait([
@@ -24,7 +25,8 @@ class GitReporter implements Reporter {
         rethrow;
       }
       if (e is ProcessException) {
-        final ProcessResult result = await Process.run(ApprovalUtils.commandWhere, [diffInfo.command]);
+        final ProcessResult result =
+            await Process.run(ApprovalUtils.commandWhere, [diffInfo.command]);
         ApprovalLogger.exception(
           'Error during comparison via Git. Please make sure that Git is installed and available in the system path. Error: ${e.message}. Git path: ${result.stdout}',
           stackTrace: st,
@@ -46,21 +48,26 @@ class GitReporter implements Reporter {
 
   /// return the diff of two files
   static String gitDiffFiles(File path0, FileSystemEntity path1) {
-    final processResult = Process.runSync('git', ['diff', '--no-index', path0.path, path1.path]);
+    final processResult =
+        Process.runSync('git', ['diff', '--no-index', path0.path, path1.path]);
 
     final stdoutString = processResult.stdout as String;
     final stderrString = processResult.stderr as String;
 
-    final processString = stdoutString.isNotEmpty || stderrString.isNotEmpty ? stdoutString : '';
+    final processString =
+        stdoutString.isNotEmpty || stderrString.isNotEmpty ? stdoutString : '';
 
     return _stripGitDiff(processString);
   }
 
   static String _stripGitDiff(String multiLineString) {
-    bool startsWithAny(String line, List<String> prefixes) => prefixes.any((prefix) => line.startsWith(prefix));
+    bool startsWithAny(String line, List<String> prefixes) =>
+        prefixes.any((prefix) => line.startsWith(prefix));
 
     final List<String> lines = multiLineString.split('\n');
-    final List<String> filteredLines = lines.where((line) => !startsWithAny(line, ['diff', 'index', '@@'])).toList();
+    final List<String> filteredLines = lines
+        .where((line) => !startsWithAny(line, ['diff', 'index', '@@']))
+        .toList();
 
     final String result = filteredLines.join('\n');
 
@@ -68,7 +75,9 @@ class GitReporter implements Reporter {
   }
 
   static void printGitDiffs(String testDescription, String differences) {
-    ApprovalLogger.log("Results of git diff during approvalTest('$testDescription'):");
+    ApprovalLogger.log(
+      "Results of git diff during approvalTest('$testDescription'):",
+    );
     ApprovalLogger.log(differences.trim());
   }
 }

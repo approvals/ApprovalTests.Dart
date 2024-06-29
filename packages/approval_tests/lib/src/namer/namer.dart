@@ -25,7 +25,9 @@ final class Namer implements ApprovalNamer {
           ? '$filePath.$currentTestName.$_updatedDescription.$approvedExtension'
           : '$filePath.$_updatedDescription.$approvedExtension';
     }
-    return addTestName ? '$filePath.$currentTestName.$approvedExtension' : '$filePath.$approvedExtension';
+    return addTestName
+        ? '$filePath.$currentTestName.$approvedExtension'
+        : '$filePath.$approvedExtension';
   }
 
   @override
@@ -38,7 +40,9 @@ final class Namer implements ApprovalNamer {
           ? '$_fileName.$currentTestName.$_updatedDescription.$approvedExtension'
           : '$_fileName.$_updatedDescription.$approvedExtension';
     }
-    return addTestName ? '$_fileName.$currentTestName.$approvedExtension' : '$_fileName.$approvedExtension';
+    return addTestName
+        ? '$_fileName.$currentTestName.$approvedExtension'
+        : '$_fileName.$approvedExtension';
   }
 
   @override
@@ -52,7 +56,9 @@ final class Namer implements ApprovalNamer {
           ? '$filePath.$currentTestName.$_updatedDescription.$receivedExtension'
           : '$filePath.$_updatedDescription.$receivedExtension';
     }
-    return addTestName ? '$filePath.$currentTestName.$receivedExtension' : '$filePath.$receivedExtension';
+    return addTestName
+        ? '$filePath.$currentTestName.$receivedExtension'
+        : '$filePath.$receivedExtension';
   }
 
   @override
@@ -65,7 +71,9 @@ final class Namer implements ApprovalNamer {
           ? '$_fileName.$currentTestName.$_updatedDescription.$receivedExtension'
           : '$_fileName.$_updatedDescription.$receivedExtension';
     }
-    return addTestName ? '$_fileName.$currentTestName.$receivedExtension' : '$_fileName.$receivedExtension';
+    return addTestName
+        ? '$_fileName.$currentTestName.$receivedExtension'
+        : '$_fileName.$receivedExtension';
   }
 
   @override
@@ -74,7 +82,8 @@ final class Namer implements ApprovalNamer {
     return testName == null ? '' : testName.replaceAll(' ', '_');
   }
 
-  String get _updatedDescription => description == null ? '' : description!.replaceAll(' ', '_');
+  String get _updatedDescription =>
+      description == null ? '' : description!.replaceAll(' ', '_');
 
   String get _fileName {
     final path = filePath!;

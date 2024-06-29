@@ -41,7 +41,8 @@ extension WidgetTesterExtension on WidgetTester {
   }) {
     assert(intl == null || text == null);
 
-    final Type? soughtType = key == null && widgetType == null ? Text : widgetType;
+    final Type? soughtType =
+        key == null && widgetType == null ? Text : widgetType;
 
     late Finder finder;
 
@@ -77,7 +78,8 @@ extension WidgetTesterExtension on WidgetTester {
     Key? key,
     Matcher matcher = findsOneWidget,
   }) {
-    final Finder finder = findBy(intl: intl, text: text, widgetType: widgetType, key: key);
+    final Finder finder =
+        findBy(intl: intl, text: text, widgetType: widgetType, key: key);
     expect(finder, matcher);
   }
 
@@ -89,7 +91,8 @@ extension WidgetTesterExtension on WidgetTester {
     Key? key,
     bool shouldPumpAndSettle = true,
   }) async {
-    final Finder finder = findBy(intl: intl, text: text, widgetType: widgetType, key: key);
+    final Finder finder =
+        findBy(intl: intl, text: text, widgetType: widgetType, key: key);
     expect(finder, findsOneWidget);
     await tap(finder);
     if (shouldPumpAndSettle) {

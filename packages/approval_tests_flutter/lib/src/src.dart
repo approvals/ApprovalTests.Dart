@@ -3,15 +3,16 @@
 import 'dart:async';
 
 import 'package:approval_tests/approval_tests.dart';
-import 'package:approval_tests_flutter/src/common.dart';
 import 'package:approval_tests_flutter/src/get_widget_names.dart';
-import 'package:approval_tests_flutter/src/widget_meta/collect_widgets_meta_data.dart' as widgets_meta_data;
+import 'package:approval_tests_flutter/src/widget_meta/collect_widgets_meta_data.dart'
+    as widgets_meta_data;
 import 'package:flutter_test/flutter_test.dart';
 
 Set<String>? _widgetNames;
 
 class ApprovalWidgets {
-  static const FilePathExtractor filePathExtractor = FilePathExtractor(stackTraceFetcher: StackTraceFetcher());
+  static const FilePathExtractor filePathExtractor =
+      FilePathExtractor(stackTraceFetcher: StackTraceFetcher());
 
   /// Initializes the approval test by building a database of project classes.
   ///
@@ -29,7 +30,8 @@ class ApprovalWidgets {
 }
 
 /// [_globalApprovalTest] resolves the name conflict with [WidgetTester.approvalTest]
-Future<void> Function(String?, String, Options?) _globalApprovalTest = (description, value, options) async {
+Future<void> Function(String?, String, Options?) _globalApprovalTest =
+    (description, value, options) async {
   Approvals.verify(
     value,
     options: options != null
@@ -88,7 +90,11 @@ extension WidgetTesterApprovedExtension on WidgetTester {
   ///
   /// [description] is the name of the test. It is appended to the description in [Tester].
   /// [textForReview] is the meta data text used in the approval test.
-  Future<void> approvalTest({String? description, String? textForReview, Options? options}) async {
+  Future<void> approvalTest({
+    String? description,
+    String? textForReview,
+    Options? options,
+  }) async {
     final resultCompleter = Completer<void>();
     final widgetsMetaCompleter = Completer<String>();
 
@@ -101,7 +107,8 @@ extension WidgetTesterApprovedExtension on WidgetTester {
       widgetsMetaCompleter.complete(textForReview);
     }
     await widgetsMetaCompleter.future.then((value) {
-      resultCompleter.complete(_globalApprovalTest(description, value, options));
+      resultCompleter
+          .complete(_globalApprovalTest(description, value, options));
     });
     return resultCompleter.future;
   }
