@@ -19,5 +19,5 @@ jobs:
           
       - name: ⬆️ Auto-Deploy to pub.dev
         run: |
-          ./bash/push_release.sh
+          ./packages/approval_tests/bash/push_release.sh
         shell: bash

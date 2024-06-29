@@ -62,6 +62,11 @@ jobs:
             "C:\\Program Files\\Android\\Android Studio\\bin\\studio64.exe" --version
           fi
         shell: bash
+      
+      - name: Go to approval_tests
+        run: |
+         cd packages
+         cd approval_tests
 
       - name: 📦 Install Dependencies
         run: |

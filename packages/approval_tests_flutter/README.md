@@ -1,7 +1,7 @@
 <div align="center">
 <p align="center">
     <a href="https://github.com/approvals/ApprovalTests.Dart" align="center">
-        <img src="https://github.com/yelmuratoff/packages_assets/blob/main/assets/approval_tests/approval_tests.png?raw=true" width="400px">
+        <img src="https://github.com/yelmuratoff/packages_assets/blob/main/assets/approval_tests/approval_tests_flutter.png?raw=true" width="400px">
     </a>
 </p>
 </div>
