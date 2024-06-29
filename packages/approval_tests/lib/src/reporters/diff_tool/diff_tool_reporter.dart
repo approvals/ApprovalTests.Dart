@@ -16,7 +16,7 @@ class DiffReporter implements Reporter {
 
   @override
   Future<void> report(String approvedPath, String receivedPath) async {
-    final DiffInfo diffInfo = _diffInfo;
+    final DiffInfo diffInfo = defaultDiffInfo;
 
     try {
       await Future.wait([
@@ -34,8 +34,7 @@ class DiffReporter implements Reporter {
         rethrow;
       }
       if (e is ProcessException) {
-        final ProcessResult result =
-            await Process.run(ApprovalUtils.commandWhere, [diffInfo.command]);
+        final ProcessResult result = await Process.run(ApprovalUtils.commandWhere, [diffInfo.command]);
         ApprovalLogger.exception(
           'Error during comparison via ${ide.name}. Please try check path of IDE. \n Current path: ${diffInfo.command} with arg: "${diffInfo.arg}" \n Path to IDE (${Platform.operatingSystem}): ${result.stdout} \n Please, add path to customDiffInfo.',
           stackTrace: st,
@@ -55,7 +54,7 @@ class DiffReporter implements Reporter {
     }
   }
 
-  DiffInfo get _diffInfo {
+  DiffInfo get defaultDiffInfo {
     if (customDiffInfo != null) {
       return customDiffInfo!;
     } else {
@@ -77,9 +76,17 @@ class DiffReporter implements Reporter {
       }
     }
     throw NoDiffToolException(
-      message:
-          'Diff tool is not supported on this platform. Please add customDiffInfo.',
+      message: 'Diff tool is not supported on this platform. Please add customDiffInfo.',
       stackTrace: StackTrace.current,
     );
+  }
+
+  bool get isReporterAvailable {
+    try {
+      final diffInfo = defaultDiffInfo;
+      return ApprovalUtils.isFileExists(diffInfo.command);
+    } catch (e) {
+      return false;
+    }
   }
 }

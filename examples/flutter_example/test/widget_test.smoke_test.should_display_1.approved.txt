@@ -1,0 +1,2 @@
+Text: {key: 'Counter', text: '2', count: 1}
+Text: {key: 'Counter', text: '0', count: 0}

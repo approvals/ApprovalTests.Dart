@@ -2,15 +2,11 @@ part of '../../../approval_tests.dart';
 
 class ApprovalConverter {
   static String convert(String jsonString) {
-    // Decode the JSON string to a dynamic object
     final decodedJson = jsonDecode(jsonString);
-    // Use JsonEncoder with custom indentation
     const encoder = JsonEncoder.withIndent('  ');
-    // Convert the dynamic object back to a string with indentation
     return encoder.convert(decodedJson);
   }
 
-  /// `encodeReflectively` is a method that encodes an object to JSON format using reflection.
   static String encodeReflectively(
     Object? object, {
     bool includeClassName = false,
@@ -20,51 +16,53 @@ class ApprovalConverter {
     }
 
     if (object is List) {
-      // Handle lists of objects by iterating through them
       return '[${object.map((item) => encodeReflectively(item)).join(', ')}]';
     }
 
     if (object is Map) {
-      // Handle maps directly
       return '{${object.entries.map((e) => '"${e.key}": ${encodeReflectively(e.value)}').join(', ')}}';
     }
 
-    // Reflect the object
-    final InstanceMirror mirror = reflect(object);
-    final ClassMirror classMirror = mirror.type;
-
     if (object is String) {
-      // JSON encode strings with proper escaping
       return '"${object.replaceAll('"', '\\"')}"';
     } else if (object is num || object is bool) {
-      // Numbers and booleans can be added directly
       return object.toString();
     }
 
-    // Handling custom objects
-    final Map<String, String> jsonMap = {};
+    // Attempt to convert custom objects to a map
+    final Map<String, dynamic>? jsonMap = _convertObjectToMap(object);
 
-    // Iterate over the instance variables of the class
-    for (final value in classMirror.declarations.values) {
-      if (value is VariableMirror && !value.isStatic) {
-        final String key = MirrorSystem.getName(value.simpleName);
-        final reflectee = mirror.getField(value.simpleName).reflectee;
-        jsonMap[key] = encodeReflectively(reflectee);
-      }
+    if (jsonMap == null) {
+      throw UnsupportedError(
+        'Cannot serialize object of type ${object.runtimeType}',
+      );
     }
 
-    // Format the map into JSON
-    final String jsonBody = jsonMap.entries
-        .map((entry) => '"${entry.key}": ${entry.value}')
-        .join(', ');
+    final String jsonBody =
+        jsonMap.entries.map((entry) => '"${entry.key}": ${encodeReflectively(entry.value)}').join(', ');
 
     if (includeClassName) {
-      final String className = MirrorSystem.getName(classMirror.simpleName);
-      final String capitalizedClassName =
-          '${className[0].toLowerCase()}${className.substring(1)}';
+      final String className = object.runtimeType.toString();
+      final String capitalizedClassName = '${className[0].toLowerCase()}${className.substring(1)}';
       return '{"$capitalizedClassName": {$jsonBody}}';
     }
 
     return '{$jsonBody}';
+  }
+
+  // Function to dynamically convert an object to a map if it has a toJson method
+  static Map<String, dynamic>? _convertObjectToMap(Object object) {
+    try {
+      // Check if the object has a `toJson` method
+      // ignore: avoid_dynamic_calls
+      final jsonMap = (object as dynamic).toJson();
+      if (jsonMap is Map<String, dynamic>) {
+        return jsonMap;
+      }
+    } catch (e) {
+      // If the object doesn't have a `toJson` method, return null
+      return null;
+    }
+    return null;
   }
 }

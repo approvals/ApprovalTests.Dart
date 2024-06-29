@@ -1,0 +1,5 @@
+MyApp: {count: 1}
+MyHomePage: {count: 1}
+Text: {text: 'You have pushed the button this many times:', count: 1}
+Text: {key: 'Counter', text: '0', count: 1}
+Text: {text: 'Approved Example', count: 1}

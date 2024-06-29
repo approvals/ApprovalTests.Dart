@@ -10,20 +10,46 @@ class FilePathExtractor {
   String get filePath {
     try {
       final stackTraceString = _stackTraceFetcher.currentStackTrace;
-      final uriRegExp =
-          RegExp(isWindows ? _windowsPattern : _linuxMacOSPattern);
+      final uriRegExp = RegExp(isWindows ? _windowsPattern : _linuxMacOSPattern);
       final match = uriRegExp.firstMatch(stackTraceString);
 
       if (match != null) {
         if (isWindows) {
           final rawPath = match.group(1)!;
-          final filePath =
-              Uri.file(rawPath, windows: true).toFilePath(windows: true);
+          final filePath = Uri.file(rawPath, windows: true).toFilePath(windows: true);
           return filePath;
         } else {
           final filePath = Uri.tryParse('file:///${match.group(1)!}');
           return filePath!.toFilePath();
         }
+      } else {
+        throw FileNotFoundException(
+          message: 'File not found in stack trace',
+          stackTrace: StackTrace.current,
+        );
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  String get directoryPath {
+    try {
+      final stackTraceString = _stackTraceFetcher.currentStackTrace;
+      final uriRegExp = RegExp(isWindows ? _windowsPattern : _linuxMacOSPattern);
+      final match = uriRegExp.firstMatch(stackTraceString);
+
+      if (match != null) {
+        String filePath;
+        if (isWindows) {
+          final rawPath = match.group(1)!;
+          filePath = Uri.file(rawPath, windows: true).toFilePath(windows: true);
+        } else {
+          filePath = Uri.tryParse('file:///${match.group(1)!}')!.toFilePath();
+        }
+
+        final directoryPath = filePath.substring(0, filePath.lastIndexOf('/'));
+        return directoryPath;
       } else {
         throw FileNotFoundException(
           message: 'File not found in stack trace',

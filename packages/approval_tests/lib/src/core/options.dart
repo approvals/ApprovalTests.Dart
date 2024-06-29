@@ -41,4 +41,27 @@ class Options {
     this.logErrors = true,
     this.logResults = true,
   });
+
+  Options copyWith({
+    ApprovalScrubber? scrubber,
+    bool? approveResult,
+    Comparator? comparator,
+    Reporter? reporter,
+    bool? deleteReceivedFile,
+    bool? deleteApprovedFile,
+    Namer? namer,
+    bool? logErrors,
+    bool? logResults,
+  }) =>
+      Options(
+        scrubber: scrubber ?? this.scrubber,
+        approveResult: approveResult ?? this.approveResult,
+        comparator: comparator ?? this.comparator,
+        reporter: reporter ?? this.reporter,
+        deleteReceivedFile: deleteReceivedFile ?? this.deleteReceivedFile,
+        deleteApprovedFile: deleteApprovedFile ?? this.deleteApprovedFile,
+        namer: namer ?? this.namer,
+        logErrors: logErrors ?? this.logErrors,
+        logResults: logResults ?? this.logResults,
+      );
 }

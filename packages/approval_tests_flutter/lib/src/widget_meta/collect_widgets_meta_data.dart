@@ -1,3 +1,4 @@
+import 'package:approval_tests/approval_tests.dart';
 import 'package:approval_tests_flutter/src/widget_meta/expect_meta.dart';
 import 'package:approval_tests_flutter/src/widget_meta/load_string_en.dart';
 import 'package:approval_tests_flutter/src/widget_meta/matcher_types.dart';
@@ -262,7 +263,7 @@ List<String> _outputStringsFromWidgetMetas(
 
 void _outputText(List<String> strings) {
   for (final expectString in strings) {
-    debugPrint('\t$expectString');
+    ApprovalLogger.log('\t$expectString');
   }
 }
 

@@ -43,4 +43,32 @@ class GitReporter implements Reporter {
       );
     }
   }
+
+  /// return the diff of two files
+  static String gitDiffFiles(File path0, FileSystemEntity path1) {
+    final processResult = Process.runSync('git', ['diff', '--no-index', path0.path, path1.path]);
+
+    final stdoutString = processResult.stdout as String;
+    final stderrString = processResult.stderr as String;
+
+    final processString = stdoutString.isNotEmpty || stderrString.isNotEmpty ? stdoutString : '';
+
+    return _stripGitDiff(processString);
+  }
+
+  static String _stripGitDiff(String multiLineString) {
+    bool startsWithAny(String line, List<String> prefixes) => prefixes.any((prefix) => line.startsWith(prefix));
+
+    final List<String> lines = multiLineString.split('\n');
+    final List<String> filteredLines = lines.where((line) => !startsWithAny(line, ['diff', 'index', '@@'])).toList();
+
+    final String result = filteredLines.join('\n');
+
+    return result;
+  }
+
+  static void printGitDiffs(String testDescription, String differences) {
+    ApprovalLogger.log("Results of git diff during approvalTest('$testDescription'):");
+    ApprovalLogger.log(differences.trim());
+  }
 }

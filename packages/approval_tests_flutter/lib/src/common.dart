@@ -1,8 +1,5 @@
 import 'dart:io';
 
-const topBar = '▶▶▶▶';
-const bottomBar = '◀◀◀◀';
-
 /// [String] extension
 extension StringApprovedExtension on String {
   /// git diff complains when file doesn't end in newline. This getter ensures a string does.

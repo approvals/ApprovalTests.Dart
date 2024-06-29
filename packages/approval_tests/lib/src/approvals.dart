@@ -25,18 +25,18 @@ class Approvals {
     String response, {
     Options options = const Options(),
   }) {
+    // Get the file path without extension or use the provided file path
+    final completedPath = options.namer?.filePath ?? filePathExtractor.filePath.split('.dart').first;
+
+    // Create namer object with given or computed file name
+    final namer = makeNamer(
+      completedPath,
+      description: options.namer?.description,
+      options: options.namer?.options,
+      addTestName: options.namer?.addTestName,
+    );
+
     try {
-      // Get the file path without extension or use the provided file path
-      final completedPath = options.namer?.filePath ?? filePathExtractor.filePath.split('.dart').first;
-
-      // Create namer object with given or computed file name
-      final namer = makeNamer(
-        completedPath,
-        description: options.namer?.description,
-        options: options.namer?.options,
-        addTestName: options.namer?.addTestName,
-      );
-
       // Create writer object with scrubbed response and file extension retrieved from options
       final writer = ApprovalTextWriter(
         options.scrubber.scrub(response),
@@ -60,12 +60,12 @@ class Approvals {
       if (!isFilesMatch) {
         options.reporter.report(namer.approved, namer.received);
         throw DoesntMatchException(
-          'Oops: [${namer.approvedFileName}] does not match [${namer.receivedFileName}].\n - Approved file path: ${namer.approved}\n - Received file path: ${namer.received}',
+          'Oops: [${namer.approvedFileName}] does not match [${namer.receivedFileName}].\n\n - Approved file path: ${namer.approved}\n\n - Received file path: ${namer.received}',
         );
       } else {
         if (options.logResults) {
           ApprovalLogger.success(
-            'Test passed: [${namer.approvedFileName}] matches [${namer.receivedFileName}]\n- Approved file path: ${namer.approved}\n- Received file path: ${namer.received}',
+            'Test passed: [${namer.approvedFileName}] matches [${namer.receivedFileName}]\n\n- Approved file path: ${namer.approved}\n\n- Received file path: ${namer.received}',
           );
         }
       }
@@ -73,23 +73,25 @@ class Approvals {
       if (options.logErrors) {
         ApprovalLogger.exception(e, stackTrace: st);
       }
-      _deleteFileAfterTest(options);
+      if (options.deleteReceivedFile) {
+        _deleteFileAfterTest(namer);
+      }
       rethrow;
     } finally {
-      _deleteFileAfterTest(options);
+      if (options.deleteReceivedFile) {
+        _deleteFileAfterTest(namer);
+      }
     }
   }
 
   /// `_deleteFileAfterTest` method to delete the received file after the test.
-  static void _deleteFileAfterTest(Options options) {
-    if (options.deleteReceivedFile) {
-      if (options.namer != null) {
-        ApprovalUtils.deleteFile(options.namer!.received);
-      } else {
-        ApprovalUtils.deleteFile(
-          Namer(filePath: filePathExtractor.filePath.split('.dart').first).received,
-        );
-      }
+  static void _deleteFileAfterTest(ApprovalNamer? namer) {
+    if (namer != null) {
+      ApprovalUtils.deleteFile(namer.received);
+    } else {
+      ApprovalUtils.deleteFile(
+        Namer(filePath: filePathExtractor.filePath.split('.dart').first).received,
+      );
     }
   }
 
