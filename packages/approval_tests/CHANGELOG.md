@@ -2,7 +2,7 @@
 
 - Breaking release:
    - Added new reporter: `GitReporter`. It allows you to use `git` to view the differences between the received and approved files.
-   - Added support to approve files using CLI. Now you can approve files using the command line: `dart run approval_tests_flutter:review`
+   - Added support to approve files using CLI. Now you can approve files using the command line: `dart run approval_tests:review`
    - Added support to use ApprovalTests during widget tests.  
 Thanks to [Richard Coutts](https://github.com/buttonsrtoys)
 
