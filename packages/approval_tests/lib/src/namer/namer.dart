@@ -5,11 +5,13 @@ final class Namer implements ApprovalNamer {
   final String? filePath;
   final FileNamerOptions? options;
   final bool addTestName;
+  final String? description;
 
   const Namer({
     this.filePath,
     this.options,
     this.addTestName = true,
+    this.description,
   });
 
   @override
@@ -17,9 +19,13 @@ final class Namer implements ApprovalNamer {
     if (options != null) {
       return options!.approved;
     }
-    return addTestName
-        ? '$filePath.$currentTestName.$approvedExtension'
-        : '$filePath.$approvedExtension';
+
+    if (description != null) {
+      return addTestName
+          ? '$filePath.$currentTestName.$_updatedDescription.$approvedExtension'
+          : '$filePath.$_updatedDescription.$approvedExtension';
+    }
+    return addTestName ? '$filePath.$currentTestName.$approvedExtension' : '$filePath.$approvedExtension';
   }
 
   @override
@@ -27,9 +33,12 @@ final class Namer implements ApprovalNamer {
     if (options != null) {
       return options!.approvedFileName;
     }
-    return addTestName
-        ? '$_fileName.$currentTestName.$approvedExtension'
-        : '$_fileName.$approvedExtension';
+    if (description != null) {
+      return addTestName
+          ? '$_fileName.$currentTestName.$_updatedDescription.$approvedExtension'
+          : '$_fileName.$_updatedDescription.$approvedExtension';
+    }
+    return addTestName ? '$_fileName.$currentTestName.$approvedExtension' : '$_fileName.$approvedExtension';
   }
 
   @override
@@ -37,9 +46,13 @@ final class Namer implements ApprovalNamer {
     if (options != null) {
       return options!.received;
     }
-    return addTestName
-        ? '$filePath.$currentTestName.$receivedExtension'
-        : '$filePath.$receivedExtension';
+
+    if (description != null) {
+      return addTestName
+          ? '$filePath.$currentTestName.$_updatedDescription.$receivedExtension'
+          : '$filePath.$_updatedDescription.$receivedExtension';
+    }
+    return addTestName ? '$filePath.$currentTestName.$receivedExtension' : '$filePath.$receivedExtension';
   }
 
   @override
@@ -47,9 +60,12 @@ final class Namer implements ApprovalNamer {
     if (options != null) {
       return options!.receivedFileName;
     }
-    return addTestName
-        ? '$_fileName.$currentTestName.$receivedExtension'
-        : '$_fileName.$receivedExtension';
+    if (description != null) {
+      return addTestName
+          ? '$_fileName.$currentTestName.$_updatedDescription.$receivedExtension'
+          : '$_fileName.$_updatedDescription.$receivedExtension';
+    }
+    return addTestName ? '$_fileName.$currentTestName.$receivedExtension' : '$_fileName.$receivedExtension';
   }
 
   @override
@@ -57,6 +73,8 @@ final class Namer implements ApprovalNamer {
     final testName = Invoker.current?.liveTest.individualName;
     return testName == null ? '' : testName.replaceAll(' ', '_');
   }
+
+  String get _updatedDescription => description == null ? '' : description!.replaceAll(' ', '_');
 
   String get _fileName {
     final path = filePath!;

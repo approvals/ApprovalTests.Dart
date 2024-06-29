@@ -2,11 +2,21 @@ part of '../approval_tests.dart';
 
 /// `Approvals` is a class that provides methods to verify the content of a response.
 class Approvals {
-  static const FilePathExtractor filePathExtractor =
-      FilePathExtractor(stackTraceFetcher: StackTraceFetcher());
+  static const FilePathExtractor filePathExtractor = FilePathExtractor(stackTraceFetcher: StackTraceFetcher());
 
   // Factory method to create an instance of ApprovalNamer with given file name
-  static ApprovalNamer makeNamer(String filePath) => Namer(filePath: filePath);
+  static ApprovalNamer makeNamer(
+    String filePath, {
+    String? description,
+    FileNamerOptions? options,
+    bool? addTestName,
+  }) =>
+      Namer(
+        filePath: filePath,
+        description: description,
+        options: options,
+        addTestName: addTestName ?? true,
+      );
 
   // ================== Verify methods ==================
 
@@ -17,11 +27,15 @@ class Approvals {
   }) {
     try {
       // Get the file path without extension or use the provided file path
-      final completedPath = options.namer?.filePath ??
-          filePathExtractor.filePath.split('.dart').first;
+      final completedPath = options.namer?.filePath ?? filePathExtractor.filePath.split('.dart').first;
 
       // Create namer object with given or computed file name
-      final namer = options.namer ?? makeNamer(completedPath);
+      final namer = makeNamer(
+        completedPath,
+        description: options.namer?.description,
+        options: options.namer?.options,
+        addTestName: options.namer?.addTestName,
+      );
 
       // Create writer object with scrubbed response and file extension retrieved from options
       final writer = ApprovalTextWriter(
@@ -31,8 +45,7 @@ class Approvals {
       // Write the content to a file whose path is specified in namer.received
       writer.writeToFile(namer.received);
 
-      if (options.approveResult ||
-          !ApprovalUtils.isFileExists(namer.approved)) {
+      if (options.approveResult || !ApprovalUtils.isFileExists(namer.approved)) {
         writer.writeToFile(namer.approved);
       }
 
@@ -74,8 +87,7 @@ class Approvals {
         ApprovalUtils.deleteFile(options.namer!.received);
       } else {
         ApprovalUtils.deleteFile(
-          Namer(filePath: filePathExtractor.filePath.split('.dart').first)
-              .received,
+          Namer(filePath: filePathExtractor.filePath.split('.dart').first).received,
         );
       }
     }

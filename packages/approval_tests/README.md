@@ -47,7 +47,7 @@ Add the following to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  approval_tests: ^1.0.0
+  approval_tests: ^1.1.0
 ```
 
 ## 👀 Getting Started
@@ -137,6 +137,7 @@ Reporters are the part of Approval Tests that launch diff tools when things do n
 
 There are several reporters available in the package:
 - `CommandLineReporter` - This is the default reporter, which will output the diff in the terminal.
+- `GitReporter` - This reporter will open the diff in the Git GUI.
 - `DiffReporter` - This reporter will open the Diff Tool in your IDE.
    - For Diff Reporter I using the default paths to the IDE, if something didn't work then you in the console see the expected correct path to the IDE and specify customDiffInfo. You can also contact me for help.
 

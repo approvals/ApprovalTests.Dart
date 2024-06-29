@@ -36,6 +36,15 @@ In normal unit testing, you say `expect(person.getAge(), 5)`. Approvals allow yo
 
 I am writing an implementation of **[Approval Tests](https://approvaltests.com/)** in Dart. If anyone wants to help, please **[text](https://t.me/yelmuratoff)** me. 🙏
 
+## Packages
+ApprovalTests is designed for two level: Dart and Flutter. <br>
+
+| Package | Version | Description | 
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [approval_tests](https://github.com/approvals/ApprovalTests.Dart/tree/feature/approval_tests_flutter/packages/approval_tests) | [![Pub](https://img.shields.io/pub/v/approval_tests.svg?style=flat-square)](https://pub.dev/packages/approval_tests) | **Dart** package for approval testing of `unit` tests *(main)* |
+| [approval_tests_flutter](https://github.com/approvals/ApprovalTests.Dart/tree/feature/approval_tests_flutter/packages/approval_tests_flutter) | [![Pub](https://img.shields.io/pub/v/approval_tests.svg?style=flat-square)](https://pub.dev/packages/approval_tests) | **Flutter** package for approval testing of `widget`, `integration` tests |
+
+
 ## 📋 How it works
 
 - If the changed results match the approved file perfectly, the test passes.
@@ -47,7 +56,8 @@ Add the following to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  approval_tests: ^1.0.0
+  approval_tests: ^1.1.0
+  approval_tests_flutter: ^1.1.0 # if you need
 ```
 
 ## 👀 Getting Started
@@ -137,6 +147,7 @@ Reporters are the part of Approval Tests that launch diff tools when things do n
 
 There are several reporters available in the package:
 - `CommandLineReporter` - This is the default reporter, which will output the diff in the terminal.
+- `GitReporter` - This reporter will open the diff in the Git GUI.
 - `DiffReporter` - This reporter will open the Diff Tool in your IDE.
    - For Diff Reporter I using the default paths to the IDE, if something didn't work then you in the console see the expected correct path to the IDE and specify customDiffInfo. You can also contact me for help.
 

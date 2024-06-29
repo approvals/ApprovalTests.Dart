@@ -40,3 +40,4 @@ part 'src/scrubbers/date_scrubber.dart';
 part 'src/scrubbers/nothing_scrubber.dart';
 part 'src/scrubbers/reg_exp_scrubber.dart';
 part 'src/writers/approval_text_writer.dart';
+part 'src/reporters/git.dart';

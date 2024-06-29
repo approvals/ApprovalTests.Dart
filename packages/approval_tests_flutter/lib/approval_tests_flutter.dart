@@ -1,7 +1,3 @@
-library approval_tests_flutter;
+library approved;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export 'package:approval_tests_flutter/src/src.dart';
