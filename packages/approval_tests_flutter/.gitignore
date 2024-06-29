@@ -27,3 +27,16 @@ migrate_working_dir/
 **/doc/api/
 .dart_tool/
 build/
+
+# Coverage
+coverage/
+
+# Codegen 
+*.*.dart
+*.g.dart
+*.received.*
+generated_*
+
+# Other files
+.old.dart
+.DS_Store
