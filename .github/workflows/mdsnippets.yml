@@ -1,3 +1,5 @@
+name: Formatting and Snippets
+
 on:
   push:
 
@@ -7,26 +9,9 @@ jobs:
     defaults:
       run:
         working-directory: packages/approval_tests
-    steps:
-      - name: 📚 Git Checkout
-        uses: actions/checkout@v4
-        
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '6.0.x'
-
-      - name: Install Dependencies
-        run: dotnet restore
-
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
 
   format_and_snippets:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: packages/approval_tests
     steps:
       - name: 📚 Git Checkout
         uses: actions/checkout@v4
@@ -45,4 +30,4 @@ jobs:
           rebase: 'true'
           push-branch: 'main'
           name: github actions
-          email: actions@github.com
+          email: actions@github.com 
