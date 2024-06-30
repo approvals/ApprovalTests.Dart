@@ -6,7 +6,7 @@
 </p>
 </div>
 
-<h2 align="center"> Approval Tests implementation in Dart 🚀 </h2>
+<h2 align="center"> Approval Tests implementation in Dart / Flutter 🚀 </h2>
 <br>
 <p align="center">
   <a href="https://app.codecov.io/gh/approvals/ApprovalTests.Dart"><img src="https://codecov.io/gh/approvals/ApprovalTests.Dart/branch/main/graph/badge.svg" alt="codecov"></a>
@@ -36,42 +36,96 @@ In normal unit testing, you say `expect(person.getAge(), 5)`. Approvals allow yo
 
 I am writing an implementation of **[Approval Tests](https://approvaltests.com/)** in Dart. If anyone wants to help, please **[text](https://t.me/yelmuratoff)** me. 🙏
 
+Thanks to **[Richard Coutts](https://github.com/buttonsrtoys)** for special contributions to the `approval_tests_flutter` package.
+
+## Packages
+ApprovalTests is designed for two level: Dart and Flutter. <br>
+
+| Package | Version | Description | 
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [approval_tests](https://github.com/approvals/ApprovalTests.Dart/tree/feature/approval_tests_flutter/packages/approval_tests) | [![Pub](https://img.shields.io/pub/v/approval_tests.svg?style=flat-square)](https://pub.dev/packages/approval_tests) | **Dart** package for approval testing of `unit` tests *(main)* |
+| [approval_tests_flutter](https://github.com/approvals/ApprovalTests.Dart/tree/feature/approval_tests_flutter/packages/approval_tests_flutter) | [![Pub](https://img.shields.io/pub/v/approval_tests.svg?style=flat-square)](https://pub.dev/packages/approval_tests) | **Flutter** package for approval testing of `widget`, `integration` tests |
+
+
 ## 📋 How it works
 
-- If the changed results match the approved file perfectly, the test passes.
-- If there's a difference, a reporter tool will highlight the mismatch and the test fails.
+- The first run of the test automatically creates an `approved` file if there is no such file.
+- If the changed results match the `approved` file perfectly, the test passes.
+- If there's a difference, a `reporter` tool will highlight the mismatch and the test fails.
+- If the test is passed, the `received` file is deleted automatically. You can change this by changing the `deleteReceivedFile` value in `options`. If the test fails, the received file remains for analysis.
 
+Instead of writing:
+```dart
+    testWidgets('home page', (WidgetTester tester) async {
+        await tester.pumpWidget(const MyApp());
+        await tester.pumpAndSettle();
+
+        expect(find.text('You have pushed the button this many times:'), findsOneWidget);
+        expect(find.text('0'), findsOneWidget);
+        expect(find.byWidgetPredicate(
+            (Widget widget) => widget is Text && widget.data == 'hello' && 
+            widget.key == ValueKey('myKey'),
+        ), findsOneWidget);
+        expect(find.text('Approved Example'), findsOneWidget);
+    });
+```
+
+Write this:
+```dart
+    testWidgets('smoke test', (WidgetTester tester) async {
+        await tester.pumpWidget(const MyApp());
+        await tester.pumpAndSettle();
+
+        await tester.approvalTest();
+    });
+```
+
+Suppose you wanted to confirm that a page loaded with all the widget you expected. To do this,
+perform an approval test by calling `tester.approvalTest`, and give your test a suitable name:
+
+```dart
+    testWidget('home page', () {
+        await tester.pumpWidget(const MyApp());
+        await tester.pumpAndSettle();
+
+        await tester.approvalTest(description: 'all widgets load correctly');
+    });
+```
+
+To include your project's custom widget types in your test, and to perform post-test checks, add 
+calls to `Approved.setUpAll()` to your tests' `setUpAll` calls, like so:
+
+```dart
+    main() {
+        setUpAll(() {
+            Approved.setUpAll();
+        });
+    }
+```
 ## 📦 Installation
 
 Add the following to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  approval_tests: ^1.0.0
+  approval_tests: ^1.1.0
+  approval_tests_flutter: ^1.1.0 # If you need. This package is needed for widget and integration tests. You can remove `approval_tests` if you use flutter package.
 ```
 
 ## 👀 Getting Started
 
-The best way to get started is to download and open the starter project:
-* [Approvaltests.Dart.StarterProject](https://github.com/approvals/Approvaltests.Dart.StarterProject)
-
-This is a standard project that can be imported into any editor or IDE and also includes CI with GitHub Actions.
-
-It comes ready with:
-
-- A suitable `.gitignore` to exclude approval artifacts
-- A ready linter with all rules in place
-- A GitHub action to run tests and you can always check the status of the tests on the badge in the `README.md` file.
+The best way to get started is to download and open the example project:
+* [Flutter example project](https://github.com/approvals/ApprovalTests.Dart/tree/feature/approval_tests_flutter/examples/flutter_example)
 
 ## 📚 How to use
 
-In order to use Approval Tests, the user needs to:
+In order to use `Approval Tests`, the user needs to:
 
 1. Set up a test: This involves importing the Approval Tests library into your own code.
 
-2. Optionally, set up a reporter: Reporters are tools that highlight differences between approved and received files when a test fails. Although not necessary, they make it significantly easier to see what changes have caused a test to fail. The default reporter is the `CommandLineReporter`. You can also use the `DiffReporter` to compare the files in your IDE.
+2. Optionally, set up a reporter: Reporters are tools that highlight differences between approved and received files when a test fails. Although not necessary, they make it significantly easier to see what changes have caused a test to fail. The default reporter is the `CommandLineReporter`. You can also use the `DiffReporter` to compare the files in your IDE, and the `GitReporter` to see the differences in the `Git GUI`.
 
-3. Manage the "approved" file: When the test is run for the first time, an approved file is created automatically. This file will represent the expected outcome. Once the test results in a favorable outcome, the approved file should be updated to reflect these changes. A little bit below I wrote how to do it.
+3. Manage the `approved` file: When the test is run for the first time, an approved file is created automatically. This file will represent the expected outcome. Once the test results in a favorable outcome, the approved file should be updated to reflect these changes. A little bit below I wrote how to do it.
 
 This setup is useful because it shortens feedback loops, saving developers time by only highlighting what has been altered rather than requiring them to parse through their entire output to see what effect their changes had.
 
@@ -84,6 +138,16 @@ We’ll provide more explanation in due course, but, briefly, here are the most 
 #### • Via Diff Tool
 Most diff tools have the ability to move text from left to right, and save the result.
 How to use diff tools is just below, there is a `Comparator` class for that.
+
+#### • Via CLI command
+You can run the command in a terminal to review your files:
+```bash
+dart run approval_tests:review
+```
+After running the command, the files will be analyzed and you will be asked to choose one of the options:
+- `y` - Approve the received file.
+- `n` - Reject the received file.
+- `v`iew - View the differences between the received and approved files. After selecting `v` you will be asked which IDE you want to use to view the differences.
 
 #### • Via approveResult property
 If you want the result to be automatically saved after running the test, you need to use the `approveResult` property in `Options`:
@@ -137,6 +201,7 @@ Reporters are the part of Approval Tests that launch diff tools when things do n
 
 There are several reporters available in the package:
 - `CommandLineReporter` - This is the default reporter, which will output the diff in the terminal.
+- `GitReporter` - This reporter will open the diff in the Git GUI.
 - `DiffReporter` - This reporter will open the Diff Tool in your IDE.
    - For Diff Reporter I using the default paths to the IDE, if something didn't work then you in the console see the expected correct path to the IDE and specify customDiffInfo. You can also contact me for help.
 
@@ -166,6 +231,7 @@ You can study it to understand how to use the package to test complex code.
 And the `verify_methods` folder has small examples of using different `ApprovalTests` methods for different cases.
 
 ### JSON example
+With `verifyAsJson`, if you pass data models as `JsonItem`, with nested other models as `AnotherItem` and `SubItem`, then you need to add an `toJson` method to each model for the serialization to succeed.
 
 <!-- snippet: same_verify_as_json_test_with_model -->
 <a id='snippet-same_verify_as_json_test_with_model'></a>

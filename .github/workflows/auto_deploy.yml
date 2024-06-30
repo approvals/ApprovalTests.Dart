@@ -7,11 +7,13 @@ on:
       - completed
 
 jobs:
-  check-release-tag:
+  build:
+    defaults:
+      run:
+        working-directory: packages/approval_tests
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
-
       - name: 📚 Git Checkout
         uses: actions/checkout@v4
         with:
@@ -19,5 +21,5 @@ jobs:
           
       - name: ⬆️ Auto-Deploy to pub.dev
         run: |
-          ./bash/push_release.sh
+          ./packages/approval_tests/bash/push_release.sh
         shell: bash

@@ -1,0 +1,28 @@
+#  * 1.0.0 for a first major release.
+#  * 0.1.0 for a breaking release.
+#  * 0.0.4 for a minor release.
+name: approval_tests
+description: Approval Tests implementation in Dart. Inspired by ApprovalTests.
+version: 1.0.0
+repository: https://github.com/approvals/ApprovalTests.Dart
+homepage: https://github.com/approvals/ApprovalTests.Dart.git
+issue_tracker: https://github.com/approvals/ApprovalTests.Dart/issues
+
+topics:
+  - test
+  - approval
+  - approvals
+  - tests
+  - approval-tests
+
+environment:
+    sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  test: ^1.25.2
+  talker: ^4.3.2
+  diff_match_patch2: ^0.5.0
+  test_api: ^0.7.0
+
+dev_dependencies:
+  sizzle_lints: ^2.0.2
