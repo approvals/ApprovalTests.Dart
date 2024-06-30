@@ -151,8 +151,6 @@ After running the command, the files will be analyzed and you will be asked to c
 #### • Via approveResult property
 If you want the result to be automatically saved after running the test, you need to use the `approveResult` property in `Options`:
 
-<!-- snippet: sample_verify_as_json_test -->
-<a id='snippet-sample_verify_as_json_test'></a>
 ```dart
 void main() {
   test('test JSON object', () {
@@ -171,13 +169,9 @@ void main() {
   });
 }
 ```
-<sup><a href='/test/example/example_test.dart#L4-L21' title='Snippet source file'>snippet source</a> | <a href='#snippet-sample_verify_as_json_test' title='Start of snippet'>anchor</a></sup>
-<!-- endSnippet -->
 
 this will result in the following file
 `example_test.test_JSON_object.approved.txt`
-<!-- snippet: example_test.test_JSON_object.approved.txt -->
-<a id='snippet-example_test.test_JSON_object.approved.txt'></a>
 ```txt
 {
   "name": "JsonTest",
@@ -188,8 +182,6 @@ this will result in the following file
   "version": 0.1
 }
 ```
-<sup><a href='/test/example/example_test.test_JSON_object.approved.txt#L1-L8' title='Snippet source file'>snippet source</a> | <a href='#snippet-example_test.test_JSON_object.approved.txt' title='Start of snippet'>anchor</a></sup>
-<!-- endSnippet -->
 
 #### • Via file rename
 You can just rename the `.received` file to `.approved`.
@@ -232,8 +224,6 @@ And the `verify_methods` folder has small examples of using different `ApprovalT
 ### JSON example
 With `verifyAsJson`, if you pass data models as `JsonItem`, with nested other models as `AnotherItem` and `SubItem`, then you need to add an `toJson` method to each model for the serialization to succeed.
 
-<!-- snippet: same_verify_as_json_test_with_model -->
-<a id='snippet-same_verify_as_json_test_with_model'></a>
 ```dart
 void main() {
   const jsonItem = JsonItem(
@@ -263,13 +253,11 @@ void main() {
   });
 }
 ```
-<sup><a href='/example/verify_methods/verify_as_json/verify_as_json_test.dart#L6-L34' title='Snippet source file'>snippet source</a> | <a href='#snippet-same_verify_as_json_test_with_model' title='Start of snippet'>anchor</a></sup>
-<!-- endSnippet -->
+
 
 this will result in the following file
 `verify_as_json_test.verify_model.approved.txt`
-<!-- snippet: verify_as_json_test.verify_model.approved.txt -->
-<a id='snippet-verify_as_json_test.verify_model.approved.txt'></a>
+
 ```txt
 {
   "jsonItem": {
@@ -296,8 +284,6 @@ this will result in the following file
   }
 }
 ```
-<sup><a href='/example/verify_methods/verify_as_json/verify_as_json_test.verify_model.approved.txt#L1-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-verify_as_json_test.verify_model.approved.txt' title='Start of snippet'>anchor</a></sup>
-<!-- endSnippet -->
 
 <img src="https://github.com/yelmuratoff/packages_assets/blob/main/assets/approval_tests/passed.png?raw=true" alt="Passed test example" title="ApprovalTests" style="max-width: 800px;">
 
