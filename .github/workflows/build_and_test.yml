@@ -4,6 +4,9 @@ on: [push, pull_request]
 
 jobs:
   build:
+    defaults:
+      run:
+        working-directory: packages/approval_tests
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: true
@@ -62,11 +65,6 @@ jobs:
             "C:\\Program Files\\Android\\Android Studio\\bin\\studio64.exe" --version
           fi
         shell: bash
-      
-      - name: Go to approval_tests
-        run: |
-         cd packages
-         cd approval_tests
 
       - name: 📦 Install Dependencies
         run: |

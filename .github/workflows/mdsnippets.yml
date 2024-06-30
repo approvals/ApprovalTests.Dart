@@ -1,26 +1,36 @@
 name: Formatting and Snippets
+
 on:
   push:
+
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/approval_tests
+
   format_and_snippets:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/approval_tests
     steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v4
 
-    - name: 📚 Git Checkout
-      uses: actions/checkout@v4
+      - name: ♻️ Run MarkdownSnippets
+        run: |
+          dotnet tool install --global MarkdownSnippets.Tool
+          mdsnippets ${GITHUB_WORKSPACE}
+        shell: bash
 
-    - name: ♻️ Run MarkdownSnippets
-      run: |
-        dotnet tool install --global MarkdownSnippets.Tool
-        mdsnippets ${GITHUB_WORKSPACE}
-      shell: bash
-
-    - name: ⬆️ Git Commit and Push
-      uses: github-actions-x/commit@v2.9
-      with:
-        github-token: "${secrets.GITHUB_TOKEN}"
-        commit-message: ". d updated markdown snippets"
-        rebase: 'true'
-        push-branch: 'main'
-        name: github actions
-        email: actions@github.com 
+      - name: ⬆️ Git Commit and Push
+        uses: github-actions-x/commit@v2.9
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          commit-message: ". d updated markdown snippets"
+          rebase: 'true'
+          push-branch: 'main'
+          name: github actions
+          email: actions@github.com 
