@@ -1,3 +1,19 @@
+/*
+   Copyright 2024 shodev.live
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
+
 part of '../../../approval_tests.dart';
 
 /// `CommandLineReporter` is a class for reporting the comparison results using the command line.
@@ -9,18 +25,14 @@ class CommandLineReporter implements Reporter {
     try {
       final StringBuffer buffer = StringBuffer(message ?? "Differences:\n");
 
-      final List<String> approvedLines =
-          ApprovalUtils.readFile(path: approvedPath).split('\n');
-      final List<String> receivedLines =
-          ApprovalUtils.readFile(path: receivedPath).split('\n');
+      final List<String> approvedLines = ApprovalUtils.readFile(path: approvedPath).split('\n');
+      final List<String> receivedLines = ApprovalUtils.readFile(path: receivedPath).split('\n');
 
       final int maxLines = max(approvedLines.length, receivedLines.length);
 
       for (int i = 0; i < maxLines; i++) {
-        final String approvedLine =
-            i < approvedLines.length ? approvedLines[i] : "";
-        final String receivedLine =
-            i < receivedLines.length ? receivedLines[i] : "";
+        final String approvedLine = i < approvedLines.length ? approvedLines[i] : "";
+        final String receivedLine = i < receivedLines.length ? receivedLines[i] : "";
 
         if (approvedLine != receivedLine) {
           buffer.writeln(

@@ -1,3 +1,19 @@
+/*
+   Copyright 2024 shodev.live
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
+
 part of '../../approval_tests.dart';
 
 /// `Namer` class is used to generate the file names for the approved and received files.
@@ -25,9 +41,7 @@ final class Namer implements ApprovalNamer {
           ? '$filePath.$currentTestName.$_updatedDescription.$approvedExtension'
           : '$filePath.$_updatedDescription.$approvedExtension';
     }
-    return addTestName
-        ? '$filePath.$currentTestName.$approvedExtension'
-        : '$filePath.$approvedExtension';
+    return addTestName ? '$filePath.$currentTestName.$approvedExtension' : '$filePath.$approvedExtension';
   }
 
   @override
@@ -40,9 +54,7 @@ final class Namer implements ApprovalNamer {
           ? '$_fileName.$currentTestName.$_updatedDescription.$approvedExtension'
           : '$_fileName.$_updatedDescription.$approvedExtension';
     }
-    return addTestName
-        ? '$_fileName.$currentTestName.$approvedExtension'
-        : '$_fileName.$approvedExtension';
+    return addTestName ? '$_fileName.$currentTestName.$approvedExtension' : '$_fileName.$approvedExtension';
   }
 
   @override
@@ -56,9 +68,7 @@ final class Namer implements ApprovalNamer {
           ? '$filePath.$currentTestName.$_updatedDescription.$receivedExtension'
           : '$filePath.$_updatedDescription.$receivedExtension';
     }
-    return addTestName
-        ? '$filePath.$currentTestName.$receivedExtension'
-        : '$filePath.$receivedExtension';
+    return addTestName ? '$filePath.$currentTestName.$receivedExtension' : '$filePath.$receivedExtension';
   }
 
   @override
@@ -71,9 +81,7 @@ final class Namer implements ApprovalNamer {
           ? '$_fileName.$currentTestName.$_updatedDescription.$receivedExtension'
           : '$_fileName.$_updatedDescription.$receivedExtension';
     }
-    return addTestName
-        ? '$_fileName.$currentTestName.$receivedExtension'
-        : '$_fileName.$receivedExtension';
+    return addTestName ? '$_fileName.$currentTestName.$receivedExtension' : '$_fileName.$receivedExtension';
   }
 
   @override
@@ -82,9 +90,7 @@ final class Namer implements ApprovalNamer {
     return testName == null ? '' : testName.replaceAll(' ', '_').toLowerCase();
   }
 
-  String get _updatedDescription => description == null
-      ? ''
-      : description!.replaceAll(' ', '_').toLowerCase();
+  String get _updatedDescription => description == null ? '' : description!.replaceAll(' ', '_').toLowerCase();
 
   String get _fileName {
     final path = filePath!;
