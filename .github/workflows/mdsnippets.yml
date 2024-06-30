@@ -8,9 +8,13 @@ jobs:
       run:
         working-directory: packages/approval_tests
     steps:
-
     - name: 📚 Git Checkout
       uses: actions/checkout@v4
+
+    - name: ✏️ Create mdsnippets.json
+      run: |
+        echo '{ "Convention": "InPlaceOverwrite" }' > ${GITHUB_WORKSPACE}/mdsnippets.json
+      shell: bash
 
     - name: ♻️ Run MarkdownSnippets
       run: |
@@ -21,9 +25,9 @@ jobs:
     - name: ⬆️ Git Commit and Push
       uses: github-actions-x/commit@v2.9
       with:
-        github-token: "${secrets.GITHUB_TOKEN}"
+        github-token: "${{ secrets.GITHUB_TOKEN }}"
         commit-message: ". d updated markdown snippets"
         rebase: 'true'
         push-branch: 'main'
         name: github actions
-        email: actions@github.com 
+        email: actions@github.com
