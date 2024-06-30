@@ -47,8 +47,10 @@ ApprovalTests is designed for two level: Dart and Flutter. <br>
 
 ## 📋 How it works
 
-- If the changed results match the approved file perfectly, the test passes.
-- If there's a difference, a reporter tool will highlight the mismatch and the test fails.
+- The first run of the test automatically creates an `approved` file if there is no such file.
+- If the changed results match the `approved` file perfectly, the test passes.
+- If there's a difference, a `reporter` tool will highlight the mismatch and the test fails.
+- If the test is passed, the `received` file is deleted automatically. You can change this by changing the `deleteReceivedFile` value in `options`. If the test fails, the received file remains for analysis.
 
 ## 📦 Installation
 
@@ -57,7 +59,7 @@ Add the following to your `pubspec.yaml` file:
 ```yaml
 dependencies:
   approval_tests: ^1.1.0
-  approval_tests_flutter: ^1.1.0 # if you need
+  approval_tests_flutter: ^1.1.0 # If you need. This package is needed for widget and integration tests.
 ```
 
 ## 👀 Getting Started
@@ -75,13 +77,13 @@ It comes ready with:
 
 ## 📚 How to use
 
-In order to use Approval Tests, the user needs to:
+In order to use `Approval Tests`, the user needs to:
 
 1. Set up a test: This involves importing the Approval Tests library into your own code.
 
-2. Optionally, set up a reporter: Reporters are tools that highlight differences between approved and received files when a test fails. Although not necessary, they make it significantly easier to see what changes have caused a test to fail. The default reporter is the `CommandLineReporter`. You can also use the `DiffReporter` to compare the files in your IDE.
+2. Optionally, set up a reporter: Reporters are tools that highlight differences between approved and received files when a test fails. Although not necessary, they make it significantly easier to see what changes have caused a test to fail. The default reporter is the `CommandLineReporter`. You can also use the `DiffReporter` to compare the files in your IDE, and the `GitReporter` to see the differences in the `Git GUI`.
 
-3. Manage the "approved" file: When the test is run for the first time, an approved file is created automatically. This file will represent the expected outcome. Once the test results in a favorable outcome, the approved file should be updated to reflect these changes. A little bit below I wrote how to do it.
+3. Manage the `approved` file: When the test is run for the first time, an approved file is created automatically. This file will represent the expected outcome. Once the test results in a favorable outcome, the approved file should be updated to reflect these changes. A little bit below I wrote how to do it.
 
 This setup is useful because it shortens feedback loops, saving developers time by only highlighting what has been altered rather than requiring them to parse through their entire output to see what effect their changes had.
 
@@ -94,6 +96,16 @@ We’ll provide more explanation in due course, but, briefly, here are the most 
 #### • Via Diff Tool
 Most diff tools have the ability to move text from left to right, and save the result.
 How to use diff tools is just below, there is a `Comparator` class for that.
+
+#### • Via CLI command
+You can run the command in a terminal to review your files:
+```bash
+dart run approval_tests:review
+```
+After running the command, the files will be analyzed and you will be asked to choose one of the options:
+- `y` - Approve the received file.
+- `n` - Reject the received file.
+- `v`iew - View the differences between the received and approved files. After selecting `v` you will be asked which IDE you want to use to view the differences.
 
 #### • Via approveResult property
 If you want the result to be automatically saved after running the test, you need to use the `approveResult` property in `Options`:
@@ -177,6 +189,7 @@ You can study it to understand how to use the package to test complex code.
 And the `verify_methods` folder has small examples of using different `ApprovalTests` methods for different cases.
 
 ### JSON example
+With `verifyAsJson`, if you pass data models as `JsonItem`, with nested other models as `AnotherItem` and `SubItem`, then you need to add an `toJson` method to each model for the serialization to succeed.
 
 <!-- snippet: same_verify_as_json_test_with_model -->
 <a id='snippet-same_verify_as_json_test_with_model'></a>

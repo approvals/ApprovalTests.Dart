@@ -37,9 +37,10 @@ Future<void> processFile(File approvedFile, FileSystemEntity reviewFile) async {
   ComparatorIDE comparatorIDE = ComparatorIDE.vsCode;
 
   if (resultString.isNotEmpty || resultString.isNotEmpty) {
-    final String fileNameWithoutExtension =
-        approvedFile.path.split('/').last.split('.').first;
-    GitReporter.printGitDiffs(fileNameWithoutExtension, resultString);
+    // final String fileNameWithoutExtension =
+    //     approvedFile.path.split('/').last.split('.').first;
+    // GitReporter.printGitDiffs(fileNameWithoutExtension, resultString);
+    const CommandLineReporter().report(approvedFile.path, reviewFile.path);
 
     String? firstCharacter;
 

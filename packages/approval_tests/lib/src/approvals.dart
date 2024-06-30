@@ -70,33 +70,37 @@ class Approvals {
           ApprovalLogger.success(
             'Test passed: [${namer.approvedFileName}] matches [${namer.receivedFileName}]\n\n- Approved file path: ${namer.approved}\n\n- Received file path: ${namer.received}',
           );
+          if (options.deleteReceivedFile) {
+            _deleteFileAfterTest(namer: namer, fileType: FileType.received);
+          }
+          if (options.deleteApprovedFile) {
+            _deleteFileAfterTest(namer: namer, fileType: FileType.approved);
+          }
         }
       }
     } catch (e, st) {
       if (options.logErrors) {
         ApprovalLogger.exception(e, stackTrace: st);
       }
-      if (options.deleteReceivedFile) {
-        _deleteFileAfterTest(namer);
-      }
       rethrow;
-    } finally {
-      if (options.deleteReceivedFile) {
-        _deleteFileAfterTest(namer);
-      }
     }
   }
 
   /// `_deleteFileAfterTest` method to delete the received file after the test.
-  static void _deleteFileAfterTest(ApprovalNamer? namer) {
-    if (namer != null) {
-      ApprovalUtils.deleteFile(namer.received);
-    } else {
-      ApprovalUtils.deleteFile(
-        Namer(filePath: filePathExtractor.filePath.split('.dart').first)
-            .received,
-      );
-    }
+  static void _deleteFileAfterTest({
+    required ApprovalNamer? namer,
+    required FileType fileType,
+  }) {
+    final fileToNamerMap = {
+      FileType.approved: (ApprovalNamer n) => n.approved,
+      FileType.received: (ApprovalNamer n) => n.received,
+    };
+
+    final filePath = (namer == null)
+        ? Namer(filePath: filePathExtractor.filePath.split('.dart').first)
+        : namer;
+
+    ApprovalUtils.deleteFile(fileToNamerMap[fileType]!(filePath));
   }
 
   /// Verifies all combinations of inputs for a provided function.
@@ -127,7 +131,7 @@ class Approvals {
       // Encode the object into JSON format
       final jsonContent = ApprovalConverter.encodeReflectively(
         encodable,
-        includeClassName: true,
+        includeClassName: options.includeClassNameDuringSerialization,
       );
       final prettyJson = ApprovalConverter.convert(jsonContent);
 

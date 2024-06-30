@@ -27,6 +27,7 @@ class ApprovalTestHelper {
     bool approveResult = false,
     bool deleteReceivedFile = true,
     bool useDefaultPath = true,
+    String? description,
     ApprovalScrubber scrubber = const ScrubNothing(),
     Reporter reporter = const CommandLineReporter(),
   }) {
@@ -40,6 +41,7 @@ class ApprovalTestHelper {
         useDefaultPath: useDefaultPath,
         reporter: reporter,
         scrubber: scrubber,
+        description: description,
       ),
     );
   }
@@ -74,6 +76,7 @@ class ApprovalTestHelper {
     bool expectException = false,
     bool approveResult = false,
     bool deleteReceivedFile = true,
+    bool includeClassNameDuringSerialization = true,
   }) {
     Approvals.verifyAsJson(
       encodable,
@@ -82,6 +85,8 @@ class ApprovalTestHelper {
         expectException: expectException,
         approveResult: approveResult,
         deleteReceivedFile: deleteReceivedFile,
+        includeClassNameDuringSerialization:
+            includeClassNameDuringSerialization,
       ),
     );
   }
@@ -146,7 +151,9 @@ class ApprovalTestHelper {
     required bool expectException,
     required bool approveResult,
     required bool deleteReceivedFile,
+    bool includeClassNameDuringSerialization = true,
     bool useDefaultPath = true,
+    String? description,
     ApprovalScrubber scrubber = const ScrubNothing(),
     Reporter reporter = const CommandLineReporter(),
   }) =>
@@ -157,6 +164,7 @@ class ApprovalTestHelper {
                   folderPath: basePath,
                   testName: testName,
                   fileName: 'approval_test',
+                  description: description,
                 ),
               )
             : null,
@@ -165,6 +173,8 @@ class ApprovalTestHelper {
         logErrors: !expectException,
         reporter: reporter,
         scrubber: scrubber,
+        includeClassNameDuringSerialization:
+            includeClassNameDuringSerialization,
       );
 
   String get fakeStackTracePath {
@@ -180,6 +190,14 @@ class ApprovalTestHelper {
       return 'C:\\path\\to\\file.dart';
     } else {
       return '/path/to/file.dart';
+    }
+  }
+
+  String get testDirectoryPath {
+    if (Platform.isWindows) {
+      return 'C:\\path\\to';
+    } else {
+      return '/path/to';
     }
   }
 }

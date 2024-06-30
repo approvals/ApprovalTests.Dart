@@ -183,7 +183,67 @@ void main() {
       Approvals.verify(
         'Hello World',
         options: const Options(
-          deleteReceivedFile: true,
+          deleteApprovedFile: true,
+        ),
+      );
+    });
+
+    test('Verify model without class name', () {
+      helper.verifyAsJson(
+        ApprovalTestHelper.jsonItem,
+        'verify_without_class_name',
+        includeClassNameDuringSerialization: false,
+      );
+    });
+
+    test('Should return correct directory path on linux/macOS/Windows', () {
+      final fakeStackTraceFetcher = FakeStackTraceFetcher(
+        helper.fakeStackTracePath,
+      );
+
+      final filePathExtractor =
+          FilePathExtractor(stackTraceFetcher: fakeStackTraceFetcher);
+      final directoryPath = filePathExtractor.directoryPath;
+
+      expect(directoryPath, helper.testDirectoryPath);
+      ApprovalLogger.success(
+        "Test Passed: Successfully extracted the directory path from the stack trace.",
+      );
+    });
+
+    test('Should throw FileNotFoundException when no match found', () {
+      const fakeStackTraceFetcher = FakeStackTraceFetcher(
+        'no file path in this stack trace\nother stack trace lines...',
+      );
+
+      const filePathExtractor =
+          FilePathExtractor(stackTraceFetcher: fakeStackTraceFetcher);
+
+      expect(
+        () => filePathExtractor.directoryPath,
+        throwsA(isA<FileNotFoundException>()),
+      );
+
+      ApprovalLogger.success(
+        "Test Passed: Successfully handled a file not found error during getting directory path.",
+      );
+    });
+
+    test('Verify with description: with FileNamer', () {
+      helper.verify(
+        'Hello World',
+        'description_with_filenamer',
+        description: 'test description',
+      );
+    });
+
+    test('description with Namer', () {
+      Approvals.verify(
+        'Hello World',
+        options: const Options(
+          namer: Namer(
+            description: 'test description',
+          ),
         ),
       );
     });

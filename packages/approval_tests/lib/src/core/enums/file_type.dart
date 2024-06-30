@@ -1,0 +1,4 @@
+enum FileType {
+  approved,
+  received,
+}

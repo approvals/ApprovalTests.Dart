@@ -9,7 +9,7 @@ void main() {
         [3, 5, 15],
         options: const Options(
           reporter: DiffReporter(),
-          deleteReceivedFile: false,
+          deleteApprovedFile: true,
         ),
         processor: (items) => fizzBuzz(items).toString(),
       );

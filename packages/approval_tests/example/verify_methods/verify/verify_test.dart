@@ -8,7 +8,6 @@ void main() {
 
     Approvals.verify(
       response,
-      options: const Options(deleteReceivedFile: true),
     );
   });
 }

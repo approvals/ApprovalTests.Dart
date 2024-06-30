@@ -79,11 +79,12 @@ final class Namer implements ApprovalNamer {
   @override
   String get currentTestName {
     final testName = Invoker.current?.liveTest.individualName;
-    return testName == null ? '' : testName.replaceAll(' ', '_');
+    return testName == null ? '' : testName.replaceAll(' ', '_').toLowerCase();
   }
 
-  String get _updatedDescription =>
-      description == null ? '' : description!.replaceAll(' ', '_');
+  String get _updatedDescription => description == null
+      ? ''
+      : description!.replaceAll(' ', '_').toLowerCase();
 
   String get _fileName {
     final path = filePath!;

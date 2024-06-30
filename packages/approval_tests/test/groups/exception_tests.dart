@@ -2,6 +2,7 @@ import 'package:approval_tests/approval_tests.dart';
 import 'package:test/test.dart';
 
 import '../approval_test.dart';
+import '../models/item.dart';
 
 void main() {
   group('Approvals: test for exceptions |', () {
@@ -17,6 +18,7 @@ void main() {
           'Hello W0rld',
           'verify',
           expectException: true,
+          deleteReceivedFile: false,
         ),
         throwsA(isA<DoesntMatchException>()),
       );
@@ -37,6 +39,18 @@ void main() {
       );
       ApprovalLogger.success(
         "Test Passed: Successfully handled a log mismatch. Method «verify» correctly throws DoesntMatchException as expected.",
+      );
+    });
+
+    test('Verify model (not map). Must throw UnsupportedError exception.', () {
+      expect(
+        () => Approvals.verifyAsJson(
+          const ErrorItem(
+            id: 1,
+            name: "JsonItem",
+          ),
+        ),
+        throwsA(isA<UnsupportedError>()),
       );
     });
   });

@@ -51,3 +51,11 @@ class AnotherItem {
         'name': name,
       };
 }
+
+/// Item without `toJson` method
+class ErrorItem {
+  final int id;
+  final String name;
+
+  const ErrorItem({required this.id, required this.name});
+}

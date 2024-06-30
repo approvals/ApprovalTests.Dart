@@ -2,12 +2,15 @@ part of '../../approval_tests.dart';
 
 /// `GitReporter` is a class for reporting the comparison results using the git.
 class GitReporter implements Reporter {
-  const GitReporter();
+  final DiffInfo? customDiffInfo;
+  const GitReporter({
+    this.customDiffInfo,
+  });
 
   @override
   Future<void> report(String approvedPath, String receivedPath) async {
-    const DiffInfo diffInfo =
-        DiffInfo(name: "Git", command: 'git', arg: 'diff --no-index');
+    final DiffInfo diffInfo = customDiffInfo ??
+        const DiffInfo(name: "Git", command: 'git', arg: 'diff --no-index');
 
     try {
       await Future.wait([
@@ -74,10 +77,10 @@ class GitReporter implements Reporter {
     return result;
   }
 
-  static void printGitDiffs(String testDescription, String differences) {
-    ApprovalLogger.log(
-      "Results of git diff during approvalTest('$testDescription'):",
-    );
-    ApprovalLogger.log(differences.trim());
-  }
+  // static void printGitDiffs(String testDescription, String differences) {
+  //   ApprovalLogger.log(
+  //     "Results of git diff during approvalTest('$testDescription'):",
+  //   );
+  //   ApprovalLogger.log(differences.trim());
+  // }
 }

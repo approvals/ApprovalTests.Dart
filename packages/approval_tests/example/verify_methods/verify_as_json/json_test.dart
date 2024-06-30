@@ -11,7 +11,6 @@ void main() {
       };
       Approvals.verifyAsJson(
         complexObject,
-        options: const Options(deleteReceivedFile: true),
       );
     });
   });

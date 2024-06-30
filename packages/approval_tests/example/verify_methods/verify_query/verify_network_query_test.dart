@@ -10,7 +10,6 @@ void main() async {
   test('verify network query', () async {
     await Approvals.verifyQuery(
       query,
-      options: const Options(deleteReceivedFile: true),
     );
   });
 }

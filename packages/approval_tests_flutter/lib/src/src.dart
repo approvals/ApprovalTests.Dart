@@ -50,6 +50,8 @@ Future<void> Function(String?, String, Options?) _globalApprovalTest =
             ),
             logErrors: options.logErrors,
             logResults: options.logResults,
+            includeClassNameDuringSerialization:
+                options.includeClassNameDuringSerialization,
           )
         : Options(
             namer: Namer(

@@ -29,17 +29,21 @@ class Options {
   /// A final bool variable `logResults` used to determine if the results should be logged.
   final bool logResults;
 
+  /// A final bool variable `includeClassNameDuringSerialization` used to determine if the class name should be included during serialization.
+  final bool includeClassNameDuringSerialization;
+
   // A constructor for the class Options which initializes `isScrub` and `fileExtensionWithoutDot`.
   const Options({
     this.scrubber = const ScrubNothing(),
     this.approveResult = false,
     this.comparator = const FileComparator(),
     this.reporter = const CommandLineReporter(),
-    this.deleteReceivedFile = false,
+    this.deleteReceivedFile = true,
     this.deleteApprovedFile = false,
     this.namer,
     this.logErrors = true,
     this.logResults = true,
+    this.includeClassNameDuringSerialization = true,
   });
 
   Options copyWith({
@@ -52,6 +56,7 @@ class Options {
     Namer? namer,
     bool? logErrors,
     bool? logResults,
+    bool? includeClassNameDuringSerialization,
   }) =>
       Options(
         scrubber: scrubber ?? this.scrubber,
@@ -63,5 +68,8 @@ class Options {
         namer: namer ?? this.namer,
         logErrors: logErrors ?? this.logErrors,
         logResults: logResults ?? this.logResults,
+        includeClassNameDuringSerialization:
+            includeClassNameDuringSerialization ??
+                this.includeClassNameDuringSerialization,
       );
 }

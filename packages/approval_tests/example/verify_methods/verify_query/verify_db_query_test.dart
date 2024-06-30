@@ -8,7 +8,6 @@ void main() async {
   test('verify db query', () async {
     await Approvals.verifyQuery(
       dbQuery,
-      options: const Options(deleteReceivedFile: true),
     );
   });
 }
