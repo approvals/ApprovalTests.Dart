@@ -11,10 +11,6 @@ jobs:
       with:
         path: packages/approval_tests
 
-    - name: 📝 Create mdsnippets.json
-      run: |
-        echo '{ "Convention": "InPlaceOverwrite" }' > packages/approval_tests/mdsnippets.json
-
     - name: ♻️ Run MarkdownSnippets
       run: |
         dotnet tool install --global MarkdownSnippets.Tool
