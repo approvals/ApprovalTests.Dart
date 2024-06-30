@@ -67,7 +67,9 @@ class FilePathExtractor {
           filePath = Uri.tryParse('file:///${match.group(1)!}')!.toFilePath();
         }
 
-        final directoryPath = filePath.substring(0, filePath.lastIndexOf('/'));
+        final separator = isWindows ? '\\' : '/';
+        final directoryPath =
+            filePath.substring(0, filePath.lastIndexOf(separator));
         return directoryPath;
       } else {
         throw FileNotFoundException(
