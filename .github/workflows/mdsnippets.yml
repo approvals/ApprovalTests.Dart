@@ -13,7 +13,11 @@ jobs:
 
     - name: ✏️ Create mdsnippets.json
       run: |
-        echo '{ "Convention": "InPlaceOverwrite" }' > ${GITHUB_WORKSPACE}/mdsnippets.json
+        echo '{
+          "$schema": "https://raw.githubusercontent.com/SimonCropp/MarkdownSnippets/master/schema.json",
+          "Convention": "InPlaceOverwrite",
+          "TocLevel": 5
+        }' > ${GITHUB_WORKSPACE}/mdsnippets.json
       shell: bash
 
     - name: ♻️ Run MarkdownSnippets
