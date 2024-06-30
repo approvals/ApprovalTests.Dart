@@ -24,10 +24,8 @@ void main() {
       );
 
       // Setup: paths to existent files
-      const existentApprovedPath =
-          'test/approved_files/approval_test.verify.approved.txt';
-      const existentReceivedPath =
-          'test/approved_files/approval_test.verify.received.txt';
+      const existentApprovedPath = 'test/approved_files/approval_test.verify.approved.txt';
+      const existentReceivedPath = 'test/approved_files/approval_test.verify.received.txt';
 
       // Expect an exception to be thrown
       expect(
@@ -50,10 +48,8 @@ void main() {
       );
 
       // Setup: paths to existent files
-      const existentApprovedPath =
-          'test/approved_files/approval_test.verify.approved.txt';
-      const existentReceivedPath =
-          'test/approved_files/approval_test.verify.received.txt';
+      const existentApprovedPath = 'test/approved_files/approval_test.verify.approved.txt';
+      const existentReceivedPath = 'test/approved_files/approval_test.verify.received.txt';
 
       // Expect an exception to be thrown
       expect(
@@ -78,11 +74,11 @@ void main() {
       // Expect an exception to be thrown
       expect(
         reporter.isReporterAvailable,
-        isLinux ? returnsNormally : false,
+        isLinux,
       );
 
       ApprovalLogger.success(
-        "Test Passed: Successfully handled availability: ${isLinux ? 'normal' : 'false'} for Android Studio DiffReporter on Linux.",
+        "Test Passed: Successfully handled availability: $isLinux for Android Studio DiffReporter on Linux.",
       );
     });
 
@@ -93,10 +89,8 @@ void main() {
       );
 
       // Setup: paths to existent files
-      const existentApprovedPath =
-          'test/approved_files/approval_test.verify.approved.txt';
-      const existentReceivedPath =
-          'test/approved_files/approval_test.verify.received.txt';
+      const existentApprovedPath = 'test/approved_files/approval_test.verify.approved.txt';
+      const existentReceivedPath = 'test/approved_files/approval_test.verify.received.txt';
 
       // Expect an exception to be thrown
       expect(
@@ -114,10 +108,8 @@ void main() {
 
     test('verify string with Git reporter', () {
       // Setup: paths to existent files
-      const existentApprovedPath =
-          'test/approved_files/approval_test.verify.approved.txt';
-      const existentReceivedPath =
-          'test/approved_files/approval_test.verify.received.txt';
+      const existentApprovedPath = 'test/approved_files/approval_test.verify.approved.txt';
+      const existentReceivedPath = 'test/approved_files/approval_test.verify.received.txt';
 
       // Expect an exception to be thrown
       expect(
@@ -143,9 +135,7 @@ void main() {
       );
     });
 
-    test(
-        'gitDiffFiles should return an empty string if no differences for valid files',
-        () {
+    test('gitDiffFiles should return an empty string if no differences for valid files', () {
       final File path0 = File('/path/to/existing/file0');
       final FileSystemEntity path1 = File('/path/to/existing/file1');
 
@@ -155,15 +145,12 @@ void main() {
     });
 
     test('GitReporter with not correct custom diff info', () {
-      const DiffInfo customDiffInfo =
-          DiffInfo(name: "G1t", command: 'g1t', arg: 'diff --no-index');
+      const DiffInfo customDiffInfo = DiffInfo(name: "G1t", command: 'g1t', arg: 'diff --no-index');
 
       const gitReporter = GitReporter(customDiffInfo: customDiffInfo);
 
-      const existentApprovedPath =
-          'test/approved_files/approval_test.verify.approved.txt';
-      const existentReceivedPath =
-          'test/approved_files/approval_test.verify.received.txt';
+      const existentApprovedPath = 'test/approved_files/approval_test.verify.approved.txt';
+      const existentReceivedPath = 'test/approved_files/approval_test.verify.received.txt';
 
       // Expect an exception to be thrown
       expect(
