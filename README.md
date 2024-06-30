@@ -6,7 +6,7 @@
 </p>
 </div>
 
-<h2 align="center"> Approval Tests implementation in Dart 🚀 </h2>
+<h2 align="center"> Approval Tests implementation in Dart / Flutter 🚀 </h2>
 <br>
 <p align="center">
   <a href="https://app.codecov.io/gh/approvals/ApprovalTests.Dart"><img src="https://codecov.io/gh/approvals/ApprovalTests.Dart/branch/main/graph/badge.svg" alt="codecov"></a>
@@ -36,6 +36,8 @@ In normal unit testing, you say `expect(person.getAge(), 5)`. Approvals allow yo
 
 I am writing an implementation of **[Approval Tests](https://approvaltests.com/)** in Dart. If anyone wants to help, please **[text](https://t.me/yelmuratoff)** me. 🙏
 
+Thanks to **[Richard Coutts](https://github.com/buttonsrtoys)** for special contributions to the `approval_tests_flutter` package.
+
 ## Packages
 ApprovalTests is designed for two level: Dart and Flutter. <br>
 
@@ -52,6 +54,54 @@ ApprovalTests is designed for two level: Dart and Flutter. <br>
 - If there's a difference, a `reporter` tool will highlight the mismatch and the test fails.
 - If the test is passed, the `received` file is deleted automatically. You can change this by changing the `deleteReceivedFile` value in `options`. If the test fails, the received file remains for analysis.
 
+Instead of writing:
+```dart
+    testWidgets('home page', (WidgetTester tester) async {
+        await tester.pumpWidget(const MyApp());
+        await tester.pumpAndSettle();
+
+        expect(find.text('You have pushed the button this many times:'), findsOneWidget);
+        expect(find.text('0'), findsOneWidget);
+        expect(find.byWidgetPredicate(
+            (Widget widget) => widget is Text && widget.data == 'hello' && 
+            widget.key == ValueKey('myKey'),
+        ), findsOneWidget);
+        expect(find.text('Approved Example'), findsOneWidget);
+    });
+```
+
+Write this:
+```dart
+    testWidgets('smoke test', (WidgetTester tester) async {
+        await tester.pumpWidget(const MyApp());
+        await tester.pumpAndSettle();
+
+        await tester.approvalTest();
+    });
+```
+
+Suppose you wanted to confirm that a page loaded with all the widget you expected. To do this,
+perform an approval test by calling `tester.approvalTest`, and give your test a suitable name:
+
+```dart
+    testWidget('home page', () {
+        await tester.pumpWidget(const MyApp());
+        await tester.pumpAndSettle();
+
+        await tester.approvalTest(description: 'all widgets load correctly');
+    });
+```
+
+To include your project's custom widget types in your test, and to perform post-test checks, add 
+calls to `Approved.setUpAll()` to your tests' `setUpAll` calls, like so:
+
+```dart
+    main() {
+        setUpAll(() {
+            Approved.setUpAll();
+        });
+    }
+```
 ## 📦 Installation
 
 Add the following to your `pubspec.yaml` file:
@@ -59,21 +109,13 @@ Add the following to your `pubspec.yaml` file:
 ```yaml
 dependencies:
   approval_tests: ^1.1.0
-  approval_tests_flutter: ^1.1.0 # If you need. This package is needed for widget and integration tests.
+  approval_tests_flutter: ^1.1.0 # If you need. This package is needed for widget and integration tests. You can remove `approval_tests` if you use flutter package.
 ```
 
 ## 👀 Getting Started
 
-The best way to get started is to download and open the starter project:
-* [Approvaltests.Dart.StarterProject](https://github.com/approvals/Approvaltests.Dart.StarterProject)
-
-This is a standard project that can be imported into any editor or IDE and also includes CI with GitHub Actions.
-
-It comes ready with:
-
-- A suitable `.gitignore` to exclude approval artifacts
-- A ready linter with all rules in place
-- A GitHub action to run tests and you can always check the status of the tests on the badge in the `README.md` file.
+The best way to get started is to download and open the example project:
+* [Flutter example project](https://github.com/approvals/ApprovalTests.Dart/tree/feature/approval_tests_flutter/examples/flutter_example)
 
 ## 📚 How to use
 
