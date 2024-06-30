@@ -15,8 +15,6 @@ dependencies:
   approval_tests_flutter:
     path: ../../packages/approval_tests_flutter
 
-  cupertino_icons: ^1.0.8
-
 dev_dependencies:
   flutter_lints: ^4.0.0
 

@@ -9,30 +9,17 @@ enum MatcherTypes {
 }
 
 extension MatcherTypesExtension on MatcherTypes {
-  Matcher get matcher {
-    switch (this) {
-      case MatcherTypes.findsNothing:
-        return findsNothing;
-      case MatcherTypes.findsOneWidget:
-        return findsOneWidget;
-      case MatcherTypes.findsWidgets:
-        return findsWidgets;
-      default:
-        return findsNothing;
-    }
-  }
+  Matcher get matcher => switch (this) {
+        MatcherTypes.findsNothing => findsNothing,
+        MatcherTypes.findsOneWidget => findsOneWidget,
+        MatcherTypes.findsWidgets => findsWidgets,
+        MatcherTypes.unknown => findsNothing,
+      };
 
-  String get matcherName {
-    switch (this) {
-      case MatcherTypes.findsNothing:
-        return 'findsNothing';
-      case MatcherTypes.findsOneWidget:
-        return 'findsOneWidget';
-      case MatcherTypes.findsWidgets:
-        return 'findsWidgets';
-      case MatcherTypes.unknown:
-      default:
-        return '(Unknown)';
-    }
-  }
+  String get matcherName => switch (this) {
+        MatcherTypes.findsNothing => 'findsNothing',
+        MatcherTypes.findsOneWidget => 'findsOneWidget',
+        MatcherTypes.findsWidgets => 'findsWidgets',
+        MatcherTypes.unknown => '(Unknown)',
+      };
 }
