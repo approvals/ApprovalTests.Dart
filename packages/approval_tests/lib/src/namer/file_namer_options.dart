@@ -47,5 +47,6 @@ final class FileNamerOptions {
     return '$fileName.$testName.received.txt';
   }
 
-  String get _updatedDescription => description == null ? '' : description!.replaceAll(' ', '_');
+  String get _updatedDescription =>
+      description == null ? '' : description!.replaceAll(' ', '_');
 }

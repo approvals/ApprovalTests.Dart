@@ -19,7 +19,8 @@ part of '../../../../approval_tests.dart';
 /// `MacDiffTools` contains diff tools available on macOS.
 final class MacDiffTools {
   static const DiffInfo visualStudioCode = DiffInfo(
-    command: '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code',
+    command:
+        '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code',
     arg: '-d',
     name: 'code',
   );

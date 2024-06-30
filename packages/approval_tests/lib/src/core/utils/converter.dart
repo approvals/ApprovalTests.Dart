@@ -54,12 +54,14 @@ class ApprovalConverter {
       );
     }
 
-    final String jsonBody =
-        jsonMap.entries.map((entry) => '"${entry.key}": ${encodeReflectively(entry.value)}').join(', ');
+    final String jsonBody = jsonMap.entries
+        .map((entry) => '"${entry.key}": ${encodeReflectively(entry.value)}')
+        .join(', ');
 
     if (includeClassName) {
       final String className = object.runtimeType.toString();
-      final String capitalizedClassName = '${className[0].toLowerCase()}${className.substring(1)}';
+      final String capitalizedClassName =
+          '${className[0].toLowerCase()}${className.substring(1)}';
       return '{"$capitalizedClassName": {$jsonBody}}';
     }
 

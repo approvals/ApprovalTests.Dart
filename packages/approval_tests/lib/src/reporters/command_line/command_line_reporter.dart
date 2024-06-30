@@ -25,14 +25,18 @@ class CommandLineReporter implements Reporter {
     try {
       final StringBuffer buffer = StringBuffer(message ?? "Differences:\n");
 
-      final List<String> approvedLines = ApprovalUtils.readFile(path: approvedPath).split('\n');
-      final List<String> receivedLines = ApprovalUtils.readFile(path: receivedPath).split('\n');
+      final List<String> approvedLines =
+          ApprovalUtils.readFile(path: approvedPath).split('\n');
+      final List<String> receivedLines =
+          ApprovalUtils.readFile(path: receivedPath).split('\n');
 
       final int maxLines = max(approvedLines.length, receivedLines.length);
 
       for (int i = 0; i < maxLines; i++) {
-        final String approvedLine = i < approvedLines.length ? approvedLines[i] : "";
-        final String receivedLine = i < receivedLines.length ? receivedLines[i] : "";
+        final String approvedLine =
+            i < approvedLines.length ? approvedLines[i] : "";
+        final String receivedLine =
+            i < receivedLines.length ? receivedLines[i] : "";
 
         if (approvedLine != receivedLine) {
           buffer.writeln(

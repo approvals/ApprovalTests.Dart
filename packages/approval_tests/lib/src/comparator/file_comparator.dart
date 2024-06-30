@@ -28,8 +28,12 @@ final class FileComparator implements Comparator {
     bool isLogError = true,
   }) {
     try {
-      final approved = ApprovalUtils.readFile(path: approvedPath).replaceAll('\r\n', '\n').trim();
-      final received = ApprovalUtils.readFile(path: receivedPath).replaceAll('\r\n', '\n').trim();
+      final approved = ApprovalUtils.readFile(path: approvedPath)
+          .replaceAll('\r\n', '\n')
+          .trim();
+      final received = ApprovalUtils.readFile(path: receivedPath)
+          .replaceAll('\r\n', '\n')
+          .trim();
 
       // Return true if contents of both files match exactly
       return approved.compareTo(received) == 0;

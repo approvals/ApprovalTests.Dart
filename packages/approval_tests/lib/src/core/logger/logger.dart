@@ -61,7 +61,8 @@ final class ApprovalLogger {
   static void log(String message) => _instance._logger.debug(message);
 
   /// `info` method to log messages with success log level.
-  static void success(String message) => _instance._logger.logTyped(_SuccessLog(message));
+  static void success(String message) =>
+      _instance._logger.logTyped(_SuccessLog(message));
 
   /// `warning` method to log messages with warning log level.
   static void warning(String message) => _instance._logger.warning(message);
