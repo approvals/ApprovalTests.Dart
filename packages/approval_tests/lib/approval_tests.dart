@@ -20,7 +20,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:approval_tests/src/core/constants/constants.dart';
 import 'package:approval_tests/src/core/enums/file_type.dart';
 import 'package:diff_match_patch2/diff_match_patch.dart';
 import 'package:talker/talker.dart';
@@ -58,3 +57,4 @@ part 'src/scrubbers/nothing_scrubber.dart';
 part 'src/scrubbers/reg_exp_scrubber.dart';
 part 'src/writers/approval_text_writer.dart';
 part 'src/reporters/git.dart';
+part 'src/core/constants/constants.dart';

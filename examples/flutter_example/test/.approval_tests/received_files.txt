@@ -1,0 +1,2 @@
+/Users/yelamanyelmuratov/Development/approvals/ApprovalTests.Dart/examples/flutter_example/test/widget_test.smoke_test.should_display_1.received.txt
+/Users/yelamanyelmuratov/Development/approvals/ApprovalTests.Dart/examples/flutter_example/test/widget_test.smoke_test.should_display_0.received.txt

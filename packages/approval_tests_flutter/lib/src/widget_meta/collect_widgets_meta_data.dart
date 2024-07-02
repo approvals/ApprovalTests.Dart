@@ -431,7 +431,7 @@ List<String> _generateExpectWidgets(
         buffer.write("intl: (s) => s.$intlPlaceHolder");
       }
     } else {
-      buffer.write("text: '${widgetMeta.widgetText}'");
+      buffer.write("data: '${widgetMeta.widgetText}'");
     }
   }
 
@@ -514,7 +514,7 @@ String _generateWidgetMeta(
 
   void addTextAttributeToBuffer() {
     addCommaIfNecessary();
-    buffer.write("text: '${widgetMeta.widgetText}'");
+    buffer.write("data: '${widgetMeta.widgetText}'");
   }
 
   void addKeyAttributeToBuffer() {

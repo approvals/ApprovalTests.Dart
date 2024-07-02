@@ -13,14 +13,17 @@ void main() {
 
       await tester.approvalTest(
         description: 'should display 0',
+        options: const Options(deleteReceivedFile: false),
       );
 
+      await tester.tap(find.byType(FloatingActionButton));
       await tester.tap(find.byType(FloatingActionButton));
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
 
       await tester.approvalTest(
         description: 'should display 1',
+        options: const Options(deleteReceivedFile: false),
       );
     });
   });

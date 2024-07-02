@@ -83,4 +83,18 @@ class GitReporter implements Reporter {
   //   );
   //   ApprovalLogger.log(differences.trim());
   // }
+
+  static void printGitDiffs(
+    String unapprovedFullPath,
+    String differences, {
+    bool showTip = true,
+  }) {
+    ApprovalLogger.log("Results of git diff:\n${differences.trim()}");
+    if (showTip) {
+      ApprovalLogger.log(
+        "To review, run: dart run approved:review '$unapprovedFullPath'",
+      );
+      ApprovalLogger.log("To review all, run: dart run approved:review");
+    }
+  }
 }

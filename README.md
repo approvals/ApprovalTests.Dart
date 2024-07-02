@@ -149,6 +149,22 @@ After running the command, the files will be analyzed and you will be asked to c
 - `n` - Reject the received file.
 - `v`iew - View the differences between the received and approved files. After selecting `v` you will be asked which IDE you want to use to view the differences.
 
+The command `dart run approval_tests:review` has additional options, including listing files, selecting
+ files to review from this list by index, and more. For its current capabilities, run 
+   ```bash
+     dart run approval_tests:review --help
+   ```
+ Typing 'dart run approval_tests:review' is tedious! To reduce your typing, alias the command in your 
+ `.zshrc` or `.bashrc` file
+   ```
+     alias review='dart run approval_tests:review'
+   ```
+ or PowerShell profile
+   ```shell
+     function review {
+         dart run approval_tests:review
+     }
+   ```
 #### • Via approveResult property
 If you want the result to be automatically saved after running the test, you need to use the `approveResult` property in `Options`:
 

@@ -6,9 +6,10 @@ import 'package:analyzer/dart/analysis/context_builder.dart';
 import 'package:analyzer/dart/analysis/context_locator.dart';
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
+import 'package:approval_tests/approval_tests.dart';
 import 'package:approval_tests_flutter/src/common.dart';
 
-final _widgetNamesDir = Directory('./test/approved');
+final _widgetNamesDir = Directory(ApprovalTestsConstants.resourceLocalPath);
 final _widgetNamesPath = '${_widgetNamesDir.path}/class_names.txt';
 
 Future<Set<String>> getWidgetNames() async {
