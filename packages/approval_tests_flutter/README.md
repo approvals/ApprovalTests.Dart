@@ -10,21 +10,21 @@
 <br>
 <p align="center">
   <a href="https://app.codecov.io/gh/approvals/ApprovalTests.Dart"><img src="https://codecov.io/gh/approvals/ApprovalTests.Dart/branch/main/graph/badge.svg" alt="codecov"></a>
-  <a href="https://pub.dev/packages/approval_tests"><img src="https://img.shields.io/pub/v/approval_tests.svg" alt="Pub"></a>
-  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
+  <a href="https://pub.dev/packages/approval_tests"><img src="https://img.shields.io/pub/v/approval_tests_flutter.svg" alt="Pub"></a>
+  <a href="http://www.apache.org/licenses/"><img src="https://img.shields.io/badge/license-APACHE-blue.svg" alt="License: APACHE"></a>
   <a href="https://github.com/approvals/ApprovalTests.Dart"><img src="https://hits.dwyl.com/approvals/ApprovalTests.Dart.svg?style=flat" alt="Repository views"></a>
   <a href="https://github.com/approvals/ApprovalTests.Dart"><img src="https://img.shields.io/github/stars/approvals/ApprovalTests.Dart?style=social" alt="Stars"></a>
 </p>
 <p align="center">
-  <a href="https://pub.dev/packages/approval_tests/score"><img src="https://img.shields.io/pub/likes/approval_tests?logo=flutter" alt="Pub likes"></a>
-  <a href="https://pub.dev/packages/approval_tests/score"><img src="https://img.shields.io/pub/popularity/approval_tests?logo=flutter" alt="Pub popularity"></a>
-  <a href="https://pub.dev/packages/approval_tests/score"><img src="https://img.shields.io/pub/points/approval_tests?logo=flutter" alt="Pub points"></a>
+  <a href="https://pub.dev/packages/approval_tests_flutter/score"><img src="https://img.shields.io/pub/likes/approval_tests_flutter?logo=flutter" alt="Pub likes"></a>
+  <a href="https://pub.dev/packages/approval_tests_flutter/score"><img src="https://img.shields.io/pub/popularity/approval_tests_flutter?logo=flutter" alt="Pub popularity"></a>
+  <a href="https://pub.dev/packages/approval_tests_flutter/score"><img src="https://img.shields.io/pub/points/approval_tests_flutter?logo=flutter" alt="Pub points"></a>
 </p>
-<p align="center">
+<!-- <p align="center">
   <a href="https://github.com/approvals/ApprovalTests.Dart/actions/workflows/build_and_test.yml"><img src="https://github.com/approvals/ApprovalTests.Dart/actions/workflows/build_and_test.yml/badge.svg" alt="Build and test badge"></a>
   <a href="https://github.com/approvals/ApprovalTests.Dart/actions/workflows/publish.yml"><img src="https://github.com/approvals/ApprovalTests.Dart/actions/workflows/publish.yml/badge.svg" alt="Deploy and Create Release"></a>
   <a href="https://github.com/approvals/ApprovalTests.Dart/actions/workflows/mdsnippets.yml"><img src="https://github.com/approvals/ApprovalTests.Dart/actions/workflows/mdsnippets.yml/badge.svg" alt="mdsnippets"></a>
-</p>
+</p> -->
 
 ## 📖 About
 
@@ -44,7 +44,7 @@ ApprovalTests is designed for two level: Dart and Flutter. <br>
 | Package | Version | Description | 
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | [approval_tests](https://github.com/approvals/ApprovalTests.Dart/tree/feature/approval_tests_flutter/packages/approval_tests) | [![Pub](https://img.shields.io/pub/v/approval_tests.svg?style=flat-square)](https://pub.dev/packages/approval_tests) | **Dart** package for approval testing of `unit` tests *(main)* |
-| [approval_tests_flutter](https://github.com/approvals/ApprovalTests.Dart/tree/feature/approval_tests_flutter/packages/approval_tests_flutter) | [![Pub](https://img.shields.io/pub/v/approval_tests.svg?style=flat-square)](https://pub.dev/packages/approval_tests) | **Flutter** package for approval testing of `widget`, `integration` tests |
+| [approval_tests_flutter](https://github.com/approvals/ApprovalTests.Dart/tree/feature/approval_tests_flutter/packages/approval_tests_flutter) | [![Pub](https://img.shields.io/pub/v/approval_tests_flutter.svg?style=flat-square)](https://pub.dev/packages/approval_tests_flutter) | **Flutter** package for approval testing of `widget`, `integration` tests |
 
 
 ## 📋 How it works
