@@ -41,7 +41,6 @@ Future<void> Function(String?, String, Options?) _globalApprovalTest =
             comparator: options.comparator,
             reporter: options.reporter,
             deleteReceivedFile: options.deleteReceivedFile,
-            deleteApprovedFile: options.deleteApprovedFile,
             namer: Namer(
               filePath: options.namer?.filePath,
               options: options.namer?.options,

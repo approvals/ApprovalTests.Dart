@@ -89,9 +89,6 @@ class Approvals {
           if (options.deleteReceivedFile) {
             _deleteFileAfterTest(namer: namer, fileType: FileType.received);
           }
-          if (options.deleteApprovedFile) {
-            _deleteFileAfterTest(namer: namer, fileType: FileType.approved);
-          }
         }
       }
     } catch (e, st) {

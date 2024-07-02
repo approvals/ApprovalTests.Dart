@@ -179,15 +179,6 @@ void main() {
       );
     });
 
-    test('Verify without namer', () {
-      Approvals.verify(
-        'Hello World',
-        options: const Options(
-          deleteApprovedFile: true,
-        ),
-      );
-    });
-
     test('Verify model without class name', () {
       helper.verifyAsJson(
         ApprovalTestHelper.jsonItem,

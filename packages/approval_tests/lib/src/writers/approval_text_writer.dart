@@ -17,7 +17,7 @@
 part of '../../approval_tests.dart';
 
 /// `ApprovalTextWriter` is a class that writes the content to a file at the specified path.
-class ApprovalTextWriter {
+class ApprovalTextWriter extends ApprovalWriter {
   // The two instance variables content and fileExtension of type String
   final String content;
 
@@ -25,9 +25,14 @@ class ApprovalTextWriter {
   const ApprovalTextWriter(this.content);
 
   // A method that writes the given content to the file at the specified path
+  @override
   void writeToFile(String path) {
     // File instance is created with the given path
     final File file = File(path);
+
+    final StringBuffer buffer = StringBuffer();
+    buffer.writeln(ApprovalTestsConstants.baseHeader);
+    buffer.write(content);
 
     // Check if the file already exists at the specific path
     if (!file.existsSync()) {
@@ -35,10 +40,10 @@ class ApprovalTextWriter {
       file.createSync(recursive: true);
 
       // After creating the file, the content is written to it
-      file.writeAsStringSync(content);
+      file.writeAsStringSync(buffer.toString());
     } else {
       // If the file already exists, then the content is simply overwritten
-      file.writeAsStringSync(content);
+      file.writeAsStringSync(buffer.toString());
     }
   }
 }
