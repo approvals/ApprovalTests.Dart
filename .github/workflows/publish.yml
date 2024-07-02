@@ -10,6 +10,8 @@ jobs:
     permissions:
       id-token: write # Required for authentication using OIDC
     uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+    with:
+      working-directory: packages/approval_tests
     # with:
     #   working-directory: path/to/package/within/repository
   create_release:
