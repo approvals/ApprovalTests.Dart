@@ -6,7 +6,7 @@ PACKAGE_NAME="approval_tests"
 VERSION=""
 
 # Retrieve the current version from the pubspec.yaml file
-VERSION=$(grep 'version:' pubspec.yaml | awk '{print $2}' | tr -d "'\"")
+VERSION=$(grep 'version:' packages/approval_tests/pubspec.yaml | awk '{print $2}' | tr -d "'\"")
 
 # Fetch the HTML content from pub.dev
 HTML_CONTENT=$(curl -s "https://pub.dev/packages/$PACKAGE_NAME")
