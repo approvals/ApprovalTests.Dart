@@ -1,4 +1,4 @@
-## 1.1.0
+## 1.1.1
 - Updated README.md file.
 
 ## 1.1.0
