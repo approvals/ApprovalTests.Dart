@@ -1,6 +1,9 @@
 ## 1.1.0
+- Updated README.md file.
 
-- Breaking release:
+## 1.1.0
+
+- **Breaking release**:
    - Added new reporter: `GitReporter`. It allows you to use `git` to view the differences between the received and approved files.
    - Added support to approve files using CLI. Now you can approve files using the command line: `dart run approval_tests:review`
    - Added support to use ApprovalTests during widget tests.  

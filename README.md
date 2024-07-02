@@ -44,7 +44,7 @@ ApprovalTests is designed for two level: Dart and Flutter. <br>
 | Package | Version | Description | 
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | [approval_tests](https://github.com/approvals/ApprovalTests.Dart/tree/feature/approval_tests_flutter/packages/approval_tests) | [![Pub](https://img.shields.io/pub/v/approval_tests.svg?style=flat-square)](https://pub.dev/packages/approval_tests) | **Dart** package for approval testing of `unit` tests *(main)* |
-| [approval_tests_flutter](https://github.com/approvals/ApprovalTests.Dart/tree/feature/approval_tests_flutter/packages/approval_tests_flutter) | [![Pub](https://img.shields.io/pub/v/approval_tests.svg)](https://pub.dev/packages/approval_tests_flutter) | **Flutter** package for approval testing of `widget`, `integration` tests |
+| [approval_tests_flutter](https://github.com/approvals/ApprovalTests.Dart/tree/feature/approval_tests_flutter/packages/approval_tests_flutter) | [![Pub](https://img.shields.io/pub/v/approval_tests_flutter.svg)](https://pub.dev/packages/approval_tests_flutter) | **Flutter** package for approval testing of `widget`, `integration` tests |
 
 
 ## 📋 How it works
