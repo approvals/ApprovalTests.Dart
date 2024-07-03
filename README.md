@@ -43,8 +43,8 @@ ApprovalTests is designed for two level: Dart and Flutter. <br>
 
 | Package | Version | Description | 
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| [approval_tests](https://github.com/approvals/ApprovalTests.Dart/tree/feature/approval_tests_flutter/packages/approval_tests) | [![Pub](https://img.shields.io/pub/v/approval_tests.svg?style=flat-square)](https://pub.dev/packages/approval_tests) | **Dart** package for approval testing of `unit` tests *(main)* |
-| [approval_tests_flutter](https://github.com/approvals/ApprovalTests.Dart/tree/feature/approval_tests_flutter/packages/approval_tests_flutter) | [![Pub](https://img.shields.io/pub/v/approval_tests_flutter.svg)](https://pub.dev/packages/approval_tests_flutter) | **Flutter** package for approval testing of `widget`, `integration` tests |
+| [approval_tests](https://github.com/approvals/ApprovalTests.Dart/tree/main/packages/approval_tests) | [![Pub](https://img.shields.io/pub/v/approval_tests.svg?style=flat-square)](https://pub.dev/packages/approval_tests) | **Dart** package for approval testing of `unit` tests *(main)* |
+| [approval_tests_flutter](https://github.com/approvals/ApprovalTests.Dart/tree/main/packages/approval_tests_flutter) | [![Pub](https://img.shields.io/pub/v/approval_tests_flutter.svg)](https://pub.dev/packages/approval_tests_flutter) | **Flutter** package for approval testing of `widget`, `integration` tests |
 
 
 ## 📋 How it works
@@ -108,14 +108,14 @@ Add the following to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  approval_tests: ^1.1.0
-  approval_tests_flutter: ^1.1.0 # If you need. This package is needed for widget and integration tests. You can remove `approval_tests` if you use flutter package.
+  approval_tests: ^1.1.3
+  approval_tests_flutter: ^1.1.3 # If you need. This package is needed for widget and integration tests. You can remove `approval_tests` if you use flutter package.
 ```
 
 ## 👀 Getting Started
 
 The best way to get started is to download and open the example project:
-* [Flutter example project](https://github.com/approvals/ApprovalTests.Dart/tree/feature/approval_tests_flutter/examples/flutter_example)
+* [Flutter example project](https://github.com/approvals/ApprovalTests.Dart/tree/main/examples/flutter_example)
 
 ## 📚 How to use
 

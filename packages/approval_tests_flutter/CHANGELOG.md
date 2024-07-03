@@ -1,4 +1,16 @@
-## 1.1.0
+## 1.1.3
+- Updated README.md file: fix links.
+
+## 1.1.2
+- Added CLI additional options:  
+   Usage: `dart run approval_tests:review [arguments]` 
+   - Arguments:  
+      - `--help`                      Print this usage information.
+      - `--list`                      Print a list of project .received.txt files.
+      - `<index>`                     Review an .received.txt file indexed by --list.
+      - `<path/to/.received.txt>`   Review an .received.txt file.
+
+## 1.1.1
 - Updated README.md file.
 
 
