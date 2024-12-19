@@ -81,6 +81,6 @@ jobs:
         run: dart run test --coverage=./coverage && dart pub global run coverage:format_coverage --packages=.dart_tool/package_config.json --report-on=lib --lcov -o ./coverage/lcov.info -i ./coverage
 
       - name: ⬆️ Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4.5.0
+        uses: codecov/codecov-action@v5.1.2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
