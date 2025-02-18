@@ -1,5 +1,3 @@
-include: package:sizzle_lints/sizzle_lints.yaml
-
 analyzer:
   errors:
     depend_on_referenced_packages: ignore

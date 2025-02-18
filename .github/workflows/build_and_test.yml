@@ -4,9 +4,6 @@ on: [push, pull_request]
 
 jobs:
   build:
-    defaults:
-      run:
-        working-directory: packages/approval_tests
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: true

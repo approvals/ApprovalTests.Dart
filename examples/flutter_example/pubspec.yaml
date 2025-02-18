@@ -1,11 +1,11 @@
 name: flutter_example
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.4.1 <4.0.0'
+  sdk: ">=3.4.1 <4.0.0"
 
 dependencies:
   flutter:
@@ -13,7 +13,7 @@ dependencies:
   flutter_test:
     sdk: flutter
   approval_tests_flutter:
-    path: ../../packages/approval_tests_flutter
+    path: ../../../ApprovalTests.Dart.Flutter/
 
 dev_dependencies:
   flutter_lints: ^4.0.0

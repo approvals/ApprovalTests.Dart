@@ -6,12 +6,12 @@
 </p>
 </div>
 
-<h2 align="center"> Approval Tests implementation in Dart / Flutter 🚀 </h2>
+<h2 align="center"> Approval Tests implementation in Dart 🚀 </h2>
 <br>
 <p align="center">
   <a href="https://app.codecov.io/gh/approvals/ApprovalTests.Dart"><img src="https://codecov.io/gh/approvals/ApprovalTests.Dart/branch/main/graph/badge.svg" alt="codecov"></a>
   <a href="https://pub.dev/packages/approval_tests"><img src="https://img.shields.io/pub/v/approval_tests.svg" alt="Pub"></a>
-   <a href="http://www.apache.org/licenses/"><img src="https://img.shields.io/badge/license-APACHE-blue.svg" alt="License: APACHE"></a>
+  <a href="http://www.apache.org/licenses/"><img src="https://img.shields.io/badge/license-APACHE-blue.svg" alt="License: APACHE"></a>
   <a href="https://github.com/approvals/ApprovalTests.Dart"><img src="https://hits.dwyl.com/approvals/ApprovalTests.Dart.svg?style=flat" alt="Repository views"></a>
   <a href="https://github.com/approvals/ApprovalTests.Dart"><img src="https://img.shields.io/github/stars/approvals/ApprovalTests.Dart?style=social" alt="Stars"></a>
 </p>
@@ -36,8 +36,6 @@ In normal unit testing, you say `expect(person.getAge(), 5)`. Approvals allow yo
 
 I am writing an implementation of **[Approval Tests](https://approvaltests.com/)** in Dart. If anyone wants to help, please **[text](https://t.me/yelmuratoff)** me. 🙏
 
-Thanks to **[Richard Coutts](https://github.com/buttonsrtoys)** for special contributions to the `approval_tests_flutter` package.
-
 ## Packages
 ApprovalTests is designed for two level: Dart and Flutter. <br>
 
@@ -54,68 +52,27 @@ ApprovalTests is designed for two level: Dart and Flutter. <br>
 - If there's a difference, a `reporter` tool will highlight the mismatch and the test fails.
 - If the test is passed, the `received` file is deleted automatically. You can change this by changing the `deleteReceivedFile` value in `options`. If the test fails, the received file remains for analysis.
 
-Instead of writing:
-```dart
-    testWidgets('home page', (WidgetTester tester) async {
-        await tester.pumpWidget(const MyApp());
-        await tester.pumpAndSettle();
-
-        expect(find.text('You have pushed the button this many times:'), findsOneWidget);
-        expect(find.text('0'), findsOneWidget);
-        expect(find.byWidgetPredicate(
-            (Widget widget) => widget is Text && widget.data == 'hello' && 
-            widget.key == ValueKey('myKey'),
-        ), findsOneWidget);
-        expect(find.text('Approved Example'), findsOneWidget);
-    });
-```
-
-Write this:
-```dart
-    testWidgets('smoke test', (WidgetTester tester) async {
-        await tester.pumpWidget(const MyApp());
-        await tester.pumpAndSettle();
-
-        await tester.approvalTest();
-    });
-```
-
-Suppose you wanted to confirm that a page loaded with all the widget you expected. To do this,
-perform an approval test by calling `tester.approvalTest`, and give your test a suitable name:
-
-```dart
-    testWidget('home page', () {
-        await tester.pumpWidget(const MyApp());
-        await tester.pumpAndSettle();
-
-        await tester.approvalTest(description: 'all widgets load correctly');
-    });
-```
-
-To include your project's custom widget types in your test, and to perform post-test checks, add 
-calls to `Approved.setUpAll()` to your tests' `setUpAll` calls, like so:
-
-```dart
-    main() {
-        setUpAll(() {
-            Approved.setUpAll();
-        });
-    }
-```
 ## 📦 Installation
 
 Add the following to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  approval_tests: ^1.1.3
-  approval_tests_flutter: ^1.1.3 # If you need. This package is needed for widget and integration tests. You can remove `approval_tests` if you use flutter package.
+  approval_tests: ^1.1.0
 ```
 
 ## 👀 Getting Started
 
-The best way to get started is to download and open the example project:
-* [Flutter example project](https://github.com/approvals/ApprovalTests.Dart/tree/main/examples/flutter_example)
+The best way to get started is to download and open the starter project:
+* [Approvaltests.Dart.StarterProject](https://github.com/approvals/Approvaltests.Dart.StarterProject)
+
+This is a standard project that can be imported into any editor or IDE and also includes CI with GitHub Actions.
+
+It comes ready with:
+
+- A suitable `.gitignore` to exclude approval artifacts
+- A ready linter with all rules in place
+- A GitHub action to run tests and you can always check the status of the tests on the badge in the `README.md` file.
 
 ## 📚 How to use
 
@@ -149,25 +106,11 @@ After running the command, the files will be analyzed and you will be asked to c
 - `n` - Reject the received file.
 - `v`iew - View the differences between the received and approved files. After selecting `v` you will be asked which IDE you want to use to view the differences.
 
-The command `dart run approval_tests:review` has additional options, including listing files, selecting
- files to review from this list by index, and more. For its current capabilities, run 
-   ```bash
-     dart run approval_tests:review --help
-   ```
- Typing 'dart run approval_tests:review' is tedious! To reduce your typing, alias the command in your 
- `.zshrc` or `.bashrc` file
-   ```
-     alias review='dart run approval_tests:review'
-   ```
- or PowerShell profile
-   ```shell
-     function review {
-         dart run approval_tests:review
-     }
-   ```
 #### • Via approveResult property
 If you want the result to be automatically saved after running the test, you need to use the `approveResult` property in `Options`:
 
+<!-- snippet: sample_verify_as_json_test -->
+<a id='snippet-sample_verify_as_json_test'></a>
 ```dart
 void main() {
   test('test JSON object', () {
@@ -186,10 +129,13 @@ void main() {
   });
 }
 ```
+<sup><a href='/test/example/example_test.dart#L4-L21' title='Snippet source file'>snippet source</a> | <a href='#snippet-sample_verify_as_json_test' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 this will result in the following file
 `example_test.test_JSON_object.approved.txt`
-
+<!-- snippet: example_test.test_JSON_object.approved.txt -->
+<a id='snippet-example_test.test_JSON_object.approved.txt'></a>
 ```txt
 {
   "name": "JsonTest",
@@ -200,6 +146,8 @@ this will result in the following file
   "version": 0.1
 }
 ```
+<sup><a href='/test/example/example_test.test_JSON_object.approved.txt#L1-L8' title='Snippet source file'>snippet source</a> | <a href='#snippet-example_test.test_JSON_object.approved.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 #### • Via file rename
 You can just rename the `.received` file to `.approved`.
@@ -242,6 +190,8 @@ And the `verify_methods` folder has small examples of using different `ApprovalT
 ### JSON example
 With `verifyAsJson`, if you pass data models as `JsonItem`, with nested other models as `AnotherItem` and `SubItem`, then you need to add an `toJson` method to each model for the serialization to succeed.
 
+<!-- snippet: same_verify_as_json_test_with_model -->
+<a id='snippet-same_verify_as_json_test_with_model'></a>
 ```dart
 void main() {
   const jsonItem = JsonItem(
@@ -271,10 +221,13 @@ void main() {
   });
 }
 ```
+<sup><a href='/example/verify_methods/verify_as_json/verify_as_json_test.dart#L6-L34' title='Snippet source file'>snippet source</a> | <a href='#snippet-same_verify_as_json_test_with_model' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 this will result in the following file
 `verify_as_json_test.verify_model.approved.txt`
-
+<!-- snippet: verify_as_json_test.verify_model.approved.txt -->
+<a id='snippet-verify_as_json_test.verify_model.approved.txt'></a>
 ```txt
 {
   "jsonItem": {
@@ -301,6 +254,8 @@ this will result in the following file
   }
 }
 ```
+<sup><a href='/example/verify_methods/verify_as_json/verify_as_json_test.verify_model.approved.txt#L1-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-verify_as_json_test.verify_model.approved.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 <img src="https://github.com/yelmuratoff/packages_assets/blob/main/assets/approval_tests/passed.png?raw=true" alt="Passed test example" title="ApprovalTests" style="max-width: 800px;">
 

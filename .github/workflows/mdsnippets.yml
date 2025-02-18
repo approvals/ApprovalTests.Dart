@@ -4,9 +4,6 @@ on:
 jobs:
   format_and_snippets:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: packages/approval_tests
     steps:
     - name: 📚 Git Checkout
       uses: actions/checkout@v4

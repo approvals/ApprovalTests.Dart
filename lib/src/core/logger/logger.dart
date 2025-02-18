@@ -28,13 +28,13 @@ final class ApprovalLogger {
       settings: TalkerSettings(
         titles: _defaultTitles,
         colors: {
-          TalkerLogType.critical: AnsiPen()..red(),
-          TalkerLogType.warning: AnsiPen()..yellow(),
-          TalkerLogType.verbose: AnsiPen()..gray(),
-          TalkerLogType.info: AnsiPen()..cyan(),
-          TalkerLogType.debug: AnsiPen()..gray(),
-          TalkerLogType.error: ApprovalUtils.hexToAnsiPen('de7979'),
-          TalkerLogType.exception: ApprovalUtils.hexToAnsiPen('de7979'),
+          TalkerLogType.critical.key: AnsiPen()..red(),
+          TalkerLogType.warning.key: AnsiPen()..yellow(),
+          TalkerLogType.verbose.key: AnsiPen()..gray(),
+          TalkerLogType.info.key: AnsiPen()..cyan(),
+          TalkerLogType.debug.key: AnsiPen()..gray(),
+          TalkerLogType.error.key: ApprovalUtils.hexToAnsiPen('de7979'),
+          TalkerLogType.exception.key: ApprovalUtils.hexToAnsiPen('de7979'),
         },
       ),
     ),
@@ -47,22 +47,23 @@ final class ApprovalLogger {
   static const _approvalTitle = "ApprovalTests";
 
   // Define default titles for different log types.
-  static const _defaultTitles = {
-    TalkerLogType.critical: '💀 $_approvalTitle',
-    TalkerLogType.warning: '🟡 $_approvalTitle',
-    TalkerLogType.verbose: '🐛 $_approvalTitle',
-    TalkerLogType.info: '🔍 $_approvalTitle',
-    TalkerLogType.debug: '🐛 $_approvalTitle',
-    TalkerLogType.error: '🔴 $_approvalTitle',
-    TalkerLogType.exception: '🔴 $_approvalTitle',
+  static Map<String, String> _defaultTitles = {
+    TalkerLogType.critical.key: '💀 $_approvalTitle',
+    TalkerLogType.warning.key: '🟡 $_approvalTitle',
+    TalkerLogType.verbose.key: '🐛 $_approvalTitle',
+    TalkerLogType.info.key: '🔍 $_approvalTitle',
+    TalkerLogType.debug.key: '🐛 $_approvalTitle',
+    TalkerLogType.error.key: '🔴 $_approvalTitle',
+    TalkerLogType.exception.key: '🔴 $_approvalTitle',
   };
 
   /// `log` method to log messages with debug log level.
   static void log(String message) => _instance._logger.debug(message);
 
   /// `info` method to log messages with success log level.
-  static void success(String message) =>
-      _instance._logger.logTyped(_SuccessLog(message));
+  static void success(String message) => _instance._logger.logCustom(
+        _SuccessLog(message),
+      );
 
   /// `warning` method to log messages with warning log level.
   static void warning(String message) => _instance._logger.warning(message);
