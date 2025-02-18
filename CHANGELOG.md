@@ -1,4 +1,4 @@
-## 1.1.4
+## 1.1.5
 - Upgraded all dependencies to actuals.
 
 ## 1.1.3
