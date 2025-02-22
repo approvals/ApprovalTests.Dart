@@ -114,6 +114,7 @@ final class Namer implements ApprovalNamer {
   static const String approvedExtension = 'approved.txt';
   static const String receivedExtension = 'received.txt';
 
+  /// Copy with method for [Namer].
   Namer copyWith({
     String? filePath,
     FileNamerOptions? options,

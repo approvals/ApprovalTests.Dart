@@ -48,12 +48,6 @@ class Approvals {
     final namer = options.namer.copyWith(
       filePath: completedPath,
     );
-    // final namer = makeNamer(
-    //   completedPath,
-    //   description: options.namer?.description,
-    //   options: options.namer?.options,
-    //   addTestName: options.namer?.addTestName,
-    // );
 
     try {
       // Create writer object with scrubbed response and file extension retrieved from options
