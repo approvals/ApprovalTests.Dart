@@ -34,7 +34,7 @@ class Options {
   final bool deleteReceivedFile;
 
   /// A final variable `namer` of type `Namer` used to set the name and path of the file.
-  final Namer? namer;
+  final Namer namer;
 
   /// A final bool variable `logErrors` used to determine if the errors should be logged.
   final bool logErrors;
@@ -52,7 +52,7 @@ class Options {
     this.comparator = const FileComparator(),
     this.reporter = const CommandLineReporter(),
     this.deleteReceivedFile = true,
-    this.namer,
+    this.namer = const Namer(),
     this.logErrors = true,
     this.logResults = true,
     this.includeClassNameDuringSerialization = true,
@@ -79,7 +79,6 @@ class Options {
         logErrors: logErrors ?? this.logErrors,
         logResults: logResults ?? this.logResults,
         includeClassNameDuringSerialization:
-            includeClassNameDuringSerialization ??
-                this.includeClassNameDuringSerialization,
+            includeClassNameDuringSerialization ?? this.includeClassNameDuringSerialization,
       );
 }
