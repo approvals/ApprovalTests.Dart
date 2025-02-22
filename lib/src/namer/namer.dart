@@ -42,7 +42,9 @@ final class Namer implements ApprovalNamer {
           ? '${_basePath}.$currentTestName.$_updatedDescription.$approvedExtension'
           : '${_basePath}.$_updatedDescription.$approvedExtension';
     }
-    return addTestName ? '${_basePath}.$currentTestName.$approvedExtension' : '${_basePath}.$approvedExtension';
+    return addTestName
+        ? '${_basePath}.$currentTestName.$approvedExtension'
+        : '${_basePath}.$approvedExtension';
   }
 
   @override
@@ -54,7 +56,9 @@ final class Namer implements ApprovalNamer {
           ? '$_fileName.$currentTestName.$_updatedDescription.$approvedExtension'
           : '$_fileName.$_updatedDescription.$approvedExtension';
     }
-    return addTestName ? '$_fileName.$currentTestName.$approvedExtension' : '$_fileName.$approvedExtension';
+    return addTestName
+        ? '$_fileName.$currentTestName.$approvedExtension'
+        : '$_fileName.$approvedExtension';
   }
 
   @override
@@ -66,7 +70,9 @@ final class Namer implements ApprovalNamer {
           ? '${_basePath}.$currentTestName.$_updatedDescription.$receivedExtension'
           : '${_basePath}.$_updatedDescription.$receivedExtension';
     }
-    return addTestName ? '${_basePath}.$currentTestName.$receivedExtension' : '${_basePath}.$receivedExtension';
+    return addTestName
+        ? '${_basePath}.$currentTestName.$receivedExtension'
+        : '${_basePath}.$receivedExtension';
   }
 
   @override
@@ -78,7 +84,9 @@ final class Namer implements ApprovalNamer {
           ? '$_fileName.$currentTestName.$_updatedDescription.$receivedExtension'
           : '$_fileName.$_updatedDescription.$receivedExtension';
     }
-    return addTestName ? '$_fileName.$currentTestName.$receivedExtension' : '$_fileName.$receivedExtension';
+    return addTestName
+        ? '$_fileName.$currentTestName.$receivedExtension'
+        : '$_fileName.$receivedExtension';
   }
 
   @override
@@ -87,7 +95,9 @@ final class Namer implements ApprovalNamer {
     return testName == null ? '' : testName.replaceAll(' ', '_').toLowerCase();
   }
 
-  String get _updatedDescription => description == null ? '' : description!.replaceAll(' ', '_').toLowerCase();
+  String get _updatedDescription => description == null
+      ? ''
+      : description!.replaceAll(' ', '_').toLowerCase();
 
   /// Returns the path without extension.
   /// If [useSubfolder] is `true`, appends `approval_tests` to the folder path.

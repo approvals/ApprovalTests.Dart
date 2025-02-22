@@ -79,6 +79,7 @@ class Options {
         logErrors: logErrors ?? this.logErrors,
         logResults: logResults ?? this.logResults,
         includeClassNameDuringSerialization:
-            includeClassNameDuringSerialization ?? this.includeClassNameDuringSerialization,
+            includeClassNameDuringSerialization ??
+                this.includeClassNameDuringSerialization,
       );
 }

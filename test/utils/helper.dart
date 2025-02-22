@@ -57,7 +57,8 @@ class ApprovalTestHelper {
   }) {
     Approvals.verifyAll(
       contents,
-      processor: (item) => item.toString(), // Simple processor function that returns the item itself.
+      processor: (item) => item
+          .toString(), // Simple processor function that returns the item itself.
       options: _getOptions(
         testName,
         expectException: expectException,
@@ -84,7 +85,8 @@ class ApprovalTestHelper {
         expectException: expectException,
         approveResult: approveResult,
         deleteReceivedFile: deleteReceivedFile,
-        includeClassNameDuringSerialization: includeClassNameDuringSerialization,
+        includeClassNameDuringSerialization:
+            includeClassNameDuringSerialization,
       ),
     );
   }
@@ -171,7 +173,8 @@ class ApprovalTestHelper {
         logErrors: !expectException,
         reporter: reporter,
         scrubber: scrubber,
-        includeClassNameDuringSerialization: includeClassNameDuringSerialization,
+        includeClassNameDuringSerialization:
+            includeClassNameDuringSerialization,
       );
 
   String get fakeStackTracePath {
