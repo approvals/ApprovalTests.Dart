@@ -1,3 +1,17 @@
+## 1.2.0
+
+### URL Updates
+- Updated URLs in LICENSE to use HTTPS.
+- Updated the license badge URL in README.md to use HTTPS.
+### Code Refactoring
+- Removed the `makeNamer` factory method in `lib/src/approvals.dart` and replaced it with `copyWith` for creating Namer instances.
+- Added a `_normalizeContent` method in `lib/src/comparator/file_comparator.dart` to standardize line endings and trim whitespace for file comparisons.
+### Documentation Adjustments
+- Removed the Pub popularity badge from README.md.
+### Other Changes
+- Added the `--generate-notes` option to the `gh release create` command in `.github/workflows/publish.yml`.
+- Updated `example/main.dart` to use a Namer with a subfolder and a CommandLineReporter in `verifyAll`.
+
 ## 1.1.6
 - Upgraded all dependencies to actuals.
 
