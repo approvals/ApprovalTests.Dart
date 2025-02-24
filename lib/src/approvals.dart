@@ -5,7 +5,7 @@
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+       https://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,20 +21,6 @@ class Approvals {
   static const FilePathExtractor filePathExtractor =
       FilePathExtractor(stackTraceFetcher: StackTraceFetcher());
 
-  // Factory method to create an instance of ApprovalNamer with given file name
-  static ApprovalNamer makeNamer(
-    String filePath, {
-    String? description,
-    FileNamerOptions? options,
-    bool? addTestName,
-  }) =>
-      Namer(
-        filePath: filePath,
-        description: description,
-        options: options,
-        addTestName: addTestName ?? true,
-      );
-
   // ================== Verify methods ==================
 
   // Method to verify if the content in response matches the approved content
@@ -43,15 +29,12 @@ class Approvals {
     Options options = const Options(),
   }) {
     // Get the file path without extension or use the provided file path
-    final completedPath = options.namer?.filePath ??
+    final completedPath = options.namer.filePath ??
         filePathExtractor.filePath.split('.dart').first;
 
     // Create namer object with given or computed file name
-    final namer = makeNamer(
-      completedPath,
-      description: options.namer?.description,
-      options: options.namer?.options,
-      addTestName: options.namer?.addTestName,
+    final namer = options.namer.copyWith(
+      filePath: completedPath,
     );
 
     try {

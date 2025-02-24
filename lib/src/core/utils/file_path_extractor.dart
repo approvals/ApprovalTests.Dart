@@ -5,7 +5,7 @@
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+       https://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,74 +16,74 @@
 
 part of '../../../approval_tests.dart';
 
-class FilePathExtractor {
+/// Extracts file and directory paths from the current stack trace.
+///
+/// The [FilePathExtractor] class utilizes an [IStackTraceFetcher] to retrieve
+/// stack traces and extract file paths based on platform-specific patterns.
+final class FilePathExtractor {
   final IStackTraceFetcher _stackTraceFetcher;
 
+  /// Constructs a [FilePathExtractor] with an optional custom [IStackTraceFetcher].
+  /// If no custom fetcher is provided, a default [StackTraceFetcher] is used.
   const FilePathExtractor({
     IStackTraceFetcher? stackTraceFetcher,
   }) : _stackTraceFetcher = stackTraceFetcher ?? const StackTraceFetcher();
 
+  /// Retrieves the file path from the current stack trace.
+  ///
+  /// This method extracts the first file path found in the stack trace
+  /// using platform-specific regular expressions.
+  ///
+  /// Throws:
+  /// - [FileNotFoundException] if no file path is found in the stack trace.
+  ///
+  /// Returns:
+  /// A string representing the extracted file path.
   String get filePath {
-    try {
-      final stackTraceString = _stackTraceFetcher.currentStackTrace;
-      final uriRegExp =
-          RegExp(isWindows ? _windowsPattern : _linuxMacOSPattern);
-      final match = uriRegExp.firstMatch(stackTraceString);
-
-      if (match != null) {
-        if (isWindows) {
-          final rawPath = match.group(1)!;
-          final filePath =
-              Uri.file(rawPath, windows: true).toFilePath(windows: true);
-          return filePath;
-        } else {
-          final filePath = Uri.tryParse('file:///${match.group(1)!}');
-          return filePath!.toFilePath();
-        }
-      } else {
-        throw FileNotFoundException(
-          message: 'File not found in stack trace',
-          stackTrace: StackTrace.current,
-        );
-      }
-    } catch (e) {
-      rethrow;
+    final match = _extractFileMatch();
+    if (match == null) {
+      throw FileNotFoundException(
+        message: 'File not found in stack trace',
+        stackTrace: StackTrace.current,
+      );
     }
+
+    return isWindows
+        ? Uri.file(match.group(1)!, windows: true).toFilePath(windows: true)
+        : Uri.parse('file:///${match.group(1)!}').toFilePath();
   }
 
+  /// Retrieves the directory path from the current stack trace.
+  ///
+  /// This method extracts the file path and determines its parent directory.
+  ///
+  /// Throws:
+  /// - [FileNotFoundException] if no file path is found in the stack trace.
+  ///
+  /// Returns:
+  /// A string representing the extracted directory path.
   String get directoryPath {
-    try {
-      final stackTraceString = _stackTraceFetcher.currentStackTrace;
-      final uriRegExp =
-          RegExp(isWindows ? _windowsPattern : _linuxMacOSPattern);
-      final match = uriRegExp.firstMatch(stackTraceString);
-
-      if (match != null) {
-        String filePath;
-        if (isWindows) {
-          final rawPath = match.group(1)!;
-          filePath = Uri.file(rawPath, windows: true).toFilePath(windows: true);
-        } else {
-          filePath = Uri.tryParse('file:///${match.group(1)!}')!.toFilePath();
-        }
-
-        final separator = isWindows ? '\\' : '/';
-        final directoryPath =
-            filePath.substring(0, filePath.lastIndexOf(separator));
-        return directoryPath;
-      } else {
-        throw FileNotFoundException(
-          message: 'File not found in stack trace',
-          stackTrace: StackTrace.current,
-        );
-      }
-    } catch (e) {
-      rethrow;
-    }
+    final filePath = this.filePath;
+    final separator = isWindows ? '\\' : '/';
+    return filePath.substring(0, filePath.lastIndexOf(separator));
   }
 
-  static bool isWindows = Platform.isWindows;
+  /// Extracts the first matching file path from the stack trace.
+  ///
+  /// Returns:
+  /// A [RegExpMatch] if a match is found, otherwise `null`.
+  RegExpMatch? _extractFileMatch() {
+    final stackTraceString = _stackTraceFetcher.currentStackTrace;
+    final uriRegExp = RegExp(isWindows ? _windowsPattern : _linuxMacOSPattern);
+    return uriRegExp.firstMatch(stackTraceString);
+  }
 
+  /// Indicates whether the current platform is Windows.
+  static final bool isWindows = Platform.isWindows;
+
+  /// Regular expression pattern for extracting file paths on Windows.
   static const String _windowsPattern = r'file:///([a-zA-Z]:/[^:\s]+)';
-  static const String _linuxMacOSPattern = r'file:\/\/\/([^\s:]+)';
+
+  /// Regular expression pattern for extracting file paths on Linux and macOS.
+  static const String _linuxMacOSPattern = r'file:///([^\s:]+)';
 }

@@ -5,7 +5,7 @@
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+       https://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,62 +16,75 @@
 
 part of '../../../approval_tests.dart';
 
-// Define utility class for approval related operations. It contains methods for converting string cases and retrieving directory or file path.
+/// A utility class for approval-related operations.
+///
+/// Provides methods for converting hex colors to ANSI pen colors, computing
+/// Cartesian products, reading and managing files, and retrieving system commands.
 final class ApprovalUtils {
+  /// Converts a hex color code to an [AnsiPen] for terminal styling.
+  ///
+  /// - [hex]: A 6-character hex string representing an RGB color.
+  ///
+  /// Returns:
+  /// An [AnsiPen] configured with the specified color.
   static AnsiPen hexToAnsiPen(String hex) {
     final int red = int.parse(hex.substring(0, 2), radix: 16);
     final int green = int.parse(hex.substring(2, 4), radix: 16);
     final int blue = int.parse(hex.substring(4, 6), radix: 16);
-
-    final AnsiPen pen = AnsiPen()
-      ..rgb(r: red / 255, g: green / 255, b: blue / 255);
-    return pen;
+    return AnsiPen()..rgb(r: red / 255, g: green / 255, b: blue / 255);
   }
 
   /// Computes the Cartesian product of a list of lists.
+  ///
+  /// - [lists]: A list of lists containing elements of type `T`.
+  ///
+  /// Returns:
+  /// An iterable containing lists representing the Cartesian product.
   static Iterable<List<T>> cartesianProduct<T>(List<List<T>> lists) {
-    try {
-      Iterable<List<T>> result = [[]];
-      for (final list in lists) {
-        result = result.expand((x) => list.map((y) => [...x, y]));
-      }
-      return result;
-    } catch (e) {
-      rethrow;
-    }
+    return lists.fold(<List<T>>[[]],
+        (result, list) => result.expand((x) => list.map((y) => [...x, y])));
   }
 
-  static String readFile({
-    required String path,
-  }) {
-    final File file = File(path);
-    return file.readAsStringSync().trim();
-  }
+  /// Reads the contents of a file and trims any extra whitespace.
+  ///
+  /// - [path]: The file path to read from.
+  ///
+  /// Returns:
+  /// A string containing the file's contents.
+  static String readFile(String path) => File(path).readAsStringSync().trim();
 
-  static bool isFileExists(String path) {
-    final File file = File(path);
-    return file.existsSync();
-  }
+  /// Checks if a file exists at the specified path.
+  ///
+  /// - [path]: The file path to check.
+  ///
+  /// Returns:
+  /// `true` if the file exists, otherwise `false`.
+  static bool isFileExists(String path) => File(path).existsSync();
 
-  static String lines(int count) => List.filled(count, '=').join();
+  /// Generates a separator line of the specified length.
+  ///
+  /// - [count]: The number of '=' characters in the line.
+  ///
+  /// Returns:
+  /// A string containing the separator line.
+  static String lines(int count) => '=' * count;
 
+  /// Deletes a file if it exists.
+  ///
+  /// - [path]: The file path to delete.
+  ///
+  /// Throws:
+  /// Any exception encountered during deletion.
   static void deleteFile(String path) {
-    try {
-      final File file = File(path);
-      final bool exists = file.existsSync();
-      if (exists) {
-        file.deleteSync();
-      }
-    } catch (_) {
-      rethrow;
+    final file = File(path);
+    if (file.existsSync()) {
+      file.deleteSync();
     }
   }
 
-  static String get commandWhere {
-    if (Platform.isWindows) {
-      return 'where';
-    } else {
-      return 'which';
-    }
-  }
+  /// Retrieves the system command for finding executables.
+  ///
+  /// Returns:
+  /// `'where'` on Windows, `'which'` on other platforms.
+  static String get commandWhere => Platform.isWindows ? 'where' : 'which';
 }

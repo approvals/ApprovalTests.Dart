@@ -5,7 +5,7 @@
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+       https://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,38 +16,30 @@
 
 part of '../../../approval_tests.dart';
 
-/// `CommandLineReporter` is a class for reporting the comparison results using the command line.
+/// A reporter that outputs comparison results to the command line.
+///
+/// This class reads and compares two files (approved and received) line by line,
+/// highlighting the differences in color-coded format.
 class CommandLineReporter implements Reporter {
+  /// Default constructor for `CommandLineReporter`.
   const CommandLineReporter();
 
   @override
   void report(String approvedPath, String receivedPath, {String? message}) {
     try {
-      final StringBuffer buffer = StringBuffer(message ?? "Differences:\n");
+      final buffer = StringBuffer(message ?? "Differences:\n");
 
-      final List<String> approvedLines =
-          ApprovalUtils.readFile(path: approvedPath).split('\n');
-      final List<String> receivedLines =
-          ApprovalUtils.readFile(path: receivedPath).split('\n');
+      final approvedLines = _readFileLines(approvedPath);
+      final receivedLines = _readFileLines(receivedPath);
 
-      final int maxLines = max(approvedLines.length, receivedLines.length);
+      final maxLines = max(approvedLines.length, receivedLines.length);
 
-      for (int i = 0; i < maxLines; i++) {
-        final String approvedLine =
-            i < approvedLines.length ? approvedLines[i] : "";
-        final String receivedLine =
-            i < receivedLines.length ? receivedLines[i] : "";
+      for (var i = 0; i < maxLines; i++) {
+        final approvedLine = i < approvedLines.length ? approvedLines[i] : "";
+        final receivedLine = i < receivedLines.length ? receivedLines[i] : "";
 
         if (approvedLine != receivedLine) {
-          buffer.writeln(
-            '${ApprovalUtils.lines(20)} Difference at line ${i + 1} ${ApprovalUtils.lines(20)} \n',
-          );
-          buffer.writeln(
-            'Approved file, line ${i + 1}: ${_highlightDifference(approvedLine, receivedLine, isApprovedFile: true)}',
-          );
-          buffer.writeln(
-            'Received file, line ${i + 1}: ${_highlightDifference(approvedLine, receivedLine)}',
-          );
+          _appendDifference(buffer, i + 1, approvedLine, receivedLine);
         }
       }
 
@@ -55,38 +47,49 @@ class CommandLineReporter implements Reporter {
         ApprovalLogger.exception(buffer.toString());
       }
     } catch (e) {
+      // Logging and rethrowing to preserve error stack trace
+      ApprovalLogger.exception("Error while reporting differences: \$e");
       rethrow;
     }
   }
 
+  /// Reads the content of a file and returns a list of its lines.
+  List<String> _readFileLines(String filePath) =>
+      ApprovalUtils.readFile(filePath).split('\n');
+
+  /// Appends a formatted difference to the provided buffer.
+  void _appendDifference(
+      StringBuffer buffer, int lineNumber, String approved, String received) {
+    buffer.writeln(
+      '${ApprovalUtils.lines(20)} Difference at line $lineNumber ${ApprovalUtils.lines(20)}\n',
+    );
+    buffer.writeln('Approved file, line $lineNumber: '
+        '${_highlightDifference(approved, received, isApprovedFile: true)}');
+    buffer.writeln('Received file, line $lineNumber: '
+        '${_highlightDifference(approved, received)}');
+  }
+
+  /// Highlights differences between the approved and received lines.
+  ///
+  /// Uses `DiffMatchPatch` to compute the differences and applies ANSI color
+  /// codes to highlight insertions (red) and deletions (green).
   String _highlightDifference(
     String approvedLine,
     String receivedLine, {
     bool isApprovedFile = false,
   }) {
-    // Create a new instance of DiffMatchPatch
     final differ = DiffMatchPatch();
-
-    // Compute the difference between the Approved and Received lines. [diffs] is a List of Diff objects.
     final diffs = differ.diff_main(approvedLine, receivedLine);
-
-    // Reduce the number of edits by eliminating semantically trivial equalities. [diffs] is a List of Diff objects.
     differ.diff_cleanupSemantic(diffs);
 
     return diffs.map((diff) {
-      if (diff.operation == Operation.insert && !isApprovedFile) {
-        // Red for insertions in the Received file
-        return '\x1B[41m${diff.text}\x1B[0m\x1B[31m';
-      } else if (diff.operation == Operation.delete && isApprovedFile) {
-        // Green for deletions in the Approved file
-        return '\x1B[32m${diff.text}\x1B[31m';
-      } else if (diff.operation == Operation.equal) {
-        // No highlighting for equal parts
-        return diff.text;
-      } else {
-        // For any unexpected cases
-        return '';
-      }
+      return switch (diff.operation) {
+        Operation.insert =>
+          isApprovedFile ? '' : '\x1B[41m${diff.text}\x1B[0m\x1B[31m',
+        Operation.delete =>
+          isApprovedFile ? '\x1B[32m${diff.text}\x1B[31m' : '',
+        Operation.equal => diff.text,
+      };
     }).join();
   }
 }

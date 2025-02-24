@@ -6,8 +6,11 @@ void main() {
     test("verify combinations", () {
       Approvals.verifyAll(
         [3, 5, 15],
-        options: const Options(
-          reporter: DiffReporter(),
+        options: Options(
+          namer: Namer(
+            useSubfolder: true,
+          ),
+          reporter: CommandLineReporter(),
         ),
         processor: (items) => fizzBuzz(items).toString(),
       );

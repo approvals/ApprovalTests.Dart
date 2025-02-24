@@ -5,7 +5,7 @@
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+       https://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
@@ -34,7 +34,7 @@ class Options {
   final bool deleteReceivedFile;
 
   /// A final variable `namer` of type `Namer` used to set the name and path of the file.
-  final Namer? namer;
+  final Namer namer;
 
   /// A final bool variable `logErrors` used to determine if the errors should be logged.
   final bool logErrors;
@@ -52,7 +52,7 @@ class Options {
     this.comparator = const FileComparator(),
     this.reporter = const CommandLineReporter(),
     this.deleteReceivedFile = true,
-    this.namer,
+    this.namer = const Namer(),
     this.logErrors = true,
     this.logResults = true,
     this.includeClassNameDuringSerialization = true,

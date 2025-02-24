@@ -167,7 +167,7 @@ class ApprovalTestHelper {
                   description: description,
                 ),
               )
-            : null,
+            : Namer(),
         deleteReceivedFile: deleteReceivedFile,
         approveResult: approveResult,
         logErrors: !expectException,
