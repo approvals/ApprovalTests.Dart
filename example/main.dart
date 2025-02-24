@@ -10,7 +10,7 @@ void main() {
           namer: Namer(
             useSubfolder: true,
           ),
-          reporter: DiffReporter(),
+          reporter: CommandLineReporter(),
         ),
         processor: (items) => fizzBuzz(items).toString(),
       );

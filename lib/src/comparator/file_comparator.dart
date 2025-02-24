@@ -28,12 +28,8 @@ final class FileComparator implements Comparator {
     bool isLogError = true,
   }) {
     try {
-      final approved = ApprovalUtils.readFile(path: approvedPath)
-          .replaceAll('\r\n', '\n')
-          .trim();
-      final received = ApprovalUtils.readFile(path: receivedPath)
-          .replaceAll('\r\n', '\n')
-          .trim();
+      final approved = _normalizeContent(ApprovalUtils.readFile(approvedPath));
+      final received = _normalizeContent(ApprovalUtils.readFile(receivedPath));
 
       // Return true if contents of both files match exactly
       return approved.compareTo(received) == 0;
@@ -44,4 +40,8 @@ final class FileComparator implements Comparator {
       rethrow;
     }
   }
+
+  /// Normalizes file content by standardizing line endings and trimming whitespace.
+  String _normalizeContent(String content) =>
+      content.replaceAll('\r\n', '\n').trim();
 }

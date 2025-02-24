@@ -16,37 +16,49 @@
 
 part of '../../approval_tests.dart';
 
+/// A class representing options for file naming in approval tests.
+///
+/// The [FileNamerOptions] class constructs standardized file names for
+/// approved and received test outputs, allowing optional descriptions.
 final class FileNamerOptions {
+  /// The directory where files will be stored.
   final String folderPath;
+
+  /// The base file name.
   final String fileName;
+
+  /// The name of the test associated with the file.
   final String testName;
+
+  /// An optional description to differentiate test outputs.
   final String? description;
 
+  /// Creates a [FileNamerOptions] instance with required parameters.
   const FileNamerOptions({
     required this.folderPath,
     required this.fileName,
     required this.testName,
-    required this.description,
+    this.description,
   });
 
+  /// Returns the full path of the approved file.
   String get approved => '$folderPath/$approvedFileName';
 
+  /// Returns the full path of the received file.
   String get received => '$folderPath/$receivedFileName';
 
-  String get approvedFileName {
-    if (description != null) {
-      return '$fileName.$testName.$_updatedDescription.approved.txt';
-    }
-    return '$fileName.$testName.approved.txt';
+  /// Generates the approved file name.
+  String get approvedFileName => _constructFileName('approved');
+
+  /// Generates the received file name.
+  String get receivedFileName => _constructFileName('received');
+
+  /// Constructs a file name based on type and description.
+  String _constructFileName(String status) {
+    final descPart = description != null ? '.$_updatedDescription' : '';
+    return '$fileName.$testName$descPart.$status.txt';
   }
 
-  String get receivedFileName {
-    if (description != null) {
-      return '$fileName.$testName.$_updatedDescription.received.txt';
-    }
-    return '$fileName.$testName.received.txt';
-  }
-
-  String get _updatedDescription =>
-      description == null ? '' : description!.replaceAll(' ', '_');
+  /// Converts spaces in the description to underscores.
+  String get _updatedDescription => description?.replaceAll(' ', '_') ?? '';
 }

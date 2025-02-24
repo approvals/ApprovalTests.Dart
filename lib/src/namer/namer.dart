@@ -16,8 +16,8 @@
 
 part of '../../approval_tests.dart';
 
-/// `Namer` class is used to generate the file names for the approved and received files.
-
+/// A utility class responsible for generating structured file names
+/// for approval testing, ensuring consistency across test runs.
 final class Namer implements ApprovalNamer {
   final String? filePath;
   final FileNamerOptions? options;
@@ -25,6 +25,13 @@ final class Namer implements ApprovalNamer {
   final String? description;
   final bool useSubfolder;
 
+  /// Creates a [Namer] instance with customizable file naming parameters.
+  ///
+  /// - [filePath]: The base file path for generated names.
+  /// - [options]: If provided, overrides default naming logic.
+  /// - [addTestName]: Whether to include the test name in the file name.
+  /// - [description]: An optional description to differentiate test cases.
+  /// - [useSubfolder]: Whether to store files in an `approvals` subdirectory.
   const Namer({
     this.filePath,
     this.options,
@@ -33,98 +40,73 @@ final class Namer implements ApprovalNamer {
     this.useSubfolder = false,
   });
 
+  /// Returns the fully qualified approved file path.
   @override
-  String get approved {
-    if (options != null) return options!.approved;
+  String get approved => options?.approved ?? _buildFilePath(approvedExtension);
 
-    if (description != null) {
-      return addTestName
-          ? '${_basePath}.$currentTestName.$_updatedDescription.$approvedExtension'
-          : '${_basePath}.$_updatedDescription.$approvedExtension';
-    }
-    return addTestName
-        ? '${_basePath}.$currentTestName.$approvedExtension'
-        : '${_basePath}.$approvedExtension';
-  }
-
+  /// Returns the generated approved file name.
   @override
-  String get approvedFileName {
-    if (options != null) return options!.approvedFileName;
+  String get approvedFileName =>
+      options?.approvedFileName ?? _buildFileName(approvedExtension);
 
-    if (description != null) {
-      return addTestName
-          ? '$_fileName.$currentTestName.$_updatedDescription.$approvedExtension'
-          : '$_fileName.$_updatedDescription.$approvedExtension';
-    }
-    return addTestName
-        ? '$_fileName.$currentTestName.$approvedExtension'
-        : '$_fileName.$approvedExtension';
-  }
-
+  /// Returns the fully qualified received file path.
   @override
-  String get received {
-    if (options != null) return options!.received;
+  String get received => options?.received ?? _buildFilePath(receivedExtension);
 
-    if (description != null) {
-      return addTestName
-          ? '${_basePath}.$currentTestName.$_updatedDescription.$receivedExtension'
-          : '${_basePath}.$_updatedDescription.$receivedExtension';
-    }
-    return addTestName
-        ? '${_basePath}.$currentTestName.$receivedExtension'
-        : '${_basePath}.$receivedExtension';
-  }
-
+  /// Returns the generated received file name.
   @override
-  String get receivedFileName {
-    if (options != null) return options!.receivedFileName;
+  String get receivedFileName =>
+      options?.receivedFileName ?? _buildFileName(receivedExtension);
 
-    if (description != null) {
-      return addTestName
-          ? '$_fileName.$currentTestName.$_updatedDescription.$receivedExtension'
-          : '$_fileName.$_updatedDescription.$receivedExtension';
-    }
-    return addTestName
-        ? '$_fileName.$currentTestName.$receivedExtension'
-        : '$_fileName.$receivedExtension';
-  }
-
+  /// Retrieves the current test name, formatted appropriately.
   @override
   String get currentTestName {
     final testName = Invoker.current?.liveTest.individualName;
-    return testName == null ? '' : testName.replaceAll(' ', '_').toLowerCase();
+    return testName?.replaceAll(' ', '_').toLowerCase() ?? '';
   }
 
-  String get _updatedDescription => description == null
-      ? ''
-      : description!.replaceAll(' ', '_').toLowerCase();
+  /// Returns a formatted version of the description, replacing spaces with underscores.
+  String get _formattedDescription =>
+      description?.replaceAll(' ', '_').toLowerCase() ?? '';
 
-  /// Returns the path without extension.
-  /// If [useSubfolder] is `true`, appends `approval_tests` to the folder path.
+  /// Constructs a full file path, including directory and extension.
+  String _buildFilePath(String extension) {
+    final base = _basePath;
+    final testNamePart = addTestName ? '.$currentTestName' : '';
+    final descriptionPart =
+        description != null ? '.$_formattedDescription' : '';
+    return '$base$testNamePart$descriptionPart.$extension';
+  }
+
+  /// Constructs only the file name portion, without the directory path.
+  String _buildFileName(String extension) {
+    final name = _fileName;
+    final testNamePart = addTestName ? '.$currentTestName' : '';
+    final descriptionPart =
+        description != null ? '.$_formattedDescription' : '';
+    return '$name$testNamePart$descriptionPart.$extension';
+  }
+
+  /// Computes the base file path without its extension.
+  /// If [useSubfolder] is true, the file will be placed inside an `approvals` subfolder.
   String get _basePath {
-    final separator = Platform.isWindows ? '\\' : '/';
-    final idx = filePath!.lastIndexOf(separator);
-    final dir = idx < 0 ? '' : filePath!.substring(0, idx);
-    final name = filePath!.split(separator).last.split('.dart').first;
-    final baseDir = useSubfolder ? '$dir${separator}approvals' : dir;
-    return '$baseDir$separator$name';
+    final separator = Platform.pathSeparator;
+    final directory = filePath!.substring(0, filePath!.lastIndexOf(separator));
+    final fileName = filePath!.split(separator).last.split('.dart').first;
+    final baseDir =
+        useSubfolder ? '$directory${separator}approvals' : directory;
+    return '$baseDir$separator$fileName';
   }
 
-  /// Returns the file name part used in `approvedFileName` and `receivedFileName`.
-  String get _fileName {
-    final separator = Platform.isWindows ? '\\' : '/';
-    final name = filePath!.split(separator).last.split('.dart').first;
-    final dirIdx = filePath!.lastIndexOf(separator);
-    if (dirIdx < 0) return name;
-    final dir = filePath!.substring(0, dirIdx);
-    final baseDir = useSubfolder ? '$dir${separator}approvals' : dir;
-    return '$baseDir$separator$name';
-  }
+  /// Extracts the file name without its directory path.
+  String get _fileName =>
+      filePath!.split(Platform.pathSeparator).last.split('.dart').first;
 
+  /// Constants defining the file extensions used for approval testing.
   static const String approvedExtension = 'approved.txt';
   static const String receivedExtension = 'received.txt';
 
-  /// Copy with method for [Namer].
+  /// Creates a modified copy of the current [Namer] instance with new values.
   Namer copyWith({
     String? filePath,
     FileNamerOptions? options,

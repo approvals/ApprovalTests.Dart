@@ -16,71 +16,77 @@
 
 part of '../../../approval_tests.dart';
 
-class ApprovalConverter {
+/// A utility class for converting and encoding objects into JSON format.
+///
+/// The [ApprovalConverter] class provides methods to format JSON strings
+/// with indentation and to encode objects reflectively, supporting basic
+/// types, lists, maps, and objects with a `toJson` method.
+final class ApprovalConverter {
+  /// Prevents instantiation of [ApprovalConverter].
+  /// This is a utility class and should not be instantiated.
+  const ApprovalConverter._();
+
+  /// Converts a raw JSON string into a formatted, indented JSON string.
+  ///
+  /// - [jsonString]: A valid JSON string.
+  ///
+  /// Returns:
+  /// A properly indented JSON string.
   static String convert(String jsonString) {
-    final decodedJson = jsonDecode(jsonString);
-    const encoder = JsonEncoder.withIndent('  ');
-    return encoder.convert(decodedJson);
+    return const JsonEncoder.withIndent('  ').convert(jsonDecode(jsonString));
   }
 
-  static String encodeReflectively(
-    Object? object, {
-    bool includeClassName = false,
-  }) {
-    if (object == null) {
-      return 'null';
-    }
-
-    if (object is List) {
-      return '[${object.map((item) => encodeReflectively(item)).join(', ')}]';
-    }
-
+  /// Recursively encodes an object into a JSON-compatible string.
+  ///
+  /// Supports basic types, lists, maps, and objects with a `toJson` method.
+  /// Optionally includes the class name as a wrapper for custom objects.
+  ///
+  /// - [object]: The object to be encoded.
+  /// - [includeClassName]: If `true`, wraps custom objects with their class name.
+  ///
+  /// Returns:
+  /// A JSON-compatible string representation of the object.
+  static String encodeReflectively(Object? object,
+      {bool includeClassName = false}) {
+    if (object == null) return 'null';
+    if (object is num || object is bool) return object.toString();
+    if (object is String) return jsonEncode(object);
+    if (object is List) return '[${object.map(encodeReflectively).join(', ')}]';
     if (object is Map) {
       return '{${object.entries.map((e) => '"${e.key}": ${encodeReflectively(e.value)}').join(', ')}}';
     }
 
-    if (object is String) {
-      return '"${object.replaceAll('"', '\\"')}"';
-    } else if (object is num || object is bool) {
-      return object.toString();
-    }
-
-    // Attempt to convert custom objects to a map
-    final Map<String, dynamic>? jsonMap = _convertObjectToMap(object);
-
+    final jsonMap = _convertObjectToMap(object);
     if (jsonMap == null) {
       throw UnsupportedError(
-        'Cannot serialize object of type ${object.runtimeType}',
-      );
+          'Cannot serialize object of type ${object.runtimeType}');
     }
 
-    final String jsonBody = jsonMap.entries
-        .map((entry) => '"${entry.key}": ${encodeReflectively(entry.value)}')
+    final jsonBody = jsonMap.entries
+        .map((e) => '"${e.key}": ${encodeReflectively(e.value)}')
         .join(', ');
-
-    if (includeClassName) {
-      final String className = object.runtimeType.toString();
-      final String capitalizedClassName =
-          '${className[0].toLowerCase()}${className.substring(1)}';
-      return '{"$capitalizedClassName": {$jsonBody}}';
-    }
-
-    return '{$jsonBody}';
+    return includeClassName
+        ? '{"${_formatClassName(object.runtimeType)}": {$jsonBody}}'
+        : '{$jsonBody}';
   }
 
-  // Function to dynamically convert an object to a map if it has a toJson method
+  /// Converts an object into a map if it has a `toJson` method.
+  ///
+  /// - [object]: The object to convert.
+  ///
+  /// Returns:
+  /// A `Map<String, dynamic>` if the object has a `toJson` method, otherwise `null`.
   static Map<String, dynamic>? _convertObjectToMap(Object object) {
     try {
-      // Check if the object has a `toJson` method
-      // ignore: avoid_dynamic_calls
-      final jsonMap = (object as dynamic).toJson();
-      if (jsonMap is Map<String, dynamic>) {
-        return jsonMap;
-      }
-    } catch (e) {
-      // If the object doesn't have a `toJson` method, return null
+      return (object as dynamic).toJson() as Map<String, dynamic>?;
+    } catch (_) {
       return null;
     }
-    return null;
+  }
+
+  /// Formats the class name by making its first letter lowercase.
+  static String _formatClassName(Type type) {
+    final className = type.toString();
+    return '${className[0].toLowerCase()}${className.substring(1)}';
   }
 }
