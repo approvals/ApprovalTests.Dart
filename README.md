@@ -12,7 +12,7 @@
   <a href="https://app.codecov.io/gh/approvals/ApprovalTests.Dart"><img src="https://codecov.io/gh/approvals/ApprovalTests.Dart/branch/main/graph/badge.svg" alt="codecov"></a>
   <a href="https://pub.dev/packages/approval_tests"><img src="https://img.shields.io/pub/v/approval_tests.svg" alt="Pub"></a>
   <a href="https://www.apache.org/licenses/"><img src="https://img.shields.io/badge/license-APACHE-blue.svg" alt="License: APACHE"></a>
-  <a href="https://github.com/approvals/ApprovalTests.Dart"><img src="https://hits.dwyl.com/approvals/ApprovalTests.Dart.svg?style=flat" alt="Repository views"></a>
+  <!-- <a href="https://github.com/approvals/ApprovalTests.Dart"><img src="https://hits.dwyl.com/approvals/ApprovalTests.Dart.svg?style=flat" alt="Repository views"></a> -->
   <a href="https://github.com/approvals/ApprovalTests.Dart"><img src="https://img.shields.io/github/stars/approvals/ApprovalTests.Dart?style=social" alt="Stars"></a>
 </p>
 <p align="center">
