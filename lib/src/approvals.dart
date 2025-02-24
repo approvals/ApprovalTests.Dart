@@ -5,7 +5,7 @@
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+       https://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,7 +18,8 @@ part of '../approval_tests.dart';
 
 /// `Approvals` is a class that provides methods to verify the content of a response.
 class Approvals {
-  static const FilePathExtractor filePathExtractor = FilePathExtractor(stackTraceFetcher: StackTraceFetcher());
+  static const FilePathExtractor filePathExtractor =
+      FilePathExtractor(stackTraceFetcher: StackTraceFetcher());
 
   // ================== Verify methods ==================
 
@@ -28,7 +29,8 @@ class Approvals {
     Options options = const Options(),
   }) {
     // Get the file path without extension or use the provided file path
-    final completedPath = options.namer.filePath ?? filePathExtractor.filePath.split('.dart').first;
+    final completedPath = options.namer.filePath ??
+        filePathExtractor.filePath.split('.dart').first;
 
     // Create namer object with given or computed file name
     final namer = options.namer.copyWith(
@@ -44,7 +46,8 @@ class Approvals {
       // Write the content to a file whose path is specified in namer.received
       writer.writeToFile(namer.received);
 
-      if (options.approveResult || !ApprovalUtils.isFileExists(namer.approved)) {
+      if (options.approveResult ||
+          !ApprovalUtils.isFileExists(namer.approved)) {
         writer.writeToFile(namer.approved);
       }
 
@@ -89,7 +92,9 @@ class Approvals {
       FileType.received: (ApprovalNamer n) => n.received,
     };
 
-    final filePath = (namer == null) ? Namer(filePath: filePathExtractor.filePath.split('.dart').first) : namer;
+    final filePath = (namer == null)
+        ? Namer(filePath: filePathExtractor.filePath.split('.dart').first)
+        : namer;
 
     ApprovalUtils.deleteFile(fileToNamerMap[fileType]!(filePath));
   }
