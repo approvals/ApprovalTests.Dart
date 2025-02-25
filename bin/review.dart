@@ -180,7 +180,7 @@ Future<void> processFile(File? approvedFile, File receivedFile) async {
 
       final receivedFilename = receivedFile.path;
       final approvedFilename = receivedFile.path
-          .replaceAll(Namer.receivedExtension, Namer.approvedExtension);
+          .replaceAll(BaseNamer.receivedExtension, BaseNamer.approvedExtension);
 
       if (firstCharacter == 'y') {
         await approvedFile?.delete();

@@ -34,7 +34,7 @@ class Options {
   final bool deleteReceivedFile;
 
   /// A final variable `namer` of type `Namer` used to set the name and path of the file.
-  final Namer namer;
+  final ApprovalNamer namer;
 
   /// A final bool variable `logErrors` used to determine if the errors should be logged.
   final bool logErrors;

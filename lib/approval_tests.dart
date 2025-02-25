@@ -27,7 +27,7 @@ import 'package:test_api/src/backend/invoker.dart' show Invoker;
 
 part 'src/approvals.dart';
 part 'src/comparator/file_comparator.dart';
-part 'src/core/approval_number.dart';
+part 'src/core/approval_namer.dart';
 part 'src/core/approval_writer.dart';
 part 'src/core/comparator.dart';
 part 'src/core/enums/comporator_ide.dart';
@@ -48,6 +48,7 @@ part 'src/exceptions/file_not_found_exception.dart';
 part 'src/exceptions/no_diff_tool_exception.dart';
 part 'src/namer/file_namer_options.dart';
 part 'src/namer/namer.dart';
+part 'src/namer/indexed_namer.dart';
 part 'src/reporters/command_line/command_line_reporter.dart';
 part 'src/reporters/diff_tool/diff_info.dart';
 part 'src/reporters/diff_tool/diff_tool_reporter.dart';

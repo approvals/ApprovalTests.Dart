@@ -1,5 +1,7 @@
 ## 1.2.0
-
+### Indexed Namer
+- Added the `IndexedNamer`. This class allows you to create a Namer that includes an index in the file name. It is useful when you need to multiple verify calls in a single test.
+  - Please see the [Indexed Namer Example](example/auto_namer.dart)
 ### URL Updates
 - Updated URLs in LICENSE to use HTTPS.
 - Updated the license badge URL in README.md to use HTTPS.

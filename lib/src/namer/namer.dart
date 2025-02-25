@@ -16,97 +16,70 @@
 
 part of '../../approval_tests.dart';
 
-/// A utility class responsible for generating structured file names
-/// for approval testing, ensuring consistency across test runs.
-final class Namer implements ApprovalNamer {
-  final String? filePath;
-  final FileNamerOptions? options;
-  final bool addTestName;
-  final String? description;
-  final bool useSubfolder;
-
+/// A standard file namer without indexing.
+///
+/// The [Namer] class extends [BaseNamer] and provides functionality
+/// to generate approved and received file names and paths based on
+/// customizable options.
+final class Namer extends BaseNamer {
   /// Creates a [Namer] instance with customizable file naming parameters.
   ///
-  /// - [filePath]: The base file path for generated names.
-  /// - [options]: If provided, overrides default naming logic.
-  /// - [addTestName]: Whether to include the test name in the file name.
-  /// - [description]: An optional description to differentiate test cases.
-  /// - [useSubfolder]: Whether to store files in an `approvals` subdirectory.
+  /// - [filePath]: The base file path where files will be saved.
+  /// - [options]: An optional configuration for custom file names and paths.
+  /// - [addTestName]: Determines whether to append the test name to the file.
+  /// - [description]: An optional description appended to the file name.
+  /// - [useSubfolder]: Whether to store files inside a dedicated subfolder.
   const Namer({
-    this.filePath,
-    this.options,
-    this.addTestName = true,
-    this.description,
-    this.useSubfolder = false,
+    super.filePath,
+    super.options,
+    super.addTestName,
+    super.description,
+    super.useSubfolder,
   });
 
-  /// Returns the fully qualified approved file path.
+  /// Returns the fully qualified file path for the approved file.
+  ///
+  /// Uses the custom path from [options] if provided; otherwise, generates
+  /// a default file path with the [BaseNamer.approvedExtension].
   @override
-  String get approved => options?.approved ?? _buildFilePath(approvedExtension);
+  String get approved =>
+      options?.approved ?? _buildFilePath(BaseNamer.approvedExtension);
 
-  /// Returns the generated approved file name.
+  /// Returns the file name for the approved file.
+  ///
+  /// Uses the custom file name from [options] if provided; otherwise, generates
+  /// a default file name with the [BaseNamer.approvedExtension].
   @override
   String get approvedFileName =>
-      options?.approvedFileName ?? _buildFileName(approvedExtension);
+      options?.approvedFileName ?? _buildFileName(BaseNamer.approvedExtension);
 
-  /// Returns the fully qualified received file path.
+  /// Returns the fully qualified file path for the received file.
+  ///
+  /// Uses the custom path from [options] if provided; otherwise, generates
+  /// a default file path with the [BaseNamer.receivedExtension].
   @override
-  String get received => options?.received ?? _buildFilePath(receivedExtension);
+  String get received =>
+      options?.received ?? _buildFilePath(BaseNamer.receivedExtension);
 
-  /// Returns the generated received file name.
+  /// Returns the file name for the received file.
+  ///
+  /// Uses the custom file name from [options] if provided; otherwise, generates
+  /// a default file name with the [BaseNamer.receivedExtension].
   @override
   String get receivedFileName =>
-      options?.receivedFileName ?? _buildFileName(receivedExtension);
+      options?.receivedFileName ?? _buildFileName(BaseNamer.receivedExtension);
 
-  /// Retrieves the current test name, formatted appropriately.
+  /// Creates a new [Namer] instance with updated values while preserving
+  /// existing values when parameters are not provided.
+  ///
+  /// - [filePath]: New base file path, if provided.
+  /// - [options]: New configuration for file naming, if provided.
+  /// - [addTestName]: Whether to append the test name to the file.
+  /// - [description]: A new description appended to the file name.
+  /// - [useSubfolder]: Whether to use a dedicated subfolder.
+  ///
+  /// Returns a new [Namer] instance with updated values.
   @override
-  String get currentTestName {
-    final testName = Invoker.current?.liveTest.individualName;
-    return testName?.replaceAll(' ', '_').toLowerCase() ?? '';
-  }
-
-  /// Returns a formatted version of the description, replacing spaces with underscores.
-  String get _formattedDescription =>
-      description?.replaceAll(' ', '_').toLowerCase() ?? '';
-
-  /// Constructs a full file path, including directory and extension.
-  String _buildFilePath(String extension) {
-    final base = _basePath;
-    final testNamePart = addTestName ? '.$currentTestName' : '';
-    final descriptionPart =
-        description != null ? '.$_formattedDescription' : '';
-    return '$base$testNamePart$descriptionPart.$extension';
-  }
-
-  /// Constructs only the file name portion, without the directory path.
-  String _buildFileName(String extension) {
-    final name = _fileName;
-    final testNamePart = addTestName ? '.$currentTestName' : '';
-    final descriptionPart =
-        description != null ? '.$_formattedDescription' : '';
-    return '$name$testNamePart$descriptionPart.$extension';
-  }
-
-  /// Computes the base file path without its extension.
-  /// If [useSubfolder] is true, the file will be placed inside an `approvals` subfolder.
-  String get _basePath {
-    final separator = Platform.pathSeparator;
-    final directory = filePath!.substring(0, filePath!.lastIndexOf(separator));
-    final fileName = filePath!.split(separator).last.split('.dart').first;
-    final baseDir =
-        useSubfolder ? '$directory${separator}approvals' : directory;
-    return '$baseDir$separator$fileName';
-  }
-
-  /// Extracts the file name without its directory path.
-  String get _fileName =>
-      filePath!.split(Platform.pathSeparator).last.split('.dart').first;
-
-  /// Constants defining the file extensions used for approval testing.
-  static const String approvedExtension = 'approved.txt';
-  static const String receivedExtension = 'received.txt';
-
-  /// Creates a modified copy of the current [Namer] instance with new values.
   Namer copyWith({
     String? filePath,
     FileNamerOptions? options,
