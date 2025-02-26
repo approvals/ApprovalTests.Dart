@@ -7,6 +7,11 @@ jobs:
     steps:
     - name: 📚 Git Checkout
       uses: actions/checkout@v4
+   
+    - name: Set Git Author for Snippets Commit
+      run: |
+         git config --local user.name "github actions"
+         git config --local user.email "actions@github.com"
 
     - name: ✏️ Create mdsnippets.json
       run: |
@@ -30,5 +35,3 @@ jobs:
         commit-message: ". d updated markdown snippets"
         rebase: 'true'
         push-branch: 'main'
-        name: github actions
-        email: actions@github.com
