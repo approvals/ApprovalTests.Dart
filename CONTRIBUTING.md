@@ -58,3 +58,9 @@ By using this notation, you can clearly and concisely describe the nature and ri
 Summary of the Arlo's Commit Notation:
 
 <img src="https://github.com/K1yoshiSho/packages_assets/blob/main/assets/approval_tests/arlo_git_notation.png?raw=true" alt="CommandLineComparator img" title="ApprovalTests" style="max-width: 500px;">
+
+To generate report of coverage, run the following command:
+
+```bash
+flutter test --coverage && genhtml coverage/lcov.info -o coverage/html && open coverage/html/index.html
+```
