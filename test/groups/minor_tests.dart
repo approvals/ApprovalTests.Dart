@@ -238,5 +238,12 @@ void main() {
         ),
       );
     });
+
+    test('Should create a new options object', () {
+      final options1 = Options();
+      final options2 = options1.copyWith();
+
+      expect(options1, isNot(same(options2)));
+    });
   });
 }

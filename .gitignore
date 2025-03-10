@@ -5,6 +5,7 @@
 
 # Coverage
 coverage/
+build/
 
 # Pubspec
 pubspec.lock

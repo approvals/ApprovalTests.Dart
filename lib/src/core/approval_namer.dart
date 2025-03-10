@@ -134,8 +134,8 @@ abstract class BaseNamer implements ApprovalNamer {
   /// If [useSubfolder] is true, the files will be placed inside an `approvals` subdirectory.
   String get _basePath {
     final separator = Platform.pathSeparator;
-    final directory = filePath!.substring(0, filePath!.lastIndexOf(separator));
-    final fileName = filePath!.split(separator).last.split('.dart').first;
+    final directory = filePath?.substring(0, filePath!.lastIndexOf(separator));
+    final fileName = filePath?.split(separator).last.split('.dart').first;
     final baseDir =
         useSubfolder ? '$directory${separator}approvals' : directory;
     return '$baseDir$separator$fileName';

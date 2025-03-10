@@ -7,6 +7,7 @@ import 'groups/diff_tools_tests.dart' as diff_tools_tests;
 import 'groups/exception_tests.dart' as exception_tests;
 import 'groups/minor_tests.dart' as minor_tests;
 import 'groups/verify_tests.dart' as verify_tests;
+import 'groups/namer.dart' as namer_tests;
 
 import 'models/item.dart';
 import 'queries/db_request_query.dart';
@@ -46,6 +47,10 @@ void main() {
   /// ================== Approvals: test for Diff Tools ==================
 
   diff_tools_tests.main();
+
+  /// ================== Approvals: Namer tests ==================
+
+  namer_tests.main();
 
   /// ================== Tear down ==================
 
