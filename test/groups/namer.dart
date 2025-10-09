@@ -110,5 +110,39 @@ void main() {
       expect(namer.approved, equals(options.approved));
       expect(namer.received, equals(options.received));
     });
+
+    test('IndexedNamer default approvedFileName uses counter', () {
+      final tempDir =
+          Directory.systemTemp.createTempSync('indexed_approved_counter');
+      addTearDown(() => tempDir.deleteSync(recursive: true));
+      final filePath = '${tempDir.path}${separator}sample.dart';
+      final namer = IndexedNamer(
+        filePath: filePath,
+        addTestName: false,
+      );
+
+      expect(
+        namer.approvedFileName,
+        equals('sample.0.approved.txt'),
+      );
+    });
+
+    test('IndexedNamer default receivedFileName uses counter', () {
+      final tempDir =
+          Directory.systemTemp.createTempSync('indexed_received_counter');
+      addTearDown(() => tempDir.deleteSync(recursive: true));
+      final filePath = '${tempDir.path}${separator}sample.dart';
+      final first = IndexedNamer(
+        filePath: filePath,
+        addTestName: false,
+      );
+      final second = IndexedNamer(
+        filePath: filePath,
+        addTestName: false,
+      );
+
+      expect(first.receivedFileName, equals('sample.0.received.txt'));
+      expect(second.receivedFileName, equals('sample.1.received.txt'));
+    });
   });
 }
