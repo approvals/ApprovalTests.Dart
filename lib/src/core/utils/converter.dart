@@ -22,10 +22,6 @@ part of '../../../approval_tests.dart';
 /// with indentation and to encode objects reflectively, supporting basic
 /// types, lists, maps, and objects with a `toJson` method.
 final class ApprovalConverter {
-  /// Prevents instantiation of [ApprovalConverter].
-  /// This is a utility class and should not be instantiated.
-  const ApprovalConverter._();
-
   /// Converts a raw JSON string into a formatted, indented JSON string.
   ///
   /// - [jsonString]: A valid JSON string.
