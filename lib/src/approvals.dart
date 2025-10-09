@@ -100,7 +100,7 @@ class Approvals {
     required ApprovalNamer? namer,
     required FileType fileType,
   }) {
-    final filePathResolver = _fileToNamerMap[fileType];
+    final filePathResolver = fileToNamerMap[fileType];
     if (filePathResolver == null) {
       throw ArgumentError.value(
         fileType,
@@ -115,7 +115,8 @@ class Approvals {
     return filePathResolver(resolvedNamer);
   }
 
-  static final Map<FileType, String Function(ApprovalNamer)> _fileToNamerMap = {
+  @visibleForTesting
+  static Map<FileType, String Function(ApprovalNamer)> fileToNamerMap = {
     FileType.approved: (ApprovalNamer n) => n.approved,
     FileType.received: (ApprovalNamer n) => n.received,
   };
