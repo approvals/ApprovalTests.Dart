@@ -21,8 +21,13 @@ part of '../../../approval_tests.dart';
 /// This class reads and compares two files (approved and received) line by line,
 /// highlighting the differences in color-coded format.
 class CommandLineReporter implements Reporter {
+  final void Function(Object exception, {StackTrace? stackTrace})
+      exceptionLogger;
+
   /// Default constructor for `CommandLineReporter`.
-  const CommandLineReporter();
+  const CommandLineReporter({
+    this.exceptionLogger = ApprovalLogger.exception,
+  });
 
   @override
   void report(String approvedPath, String receivedPath, {String? message}) {
@@ -48,7 +53,7 @@ class CommandLineReporter implements Reporter {
       }
     } catch (e) {
       // Logging and rethrowing to preserve error stack trace
-      ApprovalLogger.exception("Error while reporting differences: \$e");
+      exceptionLogger("Error while reporting differences: $e");
       rethrow;
     }
   }
