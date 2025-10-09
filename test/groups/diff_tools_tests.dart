@@ -174,5 +174,22 @@ void main() {
         throwsA(isA<ProcessException>()),
       );
     });
+
+    test('DiffReporter expandArgsForTesting returns empty list for blank arg',
+        () {
+      const reporter = DiffReporter();
+      final result = reporter.expandArgsForTesting('   ');
+
+      expect(result, isEmpty);
+    });
+
+    test('DiffReporter expandArgsForTesting splits whitespace separated args',
+        () {
+      const reporter = DiffReporter();
+      final result =
+          reporter.expandArgsForTesting(' --wait   --diff   --reuse-open ');
+
+      expect(result, equals(['--wait', '--diff', '--reuse-open']));
+    });
   });
 }

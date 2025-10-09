@@ -1,3 +1,17 @@
+## 1.3.0
+### Quality Improvements
+- Normalized JSON conversion to produce valid output for any map keys and optional class wrappers.
+- Preserved whitespace during comparisons by updating `ApprovalUtils.readFile` and `FileComparator`.
+- Ensured received files delete even when result logging is disabled.
+- Reset `ScrubDates` counters per invocation and removed double separators from namer outputs.
+- Hardened diff tooling by validating Git/diff arguments, improving reporting.
+- Documented the deterministic query workflow and reporter argument handling in `README.md`.
+
+### Testing
+- Added regression coverage for whitespace comparisons, date scrubbing, converter encoding, and options copy semantics.
+- Introduced deterministic stubs for network query tests and refreshed related approvals.
+- Added reporter regression tests covering Git/Diff custom command execution and argument expansion.
+
 ## 1.2.1
 ### Indexed Namer
 - Added the `IndexedNamer`. This class allows you to create a Namer that includes an index in the file name. It is useful when you need to multiple verify calls in a single test.

@@ -64,15 +64,16 @@ class Approvals {
         throw DoesntMatchException(
           'Oops: [${namer.approvedFileName}] does not match [${namer.receivedFileName}].\n\n - Approved file path: ${namer.approved}\n\n - Received file path: ${namer.received}',
         );
-      } else {
-        if (options.logResults) {
-          ApprovalLogger.success(
-            'Test passed: [${namer.approvedFileName}] matches [${namer.receivedFileName}]\n\n- Approved file path: ${namer.approved}\n\n- Received file path: ${namer.received}',
-          );
-          if (options.deleteReceivedFile) {
-            _deleteFileAfterTest(namer: namer, fileType: FileType.received);
-          }
-        }
+      }
+
+      if (options.logResults) {
+        ApprovalLogger.success(
+          'Test passed: [${namer.approvedFileName}] matches [${namer.receivedFileName}]\n\n- Approved file path: ${namer.approved}\n\n- Received file path: ${namer.received}',
+        );
+      }
+
+      if (options.deleteReceivedFile) {
+        _deleteFileAfterTest(namer: namer, fileType: FileType.received);
       }
     } catch (e, st) {
       if (options.logErrors) {
@@ -87,17 +88,38 @@ class Approvals {
     required ApprovalNamer? namer,
     required FileType fileType,
   }) {
-    final fileToNamerMap = {
-      FileType.approved: (ApprovalNamer n) => n.approved,
-      FileType.received: (ApprovalNamer n) => n.received,
-    };
-
-    final filePath = (namer == null)
-        ? Namer(filePath: filePathExtractor.filePath.split('.dart').first)
-        : namer;
-
-    ApprovalUtils.deleteFile(fileToNamerMap[fileType]!(filePath));
+    final resolvedPath = filePathForDeletion(
+      namer: namer,
+      fileType: fileType,
+    );
+    ApprovalUtils.deleteFile(resolvedPath);
   }
+
+  @visibleForTesting
+  static String filePathForDeletion({
+    required ApprovalNamer? namer,
+    required FileType fileType,
+  }) {
+    final filePathResolver = fileToNamerMap[fileType];
+    if (filePathResolver == null) {
+      throw ArgumentError.value(
+        fileType,
+        'fileType',
+        'Unsupported file type for deletion',
+      );
+    }
+    final resolvedNamer = namer ??
+        Namer(
+          filePath: filePathExtractor.filePath.split('.dart').first,
+        );
+    return filePathResolver(resolvedNamer);
+  }
+
+  @visibleForTesting
+  static Map<FileType, String Function(ApprovalNamer)> fileToNamerMap = {
+    FileType.approved: (ApprovalNamer n) => n.approved,
+    FileType.received: (ApprovalNamer n) => n.received,
+  };
 
   /// Verifies all combinations of inputs for a provided function.
   static void verifyAll<T>(

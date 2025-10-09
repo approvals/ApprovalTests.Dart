@@ -90,5 +90,59 @@ void main() {
       final namer2 = namer1.copyWith();
       expect(namer1, isNot(same(namer2)));
     });
+
+    test('IndexedNamer uses FileNamerOptions file names', () {
+      const options = FileNamerOptions(
+        folderPath: 'custom/folder',
+        fileName: 'base',
+        testName: 'test_case',
+        description: 'details',
+      );
+
+      final namer = IndexedNamer(
+        options: options,
+        filePath: 'ignored${separator}value.dart',
+        addTestName: false,
+      );
+
+      expect(namer.approvedFileName, equals(options.approvedFileName));
+      expect(namer.receivedFileName, equals(options.receivedFileName));
+      expect(namer.approved, equals(options.approved));
+      expect(namer.received, equals(options.received));
+    });
+
+    test('IndexedNamer default approvedFileName uses counter', () {
+      final tempDir =
+          Directory.systemTemp.createTempSync('indexed_approved_counter');
+      addTearDown(() => tempDir.deleteSync(recursive: true));
+      final filePath = '${tempDir.path}${separator}sample.dart';
+      final namer = IndexedNamer(
+        filePath: filePath,
+        addTestName: false,
+      );
+
+      expect(
+        namer.approvedFileName,
+        equals('sample.0.approved.txt'),
+      );
+    });
+
+    test('IndexedNamer default receivedFileName uses counter', () {
+      final tempDir =
+          Directory.systemTemp.createTempSync('indexed_received_counter');
+      addTearDown(() => tempDir.deleteSync(recursive: true));
+      final filePath = '${tempDir.path}${separator}sample.dart';
+      final first = IndexedNamer(
+        filePath: filePath,
+        addTestName: false,
+      );
+      final second = IndexedNamer(
+        filePath: filePath,
+        addTestName: false,
+      );
+
+      expect(first.receivedFileName, equals('sample.0.received.txt'));
+      expect(second.receivedFileName, equals('sample.1.received.txt'));
+    });
   });
 }

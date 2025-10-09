@@ -22,10 +22,6 @@ part of '../../../approval_tests.dart';
 /// with indentation and to encode objects reflectively, supporting basic
 /// types, lists, maps, and objects with a `toJson` method.
 final class ApprovalConverter {
-  /// Prevents instantiation of [ApprovalConverter].
-  /// This is a utility class and should not be instantiated.
-  const ApprovalConverter._();
-
   /// Converts a raw JSON string into a formatted, indented JSON string.
   ///
   /// - [jsonString]: A valid JSON string.
@@ -46,28 +42,16 @@ final class ApprovalConverter {
   ///
   /// Returns:
   /// A JSON-compatible string representation of the object.
-  static String encodeReflectively(Object? object,
-      {bool includeClassName = false}) {
-    if (object == null) return 'null';
-    if (object is num || object is bool) return object.toString();
-    if (object is String) return jsonEncode(object);
-    if (object is List) return '[${object.map(encodeReflectively).join(', ')}]';
-    if (object is Map) {
-      return '{${object.entries.map((e) => '"${e.key}": ${encodeReflectively(e.value)}').join(', ')}}';
-    }
-
-    final jsonMap = _convertObjectToMap(object);
-    if (jsonMap == null) {
-      throw UnsupportedError(
-          'Cannot serialize object of type ${object.runtimeType}');
-    }
-
-    final jsonBody = jsonMap.entries
-        .map((e) => '"${e.key}": ${encodeReflectively(e.value)}')
-        .join(', ');
-    return includeClassName
-        ? '{"${_formatClassName(object.runtimeType)}": {$jsonBody}}'
-        : '{$jsonBody}';
+  static String encodeReflectively(
+    Object? object, {
+    bool includeClassName = false,
+  }) {
+    final normalized = _normalizeForJson(
+      object,
+      includeClassName: includeClassName,
+      isRoot: true,
+    );
+    return jsonEncode(normalized);
   }
 
   /// Converts an object into a map if it has a `toJson` method.
@@ -82,6 +66,52 @@ final class ApprovalConverter {
     } catch (_) {
       return null;
     }
+  }
+
+  static Object? _normalizeForJson(
+    Object? value, {
+    bool includeClassName = false,
+    bool isRoot = false,
+  }) {
+    if (value == null || value is num || value is bool) {
+      return value;
+    }
+    if (value is String) {
+      return value;
+    }
+    if (value is List) {
+      return value
+          .map((item) => _normalizeForJson(item, includeClassName: false))
+          .toList();
+    }
+    if (value is Map) {
+      return value.map(
+        (key, mapValue) => MapEntry(
+          key.toString(),
+          _normalizeForJson(mapValue, includeClassName: false),
+        ),
+      );
+    }
+
+    final jsonMap = _convertObjectToMap(value);
+    if (jsonMap == null) {
+      throw UnsupportedError(
+        'Cannot serialize object of type ${value.runtimeType}',
+      );
+    }
+
+    final normalizedMap = jsonMap.map(
+      (key, mapValue) => MapEntry(
+        key,
+        _normalizeForJson(mapValue, includeClassName: false),
+      ),
+    );
+
+    if (includeClassName && isRoot) {
+      return {_formatClassName(value.runtimeType): normalizedMap};
+    }
+
+    return normalizedMap;
   }
 
   /// Formats the class name by making its first letter lowercase.

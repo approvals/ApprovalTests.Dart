@@ -45,13 +45,13 @@ final class ApprovalUtils {
         (result, list) => result.expand((x) => list.map((y) => [...x, y])));
   }
 
-  /// Reads the contents of a file and trims any extra whitespace.
+  /// Reads the contents of a file preserving original whitespace.
   ///
   /// - [path]: The file path to read from.
   ///
   /// Returns:
   /// A string containing the file's contents.
-  static String readFile(String path) => File(path).readAsStringSync().trim();
+  static String readFile(String path) => File(path).readAsStringSync();
 
   /// Checks if a file exists at the specified path.
   ///

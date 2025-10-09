@@ -58,7 +58,7 @@ Add the following to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  approval_tests: ^1.2.1
+  approval_tests: ^1.3.0
 ```
 
 ## 👀 Getting Started
@@ -160,8 +160,8 @@ Reporters are the part of Approval Tests that launch diff tools when things do n
 
 There are several reporters available in the package:
 - `CommandLineReporter` - This is the default reporter, which will output the diff in the terminal.
-- `GitReporter` - This reporter will open the diff in the Git GUI.
-- `DiffReporter` - This reporter will open the Diff Tool in your IDE.
+- `GitReporter` - This reporter will open the diff in the Git GUI using `git diff --no-index`. Each argument is provided separately to Git and any exit code greater than `1` is surfaced as a failure, so unexpected tool errors are easier to spot. Provide a custom `DiffInfo` if you need extra arguments (for example, `DiffInfo(command: 'git', arg: 'diff --no-index --word-diff')`).
+- `DiffReporter` - This reporter will open the Diff Tool in your IDE. Arguments are tokenized automatically, so values such as `-d --wait` can be supplied in the `DiffInfo.arg` string without additional escaping.
    - For Diff Reporter I using the default paths to the IDE, if something didn't work then you in the console see the expected correct path to the IDE and specify customDiffInfo. You can also contact me for help.
 
 <img src="https://github.com/yelmuratoff/packages_assets/blob/main/assets/approval_tests/diff_command_line.png?raw=true" alt="CommandLineComparator img" title="ApprovalTests" style="max-width: 500px;">
@@ -188,6 +188,26 @@ Inside, in the `gilded_rose` folder, there is an example of using `ApprovalTests
 You can study it to understand how to use the package to test complex code.
 
 And the `verify_methods` folder has small examples of using different `ApprovalTests` methods for different cases.
+
+### Network query example
+
+`NetworkRequestQuery` now supports stubbed responses so approval files can be generated deterministically without a live HTTP request. You can still call real services, but the default constructor parameters return a cached payload for the provided URI:
+
+```dart
+final query = NetworkRequestQuery(
+  Uri.parse('https://jsonplaceholder.typicode.com/todos/1'),
+  stubbedResponses: {
+    Uri.parse('https://jsonplaceholder.typicode.com/todos/1'): {
+      'id': 1,
+      'status': 'OK',
+    },
+  },
+);
+
+await Approvals.verifyQuery(query);
+```
+
+`example/verify_methods/verify_query/verify_network_query_test.dart` demonstrates how to plug the query into an approval test.
 
 ### JSON example
 With `verifyAsJson`, if you pass data models as `JsonItem`, with nested other models as `AnotherItem` and `SubItem`, then you need to add an `toJson` method to each model for the serialization to succeed.

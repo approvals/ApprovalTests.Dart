@@ -41,7 +41,7 @@ final class FileComparator implements Comparator {
     }
   }
 
-  /// Normalizes file content by standardizing line endings and trimming whitespace.
+  /// Normalizes file content by standardizing line endings.
   String _normalizeContent(String content) =>
-      content.replaceAll('\r\n', '\n').trim();
+      content.replaceAll('\r\n', '\n').replaceAll('\r', '\n');
 }
