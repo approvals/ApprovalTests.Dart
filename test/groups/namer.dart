@@ -90,5 +90,25 @@ void main() {
       final namer2 = namer1.copyWith();
       expect(namer1, isNot(same(namer2)));
     });
+
+    test('IndexedNamer uses FileNamerOptions file names', () {
+      const options = FileNamerOptions(
+        folderPath: 'custom/folder',
+        fileName: 'base',
+        testName: 'test_case',
+        description: 'details',
+      );
+
+      final namer = IndexedNamer(
+        options: options,
+        filePath: 'ignored${separator}value.dart',
+        addTestName: false,
+      );
+
+      expect(namer.approvedFileName, equals(options.approvedFileName));
+      expect(namer.receivedFileName, equals(options.receivedFileName));
+      expect(namer.approved, equals(options.approved));
+      expect(namer.received, equals(options.received));
+    });
   });
 }
