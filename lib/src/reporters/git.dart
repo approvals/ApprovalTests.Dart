@@ -3,6 +3,13 @@ part of '../../approval_tests.dart';
 /// `GitReporter` is a class for reporting the comparison results using the git.
 class GitReporter implements Reporter {
   final DiffInfo? customDiffInfo;
+
+  static Future<ProcessResult> Function(
+          String command, List<String> arguments)
+      runProcess = _defaultRunProcess;
+  static ProcessResult Function(String command, List<String> arguments)
+      runProcessSync = _defaultRunProcessSync;
+
   const GitReporter({
     this.customDiffInfo,
   });
@@ -20,7 +27,7 @@ class GitReporter implements Reporter {
 
       final args = _expandArgs(diffInfo.arg)
         ..addAll([approvedPath, receivedPath]);
-      final result = await Process.run(
+      final result = await runProcess(
         diffInfo.command,
         args,
       );
@@ -63,7 +70,7 @@ class GitReporter implements Reporter {
   /// return the diff of two files
   static String gitDiffFiles(File path0, FileSystemEntity path1) {
     final args = ['diff', '--no-index', path0.path, path1.path];
-    final processResult = Process.runSync('git', args);
+    final processResult = runProcessSync('git', args);
 
     if (processResult.exitCode > 1) {
       throw ProcessException(
@@ -124,5 +131,22 @@ class GitReporter implements Reporter {
       return <String>[];
     }
     return trimmed.split(RegExp(r'\s+'));
+  }
+
+  static Future<ProcessResult> _defaultRunProcess(
+    String command,
+    List<String> arguments,
+  ) =>
+      Process.run(command, arguments);
+
+  static ProcessResult _defaultRunProcessSync(
+    String command,
+    List<String> arguments,
+  ) =>
+      Process.runSync(command, arguments);
+
+  static void resetProcessRunners() {
+    runProcess = _defaultRunProcess;
+    runProcessSync = _defaultRunProcessSync;
   }
 }
