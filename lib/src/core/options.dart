@@ -64,7 +64,7 @@ class Options {
     Comparator? comparator,
     Reporter? reporter,
     bool? deleteReceivedFile,
-    Namer? namer,
+    ApprovalNamer? namer,
     bool? logErrors,
     bool? logResults,
     bool? includeClassNameDuringSerialization,

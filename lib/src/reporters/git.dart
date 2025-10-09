@@ -18,10 +18,21 @@ class GitReporter implements Reporter {
         _checkFileExists(receivedPath),
       ]);
 
-      await Process.run(
+      final args = _expandArgs(diffInfo.arg)
+        ..addAll([approvedPath, receivedPath]);
+      final result = await Process.run(
         diffInfo.command,
-        [diffInfo.arg, approvedPath, receivedPath],
+        args,
       );
+
+      if (result.exitCode > 1) {
+        throw ProcessException(
+          diffInfo.command,
+          args,
+          result.stderr,
+          result.exitCode,
+        );
+      }
     } catch (e, st) {
       if (e is PathNotFoundException) {
         ApprovalLogger.exception(e, stackTrace: st);
@@ -51,11 +62,20 @@ class GitReporter implements Reporter {
 
   /// return the diff of two files
   static String gitDiffFiles(File path0, FileSystemEntity path1) {
-    final processResult =
-        Process.runSync('git', ['diff', '--no-index', path0.path, path1.path]);
+    final args = ['diff', '--no-index', path0.path, path1.path];
+    final processResult = Process.runSync('git', args);
 
-    final stdoutString = processResult.stdout as String;
-    final stderrString = processResult.stderr as String;
+    if (processResult.exitCode > 1) {
+      throw ProcessException(
+        'git',
+        args,
+        processResult.stderr,
+        processResult.exitCode,
+      );
+    }
+
+    final stdoutString = processResult.stdout as String? ?? '';
+    final stderrString = processResult.stderr as String? ?? '';
 
     final processString =
         stdoutString.isNotEmpty || stderrString.isNotEmpty ? stdoutString : '';
@@ -96,5 +116,13 @@ class GitReporter implements Reporter {
       );
       ApprovalLogger.log("To review all, run: dart run approved:review");
     }
+  }
+
+  static List<String> _expandArgs(String arg) {
+    final trimmed = arg.trim();
+    if (trimmed.isEmpty) {
+      return <String>[];
+    }
+    return trimmed.split(RegExp(r'\s+'));
   }
 }

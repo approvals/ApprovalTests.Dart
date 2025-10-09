@@ -64,15 +64,16 @@ class Approvals {
         throw DoesntMatchException(
           'Oops: [${namer.approvedFileName}] does not match [${namer.receivedFileName}].\n\n - Approved file path: ${namer.approved}\n\n - Received file path: ${namer.received}',
         );
-      } else {
-        if (options.logResults) {
-          ApprovalLogger.success(
-            'Test passed: [${namer.approvedFileName}] matches [${namer.receivedFileName}]\n\n- Approved file path: ${namer.approved}\n\n- Received file path: ${namer.received}',
-          );
-          if (options.deleteReceivedFile) {
-            _deleteFileAfterTest(namer: namer, fileType: FileType.received);
-          }
-        }
+      }
+
+      if (options.logResults) {
+        ApprovalLogger.success(
+          'Test passed: [${namer.approvedFileName}] matches [${namer.receivedFileName}]\n\n- Approved file path: ${namer.approved}\n\n- Received file path: ${namer.received}',
+        );
+      }
+
+      if (options.deleteReceivedFile) {
+        _deleteFileAfterTest(namer: namer, fileType: FileType.received);
       }
     } catch (e, st) {
       if (options.logErrors) {

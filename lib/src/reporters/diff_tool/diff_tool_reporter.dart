@@ -40,9 +40,12 @@ class DiffReporter implements Reporter {
         _checkFileExists(receivedPath),
       ]);
 
+      final args = _expandArgs(diffInfo.arg)
+        ..addAll([approvedPath, receivedPath]);
+
       await Process.run(
         diffInfo.command,
-        [diffInfo.arg, approvedPath, receivedPath],
+        args,
       );
     } catch (e, st) {
       if (e is PathNotFoundException) {
@@ -106,5 +109,13 @@ class DiffReporter implements Reporter {
     } catch (e) {
       return false;
     }
+  }
+
+  List<String> _expandArgs(String arg) {
+    final trimmed = arg.trim();
+    if (trimmed.isEmpty) {
+      return <String>[];
+    }
+    return trimmed.split(RegExp(r'\s+'));
   }
 }

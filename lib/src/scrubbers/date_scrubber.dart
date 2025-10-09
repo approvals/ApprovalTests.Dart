@@ -27,16 +27,17 @@ class ScrubDates extends ScrubWithRegEx {
   /// Replaces matched date strings with a fixed placeholder `<date>`.
   const ScrubDates();
 
-  static int _index = 0;
-
   @override
-  String scrub(String input) => input
-      .replacingOccurrences(
-        matchingPattern: _datePattern,
-        replacementProvider: (match) {
-          _index++;
-          return '<date$_index>';
-        },
-      )
-      .trim();
+  String scrub(String input) {
+    var index = 0;
+    return input
+        .replacingOccurrences(
+          matchingPattern: _datePattern,
+          replacementProvider: (_) {
+            index++;
+            return '<date$index>';
+          },
+        )
+        .trim();
+  }
 }

@@ -34,6 +34,28 @@ void main() {
       );
     });
 
+    test('FileComparator detects leading whitespace differences', () {
+      final tempDir =
+          Directory.systemTemp.createTempSync('approval_whitespace_test');
+      try {
+        final approvedFile = File('${tempDir.path}/sample.approved.txt')
+          ..writeAsStringSync('Hello');
+        final receivedFile = File('${tempDir.path}/sample.received.txt')
+          ..writeAsStringSync(' Hello');
+
+        const comparator = FileComparator();
+        final isMatch = comparator.compare(
+          approvedPath: approvedFile.path,
+          receivedPath: receivedFile.path,
+          isLogError: false,
+        );
+
+        expect(isMatch, isFalse);
+      } finally {
+        tempDir.deleteSync(recursive: true);
+      }
+    });
+
     test('Simulate file not found error during reporting.', () async {
       const reporter = DiffReporter();
 
@@ -146,6 +168,21 @@ void main() {
       );
     });
 
+    test('ScrubDates index resets for each call', () {
+      const scrubber = ScrubDates();
+      final resultOne = scrubber.scrub(
+        '2024-10-01 10:10:10.123 + 2024-10-01 10:10:11.456',
+      );
+      final resultTwo = scrubber.scrub(
+        '2025-11-02 11:11:11.789 + 2025-11-02 11:11:12.890',
+      );
+
+      expect(resultOne, contains('<date1>'));
+      expect(resultOne, contains('<date2>'));
+      expect(resultTwo, contains('<date1>'));
+      expect(resultTwo, contains('<date2>'));
+    });
+
     test('Returns correct file path', () {
       final fakeStackTraceFetcher = FakeStackTraceFetcher(
         helper.fakeStackTracePath,
@@ -185,6 +222,39 @@ void main() {
         'verify_without_class_name',
         includeClassNameDuringSerialization: false,
       );
+    });
+
+    test('Approvals.verify deletes received file when logResults is disabled',
+        () {
+      final tempDir =
+          Directory.systemTemp.createTempSync('approval_cleanup_test');
+      final fileBase = '${tempDir.path}/cleanup_test.dart';
+      try {
+        final options = Options(
+          namer: Namer(
+            filePath: fileBase,
+            addTestName: false,
+          ),
+          approveResult: true,
+          deleteReceivedFile: true,
+          logResults: false,
+          logErrors: false,
+        );
+
+        Approvals.verify('value', options: options);
+
+        final receivedFile = File(
+          fileBase.replaceAll('.dart', '.received.txt'),
+        );
+        final approvedFile = File(
+          fileBase.replaceAll('.dart', '.approved.txt'),
+        );
+
+        expect(receivedFile.existsSync(), isFalse);
+        expect(approvedFile.existsSync(), isTrue);
+      } finally {
+        tempDir.deleteSync(recursive: true);
+      }
     });
 
     test('Should return correct directory path on linux/macOS/Windows', () {
