@@ -115,8 +115,7 @@ class Approvals {
     return filePathResolver(resolvedNamer);
   }
 
-  static final Map<FileType, String Function(ApprovalNamer)> _fileToNamerMap =
-      {
+  static final Map<FileType, String Function(ApprovalNamer)> _fileToNamerMap = {
     FileType.approved: (ApprovalNamer n) => n.approved,
     FileType.received: (ApprovalNamer n) => n.received,
   };
