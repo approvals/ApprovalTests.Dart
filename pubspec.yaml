@@ -19,6 +19,7 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
+  meta: ^1.17.0
   test: ^1.25.2
   talker: ^4.6.11
   diff_match_patch2: ^0.5.0

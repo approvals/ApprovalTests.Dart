@@ -111,6 +111,12 @@ class DiffReporter implements Reporter {
     }
   }
 
+  /// Visible for testing to validate arg parsing without invoking a diff tool.
+  @visibleForTesting
+  List<String> expandArgsForTesting(String arg) {
+    return _expandArgs(arg);
+  }
+
   List<String> _expandArgs(String arg) {
     final trimmed = arg.trim();
     if (trimmed.isEmpty) {
