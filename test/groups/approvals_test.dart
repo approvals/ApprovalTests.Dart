@@ -14,7 +14,8 @@ void main() {
   });
 
   tearDown(() {
-    Approvals.fileToNamerMap = Map<FileType, String Function(ApprovalNamer)>.from(
+    Approvals.fileToNamerMap =
+        Map<FileType, String Function(ApprovalNamer)>.from(
       originalMap,
     );
   });
