@@ -88,17 +88,38 @@ class Approvals {
     required ApprovalNamer? namer,
     required FileType fileType,
   }) {
-    final fileToNamerMap = {
-      FileType.approved: (ApprovalNamer n) => n.approved,
-      FileType.received: (ApprovalNamer n) => n.received,
-    };
-
-    final filePath = (namer == null)
-        ? Namer(filePath: filePathExtractor.filePath.split('.dart').first)
-        : namer;
-
-    ApprovalUtils.deleteFile(fileToNamerMap[fileType]!(filePath));
+    final resolvedPath = filePathForDeletion(
+      namer: namer,
+      fileType: fileType,
+    );
+    ApprovalUtils.deleteFile(resolvedPath);
   }
+
+  @visibleForTesting
+  static String filePathForDeletion({
+    required ApprovalNamer? namer,
+    required FileType fileType,
+  }) {
+    final filePathResolver = _fileToNamerMap[fileType];
+    if (filePathResolver == null) {
+      throw ArgumentError.value(
+        fileType,
+        'fileType',
+        'Unsupported file type for deletion',
+      );
+    }
+    final resolvedNamer = namer ??
+        Namer(
+          filePath: filePathExtractor.filePath.split('.dart').first,
+        );
+    return filePathResolver(resolvedNamer);
+  }
+
+  static final Map<FileType, String Function(ApprovalNamer)> _fileToNamerMap =
+      {
+    FileType.approved: (ApprovalNamer n) => n.approved,
+    FileType.received: (ApprovalNamer n) => n.received,
+  };
 
   /// Verifies all combinations of inputs for a provided function.
   static void verifyAll<T>(
