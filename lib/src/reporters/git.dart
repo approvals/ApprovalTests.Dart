@@ -4,8 +4,7 @@ part of '../../approval_tests.dart';
 class GitReporter implements Reporter {
   final DiffInfo? customDiffInfo;
 
-  static Future<ProcessResult> Function(
-          String command, List<String> arguments)
+  static Future<ProcessResult> Function(String command, List<String> arguments)
       runProcess = _defaultRunProcess;
   static ProcessResult Function(String command, List<String> arguments)
       runProcessSync = _defaultRunProcessSync;
