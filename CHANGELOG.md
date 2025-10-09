@@ -10,6 +10,7 @@
 ### Testing
 - Added regression coverage for whitespace comparisons, date scrubbing, converter encoding, and options copy semantics.
 - Introduced deterministic stubs for network query tests and refreshed related approvals.
+- Added reporter regression tests covering Git/Diff custom command execution and argument expansion.
 
 ## 1.2.1
 ### Indexed Namer
