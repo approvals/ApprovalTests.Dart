@@ -1,4 +1,4 @@
-## 1.3.2
+## 1.3.3
 ### Improvements
 - Normalized JSON conversion to produce valid output for any map keys and optional class wrappers.
 - Preserved whitespace during comparisons by updating `ApprovalUtils.readFile` and `FileComparator`.
