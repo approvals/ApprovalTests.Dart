@@ -113,7 +113,7 @@ If you want the result to be automatically saved after running the test, you nee
 <a id='snippet-sample_verify_as_json_test'></a>
 ```dart
 void main() {
-  test('test JSON object', () async {
+  test('test JSON object', () {
     final complexObject = {
       'name': 'JsonTest',
       'features': ['Testing', 'JSON'],
