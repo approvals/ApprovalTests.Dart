@@ -7,7 +7,7 @@ void main() => registerReporterArgumentsTests();
 
 void registerReporterArgumentsTests() {
   group('GitReporter custom command handling', () {
-    test('reports successfully with expanded arguments', () {
+    test('reports successfully with expanded arguments', () async {
       final tempDir =
           Directory.systemTemp.createTempSync('git_reporter_success');
       addTearDown(() => tempDir.deleteSync(recursive: true));
@@ -31,14 +31,14 @@ void registerReporterArgumentsTests() {
         ),
       );
 
-      reporter.report(approved.path, received.path);
+      await reporter.report(approved.path, received.path);
 
       final lines = logFile.readAsLinesSync();
       expect(lines.contains(approved.path), isTrue);
       expect(lines.contains(received.path), isTrue);
     });
 
-    test('throws ProcessException when command exits with code > 1', () {
+    test('throws ProcessException when command exits with code > 1', () async {
       final tempDir = Directory.systemTemp.createTempSync('git_reporter_fail');
       addTearDown(() => tempDir.deleteSync(recursive: true));
 
@@ -61,8 +61,8 @@ void registerReporterArgumentsTests() {
         ),
       );
 
-      expect(
-        () => reporter.report(approved.path, received.path),
+      await expectLater(
+        reporter.report(approved.path, received.path),
         throwsA(isA<ProcessException>()),
       );
     });
@@ -85,7 +85,7 @@ void registerReporterArgumentsTests() {
   });
 
   group('DiffReporter custom command handling', () {
-    test('reports successfully with expanded arguments', () {
+    test('reports successfully with expanded arguments', () async {
       final tempDir =
           Directory.systemTemp.createTempSync('diff_reporter_success');
       addTearDown(() => tempDir.deleteSync(recursive: true));
@@ -109,7 +109,7 @@ void registerReporterArgumentsTests() {
         ),
       );
 
-      reporter.report(approved.path, received.path);
+      await reporter.report(approved.path, received.path);
 
       final lines = logFile.readAsLinesSync();
       expect(lines.first, equals(approved.path));

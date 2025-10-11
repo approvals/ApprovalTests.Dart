@@ -7,7 +7,7 @@ void main() => registerCommandLineReporterTests();
 
 void registerCommandLineReporterTests() {
   group('CommandLineReporter', () {
-    test('report logs exception when file read fails', () {
+    test('report logs exception when file read fails', () async {
       final List<Object> loggedExceptions = <Object>[];
       final reporter = CommandLineReporter(
         exceptionLogger: (Object exception, {StackTrace? stackTrace}) {
@@ -24,8 +24,8 @@ void registerCommandLineReporterTests() {
       final String missingPath =
           '${tempDir.path}/command_line_reporter_missing.txt';
 
-      expect(
-        () => reporter.report(missingPath, missingPath),
+      await expectLater(
+        reporter.report(missingPath, missingPath),
         throwsA(isA<PathNotFoundException>()),
       );
 

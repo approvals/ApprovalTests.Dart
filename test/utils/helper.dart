@@ -20,7 +20,7 @@ class ApprovalTestHelper {
     ),
   );
 
-  void verify(
+  Future<void> verify(
     String content,
     String testName, {
     bool expectException = false,
@@ -30,7 +30,7 @@ class ApprovalTestHelper {
     String? description,
     ApprovalScrubber scrubber = const ScrubNothing(),
     Reporter reporter = const CommandLineReporter(),
-  }) {
+  }) async {
     Approvals.verify(
       content,
       options: _getOptions(
@@ -46,7 +46,7 @@ class ApprovalTestHelper {
     );
   }
 
-  void verifyAll(
+  Future<void> verifyAll(
     List<dynamic> contents,
     String testName, {
     bool expectException = false,
@@ -54,7 +54,7 @@ class ApprovalTestHelper {
     bool deleteReceivedFile = true,
     ApprovalScrubber scrubber = const ScrubNothing(),
     Reporter reporter = const CommandLineReporter(),
-  }) {
+  }) async {
     Approvals.verifyAll(
       contents,
       processor: (item) => item
@@ -70,14 +70,14 @@ class ApprovalTestHelper {
     );
   }
 
-  void verifyAsJson(
+  Future<void> verifyAsJson(
     dynamic encodable,
     String testName, {
     bool expectException = false,
     bool approveResult = false,
     bool deleteReceivedFile = true,
     bool includeClassNameDuringSerialization = true,
-  }) {
+  }) async {
     Approvals.verifyAsJson(
       encodable,
       options: _getOptions(
@@ -91,13 +91,13 @@ class ApprovalTestHelper {
     );
   }
 
-  void verifyAllCombinations(
+  Future<void> verifyAllCombinations(
     List<List<int>> combinations,
     String testName, {
     bool expectException = false,
     bool approveResult = false,
     bool deleteReceivedFile = true,
-  }) {
+  }) async {
     Approvals.verifyAllCombinations(
       combinations,
       processor: (combination) => 'Combination: ${combination.join(", ")}',
@@ -110,13 +110,13 @@ class ApprovalTestHelper {
     );
   }
 
-  void verifySequence(
+  Future<void> verifySequence(
     List<dynamic> sequence,
     String testName, {
     bool expectException = false,
     bool approveResult = false,
     bool deleteReceivedFile = true,
-  }) {
+  }) async {
     Approvals.verifySequence(
       sequence,
       options: _getOptions(

@@ -13,7 +13,7 @@ void registerGitReporterTests() {
 
     tearDown(GitReporter.resetProcessRunners);
 
-    test('report throws ProcessException when process exit code > 1', () {
+    test('report throws ProcessException when process exit code > 1', () async {
       final tempDir =
           Directory.systemTemp.createTempSync('git_reporter_failure');
       addTearDown(() => tempDir.deleteSync(recursive: true));
@@ -23,7 +23,7 @@ void registerGitReporterTests() {
       final received = File('${tempDir.path}/received.txt')
         ..writeAsStringSync('received');
 
-      GitReporter.runProcessSync = (command, arguments) {
+      GitReporter.runProcess = (command, arguments) async {
         return ProcessResult(0, 2, '', 'error');
       };
 
@@ -35,8 +35,8 @@ void registerGitReporterTests() {
         ),
       );
 
-      expect(
-        () => reporter.report(approved.path, received.path),
+      await expectLater(
+        reporter.report(approved.path, received.path),
         throwsA(isA<ProcessException>()),
       );
     });
@@ -60,7 +60,7 @@ void registerGitReporterTests() {
       );
     });
 
-    test('report handles empty arg expansion', () {
+    test('report handles empty arg expansion', () async {
       final tempDir =
           Directory.systemTemp.createTempSync('git_reporter_empty_args');
       addTearDown(() => tempDir.deleteSync(recursive: true));
@@ -71,7 +71,7 @@ void registerGitReporterTests() {
         ..writeAsStringSync('received');
 
       final captured = <List<String>>[];
-      GitReporter.runProcessSync = (command, arguments) {
+      GitReporter.runProcess = (command, arguments) async {
         captured.add(arguments);
         return ProcessResult(0, 0, '', '');
       };
@@ -84,7 +84,7 @@ void registerGitReporterTests() {
         ),
       );
 
-      reporter.report(approved.path, received.path);
+      await reporter.report(approved.path, received.path);
 
       expect(captured.single, equals([approved.path, received.path]));
     });

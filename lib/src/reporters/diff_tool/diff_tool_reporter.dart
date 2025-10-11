@@ -31,17 +31,19 @@ class DiffReporter implements Reporter {
   });
 
   @override
-  void report(String approvedPath, String receivedPath) {
+  Future<void> report(String approvedPath, String receivedPath) async {
     final DiffInfo diffInfo = defaultDiffInfo;
 
     try {
-      _checkFileExists(approvedPath);
-      _checkFileExists(receivedPath);
+      await Future.wait([
+        _checkFileExists(approvedPath),
+        _checkFileExists(receivedPath),
+      ]);
 
       final args = _expandArgs(diffInfo.arg)
         ..addAll([approvedPath, receivedPath]);
 
-      Process.runSync(
+      await Process.run(
         diffInfo.command,
         args,
       );
@@ -51,10 +53,8 @@ class DiffReporter implements Reporter {
         rethrow;
       }
       if (e is ProcessException) {
-        final ProcessResult result = Process.runSync(
-          ApprovalUtils.commandWhere,
-          [diffInfo.command],
-        );
+        final ProcessResult result =
+            await Process.run(ApprovalUtils.commandWhere, [diffInfo.command]);
         ApprovalLogger.exception(
           'Error during comparison via ${ide.name}. Please try check path of IDE. \n Current path: ${diffInfo.command} with arg: "${diffInfo.arg}" \n Path to IDE (${Platform.operatingSystem}): ${result.stdout} \n Please, add path to customDiffInfo.',
           stackTrace: st,
@@ -64,14 +64,16 @@ class DiffReporter implements Reporter {
     }
   }
 
-  void _checkFileExists(String path) {
-    if (!ApprovalUtils.isFileExists(path)) {
-      throw PathNotFoundException(
-        path,
-        const OSError('File not found'),
-        'From DiffToolReporter: File not found at path: [$path]. Please check the path and try again.',
-      );
-    }
+  Future<void> _checkFileExists(String path) {
+    return Future<void>.sync(() {
+      if (!ApprovalUtils.isFileExists(path)) {
+        throw PathNotFoundException(
+          path,
+          const OSError('File not found'),
+          'From DiffToolReporter: File not found at path: [$path]. Please check the path and try again.',
+        );
+      }
+    });
   }
 
   DiffInfo get defaultDiffInfo {

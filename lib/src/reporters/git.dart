@@ -4,6 +4,8 @@ part of '../../approval_tests.dart';
 class GitReporter implements Reporter {
   final DiffInfo? customDiffInfo;
 
+  static Future<ProcessResult> Function(String command, List<String> arguments)
+      runProcess = _defaultRunProcess;
   static ProcessResult Function(String command, List<String> arguments)
       runProcessSync = _defaultRunProcessSync;
 
@@ -12,17 +14,19 @@ class GitReporter implements Reporter {
   });
 
   @override
-  void report(String approvedPath, String receivedPath) {
+  Future<void> report(String approvedPath, String receivedPath) async {
     final DiffInfo diffInfo = customDiffInfo ??
         const DiffInfo(name: "Git", command: 'git', arg: 'diff --no-index');
 
     try {
-      _checkFileExists(approvedPath);
-      _checkFileExists(receivedPath);
+      await Future.wait([
+        _checkFileExists(approvedPath),
+        _checkFileExists(receivedPath),
+      ]);
 
       final args = _expandArgs(diffInfo.arg)
         ..addAll([approvedPath, receivedPath]);
-      final result = runProcessSync(
+      final result = await runProcess(
         diffInfo.command,
         args,
       );
@@ -41,7 +45,7 @@ class GitReporter implements Reporter {
         rethrow;
       }
       if (e is ProcessException) {
-        final ProcessResult result = Process.runSync(
+        final ProcessResult result = await Process.run(
           ApprovalUtils.commandWhere,
           [diffInfo.command],
         );
@@ -54,14 +58,16 @@ class GitReporter implements Reporter {
     }
   }
 
-  void _checkFileExists(String path) {
-    if (!ApprovalUtils.isFileExists(path)) {
-      throw PathNotFoundException(
-        path,
-        const OSError('File not found'),
-        'From GitReporter: File not found at path: [$path]. Please check the path and try again.',
-      );
-    }
+  Future<void> _checkFileExists(String path) {
+    return Future<void>.sync(() {
+      if (!ApprovalUtils.isFileExists(path)) {
+        throw PathNotFoundException(
+          path,
+          const OSError('File not found'),
+          'From GitReporter: File not found at path: [$path]. Please check the path and try again.',
+        );
+      }
+    });
   }
 
   /// return the diff of two files
@@ -130,6 +136,12 @@ class GitReporter implements Reporter {
     return trimmed.split(RegExp(r'\s+'));
   }
 
+  static Future<ProcessResult> _defaultRunProcess(
+    String command,
+    List<String> arguments,
+  ) =>
+      Process.run(command, arguments);
+
   static ProcessResult _defaultRunProcessSync(
     String command,
     List<String> arguments,
@@ -137,6 +149,7 @@ class GitReporter implements Reporter {
       Process.runSync(command, arguments);
 
   static void resetProcessRunners() {
+    runProcess = _defaultRunProcess;
     runProcessSync = _defaultRunProcessSync;
   }
 }

@@ -13,31 +13,31 @@ void registerVerifyTests() {
       );
     });
 
-    test('String with approved result options', () {
-      helper.verify(
+    test('String with approved result options', () async {
+      await helper.verify(
         'Hello World',
         'verify',
         approveResult: true,
       );
     });
 
-    test('All strings in a list', () {
-      helper.verifyAll(['Hello World', 'Hello World'], 'verify_all');
+    test('All strings in a list', () async {
+      await helper.verifyAll(['Hello World', 'Hello World'], 'verify_all');
     });
 
-    test('JSON data', () {
-      helper.verifyAsJson({"message": "Hello World"}, 'verify_as_json');
+    test('JSON data', () async {
+      await helper.verifyAsJson({"message": "Hello World"}, 'verify_as_json');
     });
 
-    test('JSON data: with model', () {
-      helper.verifyAsJson(
+    test('JSON data: with model', () async {
+      await helper.verifyAsJson(
         ApprovalTestHelper.jsonItem,
         'verify_as_model_json',
       );
     });
 
-    test('All combinations', () {
-      helper.verifyAllCombinations(
+    test('All combinations', () async {
+      await helper.verifyAllCombinations(
         [
           [1, 2],
           [3, 4],
@@ -46,8 +46,8 @@ void registerVerifyTests() {
       );
     });
 
-    test("Sequence", () {
-      helper.verifySequence([1, 2, 3], 'verify_sequence');
+    test("Sequence", () async {
+      await helper.verifySequence([1, 2, 3], 'verify_sequence');
     });
 
     test("Query result", () async {

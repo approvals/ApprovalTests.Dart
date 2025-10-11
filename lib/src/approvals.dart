@@ -63,7 +63,7 @@ class Approvals {
 
       // Log results and throw exception if files do not match
       if (!isFilesMatch) {
-        options.reporter.report(namer.approved, namer.received);
+        unawaited(options.reporter.report(namer.approved, namer.received));
         throw DoesntMatchException(
           'Oops: [${namer.approvedFileName}] does not match [${namer.receivedFileName}].\n\n - Approved file path: ${namer.approved}\n\n - Received file path: ${namer.received}',
         );

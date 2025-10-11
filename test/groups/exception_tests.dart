@@ -14,9 +14,9 @@ void registerExceptionTests() {
       );
     });
 
-    test("Method «verify» must throw DoesntMatchException", () {
-      expect(
-        () => helper.verify(
+    test("Method «verify» must throw DoesntMatchException", () async {
+      await expectLater(
+        helper.verify(
           'Hello W0rld',
           'verify',
           expectException: true,
@@ -31,9 +31,9 @@ void registerExceptionTests() {
     });
 
     test("Method «verify» must throw DoesntMatchException with error handling",
-        () {
-      expect(
-        () => helper.verify(
+        () async {
+      await expectLater(
+        helper.verify(
           'Hello W0rld',
           'verify',
         ),
