@@ -136,6 +136,36 @@ void registerReporterArgumentsTests() {
 
       expect(reporter.isReporterAvailable, isTrue);
     });
+
+    test('throws ProcessException when custom command exits non-zero',
+        () async {
+      final tempDir = Directory.systemTemp.createTempSync('diff_reporter_fail');
+      addTearDown(() => tempDir.deleteSync(recursive: true));
+
+      final approved = File('${tempDir.path}/approved.txt')
+        ..writeAsStringSync('approved');
+      final received = File('${tempDir.path}/received.txt')
+        ..writeAsStringSync('received');
+
+      final failingScript = _writeExitScript(
+        directory: tempDir,
+        fileName: 'diff_exit.dart',
+        exitCode: 3,
+      );
+
+      final reporter = DiffReporter(
+        customDiffInfo: DiffInfo(
+          name: 'fail',
+          command: Platform.resolvedExecutable,
+          arg: failingScript,
+        ),
+      );
+
+      await expectLater(
+        reporter.report(approved.path, received.path),
+        throwsA(isA<ProcessException>()),
+      );
+    });
   });
 }
 
