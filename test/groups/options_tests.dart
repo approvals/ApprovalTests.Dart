@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:approval_tests/approval_tests.dart';
 import 'package:test/test.dart';
 
-void main() {
+void main() => registerOptionsTests();
+
+void registerOptionsTests() {
   group('Options copyWith', () {
     test('accepts ApprovalNamer implementations', () {
       final options = const Options();

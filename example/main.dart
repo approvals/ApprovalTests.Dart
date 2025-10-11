@@ -3,8 +3,8 @@ import 'package:test/test.dart';
 
 void main() {
   group('Fizz Buzz', () {
-    test("verify combinations", () async {
-      await Approvals.verifyAll(
+    test("verify combinations", () {
+      Approvals.verifyAll(
         [3, 5, 15],
         options: Options(
           namer: Namer(

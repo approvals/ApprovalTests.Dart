@@ -15,7 +15,9 @@ class SampleModel {
       };
 }
 
-void main() {
+void main() => registerConverterTests();
+
+void registerConverterTests() {
   group('ApprovalConverter', () {
     test('encodeReflectively escapes map keys correctly', () {
       final encoded = ApprovalConverter.encodeReflectively({

@@ -31,19 +31,17 @@ class DiffReporter implements Reporter {
   });
 
   @override
-  Future<void> report(String approvedPath, String receivedPath) async {
+  void report(String approvedPath, String receivedPath) {
     final DiffInfo diffInfo = defaultDiffInfo;
 
     try {
-      await Future.wait([
-        _checkFileExists(approvedPath),
-        _checkFileExists(receivedPath),
-      ]);
+      _checkFileExists(approvedPath);
+      _checkFileExists(receivedPath);
 
       final args = _expandArgs(diffInfo.arg)
         ..addAll([approvedPath, receivedPath]);
 
-      await Process.run(
+      Process.runSync(
         diffInfo.command,
         args,
       );
@@ -53,8 +51,10 @@ class DiffReporter implements Reporter {
         rethrow;
       }
       if (e is ProcessException) {
-        final ProcessResult result =
-            await Process.run(ApprovalUtils.commandWhere, [diffInfo.command]);
+        final ProcessResult result = Process.runSync(
+          ApprovalUtils.commandWhere,
+          [diffInfo.command],
+        );
         ApprovalLogger.exception(
           'Error during comparison via ${ide.name}. Please try check path of IDE. \n Current path: ${diffInfo.command} with arg: "${diffInfo.arg}" \n Path to IDE (${Platform.operatingSystem}): ${result.stdout} \n Please, add path to customDiffInfo.',
           stackTrace: st,
@@ -64,7 +64,7 @@ class DiffReporter implements Reporter {
     }
   }
 
-  Future<void> _checkFileExists(String path) async {
+  void _checkFileExists(String path) {
     if (!ApprovalUtils.isFileExists(path)) {
       throw PathNotFoundException(
         path,

@@ -4,8 +4,6 @@ part of '../../approval_tests.dart';
 class GitReporter implements Reporter {
   final DiffInfo? customDiffInfo;
 
-  static Future<ProcessResult> Function(String command, List<String> arguments)
-      runProcess = _defaultRunProcess;
   static ProcessResult Function(String command, List<String> arguments)
       runProcessSync = _defaultRunProcessSync;
 
@@ -14,19 +12,17 @@ class GitReporter implements Reporter {
   });
 
   @override
-  Future<void> report(String approvedPath, String receivedPath) async {
+  void report(String approvedPath, String receivedPath) {
     final DiffInfo diffInfo = customDiffInfo ??
         const DiffInfo(name: "Git", command: 'git', arg: 'diff --no-index');
 
     try {
-      await Future.wait([
-        _checkFileExists(approvedPath),
-        _checkFileExists(receivedPath),
-      ]);
+      _checkFileExists(approvedPath);
+      _checkFileExists(receivedPath);
 
       final args = _expandArgs(diffInfo.arg)
         ..addAll([approvedPath, receivedPath]);
-      final result = await runProcess(
+      final result = runProcessSync(
         diffInfo.command,
         args,
       );
@@ -45,8 +41,10 @@ class GitReporter implements Reporter {
         rethrow;
       }
       if (e is ProcessException) {
-        final ProcessResult result =
-            await Process.run(ApprovalUtils.commandWhere, [diffInfo.command]);
+        final ProcessResult result = Process.runSync(
+          ApprovalUtils.commandWhere,
+          [diffInfo.command],
+        );
         ApprovalLogger.exception(
           'Error during comparison via Git. Please make sure that Git is installed and available in the system path. Error: ${e.message}. Git path: ${result.stdout}',
           stackTrace: st,
@@ -56,7 +54,7 @@ class GitReporter implements Reporter {
     }
   }
 
-  Future<void> _checkFileExists(String path) async {
+  void _checkFileExists(String path) {
     if (!ApprovalUtils.isFileExists(path)) {
       throw PathNotFoundException(
         path,
@@ -132,12 +130,6 @@ class GitReporter implements Reporter {
     return trimmed.split(RegExp(r'\s+'));
   }
 
-  static Future<ProcessResult> _defaultRunProcess(
-    String command,
-    List<String> arguments,
-  ) =>
-      Process.run(command, arguments);
-
   static ProcessResult _defaultRunProcessSync(
     String command,
     List<String> arguments,
@@ -145,7 +137,6 @@ class GitReporter implements Reporter {
       Process.runSync(command, arguments);
 
   static void resetProcessRunners() {
-    runProcess = _defaultRunProcess;
     runProcessSync = _defaultRunProcessSync;
   }
 }

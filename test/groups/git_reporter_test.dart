@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:approval_tests/approval_tests.dart';
 import 'package:test/test.dart';
 
-void main() {
+void main() => registerGitReporterTests();
+
+void registerGitReporterTests() {
   group('GitReporter behavior', () {
     setUp(() {
       GitReporter.resetProcessRunners();
@@ -11,7 +13,7 @@ void main() {
 
     tearDown(GitReporter.resetProcessRunners);
 
-    test('report throws ProcessException when process exit code > 1', () async {
+    test('report throws ProcessException when process exit code > 1', () {
       final tempDir =
           Directory.systemTemp.createTempSync('git_reporter_failure');
       addTearDown(() => tempDir.deleteSync(recursive: true));
@@ -21,7 +23,7 @@ void main() {
       final received = File('${tempDir.path}/received.txt')
         ..writeAsStringSync('received');
 
-      GitReporter.runProcess = (command, arguments) async {
+      GitReporter.runProcessSync = (command, arguments) {
         return ProcessResult(0, 2, '', 'error');
       };
 
@@ -33,8 +35,8 @@ void main() {
         ),
       );
 
-      await expectLater(
-        reporter.report(approved.path, received.path),
+      expect(
+        () => reporter.report(approved.path, received.path),
         throwsA(isA<ProcessException>()),
       );
     });
@@ -58,7 +60,7 @@ void main() {
       );
     });
 
-    test('report handles empty arg expansion', () async {
+    test('report handles empty arg expansion', () {
       final tempDir =
           Directory.systemTemp.createTempSync('git_reporter_empty_args');
       addTearDown(() => tempDir.deleteSync(recursive: true));
@@ -69,7 +71,7 @@ void main() {
         ..writeAsStringSync('received');
 
       final captured = <List<String>>[];
-      GitReporter.runProcess = (command, arguments) async {
+      GitReporter.runProcessSync = (command, arguments) {
         captured.add(arguments);
         return ProcessResult(0, 0, '', '');
       };
@@ -82,7 +84,7 @@ void main() {
         ),
       );
 
-      await reporter.report(approved.path, received.path);
+      reporter.report(approved.path, received.path);
 
       expect(captured.single, equals([approved.path, received.path]));
     });

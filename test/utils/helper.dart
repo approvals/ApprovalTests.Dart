@@ -20,7 +20,7 @@ class ApprovalTestHelper {
     ),
   );
 
-  Future<void> verify(
+  void verify(
     String content,
     String testName, {
     bool expectException = false,
@@ -30,8 +30,8 @@ class ApprovalTestHelper {
     String? description,
     ApprovalScrubber scrubber = const ScrubNothing(),
     Reporter reporter = const CommandLineReporter(),
-  }) async {
-    await Approvals.verify(
+  }) {
+    Approvals.verify(
       content,
       options: _getOptions(
         testName,
@@ -46,7 +46,7 @@ class ApprovalTestHelper {
     );
   }
 
-  Future<void> verifyAll(
+  void verifyAll(
     List<dynamic> contents,
     String testName, {
     bool expectException = false,
@@ -54,8 +54,8 @@ class ApprovalTestHelper {
     bool deleteReceivedFile = true,
     ApprovalScrubber scrubber = const ScrubNothing(),
     Reporter reporter = const CommandLineReporter(),
-  }) async {
-    await Approvals.verifyAll(
+  }) {
+    Approvals.verifyAll(
       contents,
       processor: (item) => item
           .toString(), // Simple processor function that returns the item itself.
@@ -70,15 +70,15 @@ class ApprovalTestHelper {
     );
   }
 
-  Future<void> verifyAsJson(
+  void verifyAsJson(
     dynamic encodable,
     String testName, {
     bool expectException = false,
     bool approveResult = false,
     bool deleteReceivedFile = true,
     bool includeClassNameDuringSerialization = true,
-  }) async {
-    await Approvals.verifyAsJson(
+  }) {
+    Approvals.verifyAsJson(
       encodable,
       options: _getOptions(
         testName,
@@ -91,14 +91,14 @@ class ApprovalTestHelper {
     );
   }
 
-  Future<void> verifyAllCombinations(
+  void verifyAllCombinations(
     List<List<int>> combinations,
     String testName, {
     bool expectException = false,
     bool approveResult = false,
     bool deleteReceivedFile = true,
-  }) async {
-    await Approvals.verifyAllCombinations(
+  }) {
+    Approvals.verifyAllCombinations(
       combinations,
       processor: (combination) => 'Combination: ${combination.join(", ")}',
       options: _getOptions(
@@ -110,14 +110,14 @@ class ApprovalTestHelper {
     );
   }
 
-  Future<void> verifySequence(
+  void verifySequence(
     List<dynamic> sequence,
     String testName, {
     bool expectException = false,
     bool approveResult = false,
     bool deleteReceivedFile = true,
-  }) async {
-    await Approvals.verifySequence(
+  }) {
+    Approvals.verifySequence(
       sequence,
       options: _getOptions(
         testName,

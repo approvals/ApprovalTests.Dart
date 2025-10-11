@@ -12,6 +12,7 @@
 - Introduced deterministic stubs for network query tests and refreshed related approvals.
 - Added reporter regression tests covering Git/Diff custom command execution and argument expansion.
 - Ensured `test/approval_test.dart` invokes every suite under `test/groups`, so the aggregated run covers all group-level tests.
+- Restored synchronous verification helpers and reporter interfaces to maintain backwards compatibility for 1.x consumers.
 
 ## 1.2.1
 ### Indexed Namer

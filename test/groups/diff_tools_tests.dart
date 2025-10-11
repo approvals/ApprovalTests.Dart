@@ -5,7 +5,9 @@ import 'package:test/test.dart';
 
 import '../approval_test.dart';
 
-void main() {
+void main() => registerDiffToolTests();
+
+void registerDiffToolTests() {
   final isWindows = Platform.isWindows;
   final isLinux = Platform.isLinux;
   const gitReporter = GitReporter();
@@ -17,7 +19,7 @@ void main() {
       );
     });
 
-    test('Verify string with Android Studio DiffReporter on Windows', () async {
+    test('Verify string with Android Studio DiffReporter on Windows', () {
       const reporter = DiffReporter(
         ide: ComparatorIDE.studio,
         platformWrapper: WindowsPlatformWrapper(),
@@ -30,15 +32,22 @@ void main() {
           'test/approved_files/approval_test.verify.received.txt';
 
       // Expect an exception to be thrown
-      final future = reporter.report(
-        existentApprovedPath,
-        existentReceivedPath,
-      );
-
       if (isWindows) {
-        await expectLater(future, completes);
+        expect(
+          () => reporter.report(
+            existentApprovedPath,
+            existentReceivedPath,
+          ),
+          returnsNormally,
+        );
       } else {
-        await expectLater(future, throwsA(isA<ProcessException>()));
+        expect(
+          () => reporter.report(
+            existentApprovedPath,
+            existentReceivedPath,
+          ),
+          throwsA(isA<ProcessException>()),
+        );
       }
 
       ApprovalLogger.success(
@@ -46,7 +55,7 @@ void main() {
       );
     });
 
-    test('verify string with Android Studio DiffReporter on Linux', () async {
+    test('verify string with Android Studio DiffReporter on Linux', () {
       const reporter = DiffReporter(
         ide: ComparatorIDE.studio,
         platformWrapper: LinuxPlatformWrapper(),
@@ -59,15 +68,22 @@ void main() {
           'test/approved_files/approval_test.verify.received.txt';
 
       // Expect an exception to be thrown
-      final future = reporter.report(
-        existentApprovedPath,
-        existentReceivedPath,
-      );
-
       if (isLinux) {
-        await expectLater(future, completes);
+        expect(
+          () => reporter.report(
+            existentApprovedPath,
+            existentReceivedPath,
+          ),
+          returnsNormally,
+        );
       } else {
-        await expectLater(future, throwsA(isA<ProcessException>()));
+        expect(
+          () => reporter.report(
+            existentApprovedPath,
+            existentReceivedPath,
+          ),
+          throwsA(isA<ProcessException>()),
+        );
       }
 
       ApprovalLogger.success(
@@ -92,7 +108,7 @@ void main() {
       );
     });
 
-    test('verify string with NoPlatformWrapper', () async {
+    test('verify string with NoPlatformWrapper', () {
       const reporter = DiffReporter(
         ide: ComparatorIDE.studio,
         platformWrapper: NoPlatformWrapper(),
@@ -105,8 +121,8 @@ void main() {
           'test/approved_files/approval_test.verify.received.txt';
 
       // Expect an exception to be thrown
-      await expectLater(
-        reporter.report(
+      expect(
+        () => reporter.report(
           existentApprovedPath,
           existentReceivedPath,
         ),
@@ -118,7 +134,7 @@ void main() {
       );
     });
 
-    test('verify string with Git reporter', () async {
+    test('verify string with Git reporter', () {
       // Setup: paths to existent files
       const existentApprovedPath =
           'test/approved_files/approval_test.verify.approved.txt';
@@ -126,12 +142,12 @@ void main() {
           'test/approved_files/approval_test.verify.received.txt';
 
       // Expect an exception to be thrown
-      await expectLater(
-        gitReporter.report(
+      expect(
+        () => gitReporter.report(
           existentApprovedPath,
           existentReceivedPath,
         ),
-        completes,
+        returnsNormally,
       );
 
       ApprovalLogger.success(
@@ -139,12 +155,12 @@ void main() {
       );
     });
 
-    test('Should throw PathNotFoundException when file does not exist', () async {
+    test('Should throw PathNotFoundException when file does not exist', () {
       const String approvedPath = "/path/to/nonexisting/approved/file";
       const String receivedPath = "/path/to/nonexisting/received/file";
 
-      await expectLater(
-        gitReporter.report(approvedPath, receivedPath),
+      expect(
+        () => gitReporter.report(approvedPath, receivedPath),
         throwsA(isA<PathNotFoundException>()),
       );
     });
@@ -160,7 +176,7 @@ void main() {
       expect(diffResult, equals(''));
     });
 
-    test('GitReporter with not correct custom diff info', () async {
+    test('GitReporter with not correct custom diff info', () {
       const DiffInfo customDiffInfo =
           DiffInfo(name: "G1t", command: 'g1t', arg: 'diff --no-index');
 
@@ -172,8 +188,8 @@ void main() {
           'test/approved_files/approval_test.verify.received.txt';
 
       // Expect an exception to be thrown
-      await expectLater(
-        gitReporter.report(
+      expect(
+        () => gitReporter.report(
           existentApprovedPath,
           existentReceivedPath,
         ),

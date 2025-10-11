@@ -202,7 +202,7 @@ Future<void> processFile(File? approvedFile, File receivedFile) async {
             "Executing '${diffReporter.defaultDiffInfo.command} ${diffReporter.defaultDiffInfo.arg} $approvedFilename $receivedFilename'",
           );
           if (approvedFilename != null) {
-            await diffReporter.report(approvedFilename, receivedFilename);
+            diffReporter.report(approvedFilename, receivedFilename);
           } else {
             final processResult = Process.runSync('code', [receivedFilename]);
             ApprovalLogger.log(

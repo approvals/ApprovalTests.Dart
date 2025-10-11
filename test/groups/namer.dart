@@ -2,7 +2,9 @@ import 'dart:io'; // For Platform.pathSeparator
 import 'package:approval_tests/approval_tests.dart';
 import 'package:test/test.dart';
 
-void main() {
+void main() => registerNamerTests();
+
+void registerNamerTests() {
   // Use the platform-specific path separator
   final String separator = Platform.pathSeparator;
 

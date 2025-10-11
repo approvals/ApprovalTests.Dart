@@ -40,35 +40,35 @@ void main() {
 
   /// ================== Approvals: core behavior ==================
 
-  approvals_tests.main();
-  converter_tests.main();
-  options_tests.main();
+  approvals_tests.registerApprovalsTests();
+  converter_tests.registerConverterTests();
+  options_tests.registerOptionsTests();
 
   /// ================== Approvals: verify methods ==================
 
-  verify_tests.main();
+  verify_tests.registerVerifyTests();
 
   /// ================== Approvals: test for exceptions ==================
 
-  exception_tests.main();
+  exception_tests.registerExceptionTests();
 
   /// ================== Approvals: minor tests ==================
 
-  minor_tests.main();
+  minor_tests.registerMinorTests();
 
   /// ================== Approvals: reporter suites ==================
 
-  command_line_reporter_tests.main();
-  reporter_arguments_tests.main();
-  git_reporter_tests.main();
+  command_line_reporter_tests.registerCommandLineReporterTests();
+  reporter_arguments_tests.registerReporterArgumentsTests();
+  git_reporter_tests.registerGitReporterTests();
 
   /// ================== Approvals: test for Diff Tools ==================
 
-  diff_tools_tests.main();
+  diff_tools_tests.registerDiffToolTests();
 
   /// ================== Approvals: Namer tests ==================
 
-  namer_tests.main();
+  namer_tests.registerNamerTests();
 
   /// ================== Tear down ==================
 

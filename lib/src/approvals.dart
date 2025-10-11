@@ -24,10 +24,10 @@ class Approvals {
   // ================== Verify methods ==================
 
   // Method to verify if the content in response matches the approved content
-  static Future<void> verify(
+  static void verify(
     String response, {
     Options options = const Options(),
-  }) async {
+  }) {
     // Get the file path without extension or use the provided file path
     final completedPath = options.namer.filePath ??
         ApprovalUtils.removeFileExtension(
@@ -63,7 +63,7 @@ class Approvals {
 
       // Log results and throw exception if files do not match
       if (!isFilesMatch) {
-        await options.reporter.report(namer.approved, namer.received);
+        options.reporter.report(namer.approved, namer.received);
         throw DoesntMatchException(
           'Oops: [${namer.approvedFileName}] does not match [${namer.receivedFileName}].\n\n - Approved file path: ${namer.approved}\n\n - Received file path: ${namer.received}',
         );
@@ -128,11 +128,11 @@ class Approvals {
   };
 
   /// Verifies all combinations of inputs for a provided function.
-  static Future<void> verifyAll<T>(
+  static void verifyAll<T>(
     List<T> inputs, {
     required String Function(T item) processor,
     Options options = const Options(),
-  }) async {
+  }) {
     try {
       // Process the combination to get the response
       final response = inputs.map((e) => processor(e));
@@ -140,17 +140,17 @@ class Approvals {
       final responseString = response.join('\n');
 
       // Verify the processed response
-      await verify(responseString, options: options);
+      verify(responseString, options: options);
     } catch (_) {
       rethrow;
     }
   }
 
   // Method to encode object to JSON and then verify it
-  static Future<void> verifyAsJson(
+  static void verifyAsJson(
     dynamic encodable, {
     Options options = const Options(),
-  }) async {
+  }) {
     try {
       // Encode the object into JSON format
       final jsonContent = ApprovalConverter.encodeReflectively(
@@ -160,23 +160,23 @@ class Approvals {
       final prettyJson = ApprovalConverter.convert(jsonContent);
 
       // Call the verify method on encoded JSON content
-      await verify(prettyJson, options: options);
+      verify(prettyJson, options: options);
     } catch (_) {
       rethrow;
     }
   }
 
   // Method to convert a sequence of objects to string format and then verify it
-  static Future<void> verifySequence(
+  static void verifySequence(
     List<dynamic> sequence, {
     Options options = const Options(),
-  }) async {
+  }) {
     try {
       // Convert the sequence of objects into a multiline string
       final content = sequence.map((e) => e.toString()).join('\n');
 
       // Call the verify method on this content
-      await verify(content, options: options);
+      verify(content, options: options);
     } catch (_) {
       rethrow;
     }
@@ -195,7 +195,7 @@ class Approvals {
       final resultString = await query.executeQuery(queryString);
 
       // Use the existing verify method to check the result against approved content
-      await verify(resultString, options: options);
+      verify(resultString, options: options);
     } catch (_) {
       rethrow;
     }
@@ -204,11 +204,11 @@ class Approvals {
   // ================== Combinations ==================
 
   /// Verifies all combinations of inputs for a provided function.
-  static Future<void> verifyAllCombinations<T>(
+  static void verifyAllCombinations<T>(
     List<List<T>> inputs, {
     required String Function(Iterable<List<T>> combination) processor,
     Options options = const Options(),
-  }) async {
+  }) {
     // Generate all combinations of inputs
     final combinations = ApprovalUtils.cartesianProduct(inputs);
 
@@ -219,7 +219,7 @@ class Approvals {
       final response = processor(combinations);
 
       // Verify the processed response
-      await verify(response, options: options);
+      verify(response, options: options);
     } catch (_) {
       rethrow;
     }
