@@ -30,7 +30,11 @@ class CommandLineReporter implements Reporter {
   });
 
   @override
-  void report(String approvedPath, String receivedPath, {String? message}) {
+  Future<void> report(
+    String approvedPath,
+    String receivedPath, {
+    String? message,
+  }) async {
     try {
       final buffer = StringBuffer(message ?? "Differences:\n");
 

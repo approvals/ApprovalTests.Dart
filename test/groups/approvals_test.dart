@@ -4,7 +4,9 @@ import 'package:approval_tests/approval_tests.dart';
 import 'package:approval_tests/src/core/enums/file_type.dart';
 import 'package:test/test.dart';
 
-void main() {
+void main() => registerApprovalsTests();
+
+void registerApprovalsTests() {
   late Map<FileType, String Function(ApprovalNamer)> originalMap;
 
   setUp(() {

@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:approval_tests/approval_tests.dart';
 import 'package:test/test.dart';
 
-class _SampleModel {
-  const _SampleModel(this.name, this.count);
+class SampleModel {
+  const SampleModel(this.name, this.count);
 
   final String name;
   final int count;
@@ -15,7 +15,9 @@ class _SampleModel {
       };
 }
 
-void main() {
+void main() => registerConverterTests();
+
+void registerConverterTests() {
   group('ApprovalConverter', () {
     test('encodeReflectively escapes map keys correctly', () {
       final encoded = ApprovalConverter.encodeReflectively({
@@ -29,7 +31,7 @@ void main() {
     });
 
     test('encodeReflectively includes class wrapper when requested', () {
-      const model = _SampleModel('Sample', 3);
+      const model = SampleModel('Sample', 3);
       final encoded = ApprovalConverter.encodeReflectively(
         model,
         includeClassName: true,

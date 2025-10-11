@@ -4,7 +4,9 @@ import 'package:test/test.dart';
 import '../approval_test.dart';
 import '../models/item.dart';
 
-void main() {
+void main() => registerExceptionTests();
+
+void registerExceptionTests() {
   group('Approvals: test for exceptions |', () {
     setUpAll(() {
       ApprovalLogger.log(
@@ -12,9 +14,9 @@ void main() {
       );
     });
 
-    test("Method «verify» must throw DoesntMatchException", () {
-      expect(
-        () => helper.verify(
+    test("Method «verify» must throw DoesntMatchException", () async {
+      await expectLater(
+        helper.verify(
           'Hello W0rld',
           'verify',
           expectException: true,
@@ -29,9 +31,9 @@ void main() {
     });
 
     test("Method «verify» must throw DoesntMatchException with error handling",
-        () {
-      expect(
-        () => helper.verify(
+        () async {
+      await expectLater(
+        helper.verify(
           'Hello W0rld',
           'verify',
         ),

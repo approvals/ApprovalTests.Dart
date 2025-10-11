@@ -5,7 +5,9 @@ import 'package:test/test.dart';
 
 import '../approval_test.dart';
 
-void main() {
+void main() => registerMinorTests();
+
+void registerMinorTests() {
   final dateTime = DateTime(2021, 10, 10, 10, 10, 10);
 
   group('Approvals: test of other minor things |', () {
@@ -64,8 +66,8 @@ void main() {
       const nonExistentReceivedPath = 'path/to/nonexistent/received.txt';
 
       // Expect an exception to be thrown
-      expect(
-        () => reporter.report(
+      await expectLater(
+        reporter.report(
           nonExistentApprovedPath,
           nonExistentReceivedPath,
         ),
@@ -77,9 +79,9 @@ void main() {
       );
     });
 
-    test('verify string using VS Code DiffReporter', () {
-      expect(
-        () => helper.verify(
+    test('verify string using VS Code DiffReporter', () async {
+      await expectLater(
+        helper.verify(
           'Hello W0rld',
           'verify',
           deleteReceivedFile: false,
@@ -95,9 +97,9 @@ void main() {
       );
     });
 
-    test('verify string using Android Studio DiffReporter', () {
-      expect(
-        () => helper.verify(
+    test('verify string using Android Studio DiffReporter', () async {
+      await expectLater(
+        helper.verify(
           'Hello W0rld',
           'verify',
           deleteReceivedFile: false,
@@ -127,8 +129,8 @@ void main() {
       const existentReceivedPath =
           'test/approved_files/approval_test.verify.received.txt';
 
-      expect(
-        () => reporter.report(
+      await expectLater(
+        reporter.report(
           existentApprovedPath,
           existentReceivedPath,
         ),
@@ -140,16 +142,16 @@ void main() {
       );
     });
 
-    test('Verify string with scrubber', () {
-      helper.verify(
+    test('Verify string with scrubber', () async {
+      await helper.verify(
         '  Hello    World  \t\n ',
         'verify_scrub',
         scrubber: const ScrubWithRegEx(),
       );
     });
 
-    test('Verify string with custom scrubber', () {
-      helper.verify(
+    test('Verify string with custom scrubber', () async {
+      await helper.verify(
         '  Hello    World  \t\n ',
         'verify_custom_scrub',
         scrubber: ScrubWithRegEx.custom(
@@ -159,8 +161,8 @@ void main() {
       );
     });
 
-    test('Verify string with date scrubber', () {
-      helper.verifyAll(
+    test('Verify string with date scrubber', () async {
+      await helper.verifyAll(
         [dateTime, DateTime.now()],
         'verify_date_scrub',
         scrubber: const ScrubDates(),
@@ -216,8 +218,8 @@ void main() {
       );
     });
 
-    test('Verify model without class name', () {
-      helper.verifyAsJson(
+    test('Verify model without class name', () async {
+      await helper.verifyAsJson(
         ApprovalTestHelper.jsonItem,
         'verify_without_class_name',
         includeClassNameDuringSerialization: false,
@@ -225,7 +227,7 @@ void main() {
     });
 
     test('Approvals.verify deletes received file when logResults is disabled',
-        () {
+        () async {
       final tempDir =
           Directory.systemTemp.createTempSync('approval_cleanup_test');
       final fileBase = '${tempDir.path}/cleanup_test.dart';
@@ -290,8 +292,8 @@ void main() {
       );
     });
 
-    test('Verify with description: with FileNamer', () {
-      helper.verify(
+    test('Verify with description: with FileNamer', () async {
+      await helper.verify(
         'Hello World',
         'description_with_filenamer',
         description: 'test description',

@@ -64,14 +64,16 @@ class DiffReporter implements Reporter {
     }
   }
 
-  Future<void> _checkFileExists(String path) async {
-    if (!ApprovalUtils.isFileExists(path)) {
-      throw PathNotFoundException(
-        path,
-        const OSError('File not found'),
-        'From DiffToolReporter: File not found at path: [$path]. Please check the path and try again.',
-      );
-    }
+  Future<void> _checkFileExists(String path) {
+    return Future<void>.sync(() {
+      if (!ApprovalUtils.isFileExists(path)) {
+        throw PathNotFoundException(
+          path,
+          const OSError('File not found'),
+          'From DiffToolReporter: File not found at path: [$path]. Please check the path and try again.',
+        );
+      }
+    });
   }
 
   DiffInfo get defaultDiffInfo {

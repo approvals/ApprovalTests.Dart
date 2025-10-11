@@ -45,8 +45,10 @@ class GitReporter implements Reporter {
         rethrow;
       }
       if (e is ProcessException) {
-        final ProcessResult result =
-            await Process.run(ApprovalUtils.commandWhere, [diffInfo.command]);
+        final ProcessResult result = await Process.run(
+          ApprovalUtils.commandWhere,
+          [diffInfo.command],
+        );
         ApprovalLogger.exception(
           'Error during comparison via Git. Please make sure that Git is installed and available in the system path. Error: ${e.message}. Git path: ${result.stdout}',
           stackTrace: st,
@@ -56,14 +58,16 @@ class GitReporter implements Reporter {
     }
   }
 
-  Future<void> _checkFileExists(String path) async {
-    if (!ApprovalUtils.isFileExists(path)) {
-      throw PathNotFoundException(
-        path,
-        const OSError('File not found'),
-        'From GitReporter: File not found at path: [$path]. Please check the path and try again.',
-      );
-    }
+  Future<void> _checkFileExists(String path) {
+    return Future<void>.sync(() {
+      if (!ApprovalUtils.isFileExists(path)) {
+        throw PathNotFoundException(
+          path,
+          const OSError('File not found'),
+          'From GitReporter: File not found at path: [$path]. Please check the path and try again.',
+        );
+      }
+    });
   }
 
   /// return the diff of two files

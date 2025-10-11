@@ -3,11 +3,15 @@ import 'dart:io';
 import 'package:approval_tests/approval_tests.dart';
 import 'package:test/test.dart';
 
-void main() {
+void main() => registerGitReporterTests();
+
+void registerGitReporterTests() {
   group('GitReporter behavior', () {
     setUp(() {
       GitReporter.resetProcessRunners();
     });
+
+    tearDown(GitReporter.resetProcessRunners);
 
     test('report throws ProcessException when process exit code > 1', () async {
       final tempDir =

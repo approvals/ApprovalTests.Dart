@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:approval_tests/approval_tests.dart';
 import 'package:test/test.dart';
 
-void main() {
+void main() => registerReporterArgumentsTests();
+
+void registerReporterArgumentsTests() {
   group('GitReporter custom command handling', () {
     test('reports successfully with expanded arguments', () async {
       final tempDir =
