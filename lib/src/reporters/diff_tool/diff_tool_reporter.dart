@@ -33,6 +33,7 @@ class DiffReporter implements Reporter {
   @override
   Future<void> report(String approvedPath, String receivedPath) async {
     final DiffInfo diffInfo = defaultDiffInfo;
+    final bool shouldDetach = customDiffInfo == null;
 
     try {
       await Future.wait([
@@ -43,10 +44,26 @@ class DiffReporter implements Reporter {
       final args = _expandArgs(diffInfo.arg)
         ..addAll([approvedPath, receivedPath]);
 
-      await Process.run(
-        diffInfo.command,
-        args,
-      );
+      if (shouldDetach) {
+        await Process.start(
+          diffInfo.command,
+          args,
+          mode: ProcessStartMode.detached,
+        );
+      } else {
+        final result = await Process.run(
+          diffInfo.command,
+          args,
+        );
+        if (result.exitCode != 0) {
+          throw ProcessException(
+            diffInfo.command,
+            args,
+            result.stderr,
+            result.exitCode,
+          );
+        }
+      }
     } catch (e, st) {
       if (e is PathNotFoundException) {
         ApprovalLogger.exception(e, stackTrace: st);
