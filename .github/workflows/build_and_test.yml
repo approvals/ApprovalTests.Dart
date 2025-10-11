@@ -19,6 +19,28 @@ jobs:
         with:
           sdk: stable
 
+      - name: ♻️ Restore Visual Studio Code cache (Windows)
+        if: ${{ runner.os == 'Windows' }}
+        id: cache-vscode
+        uses: actions/cache@v4
+        with:
+          path: |
+            C:\ProgramData\chocolatey\lib\vscode
+            C:\ProgramData\chocolatey\bin\code.cmd
+            C:\Program Files\Microsoft VS Code
+          key: vscode-${{ runner.os }}-v1
+
+      - name: ♻️ Restore Android Studio cache (Windows)
+        if: ${{ runner.os == 'Windows' }}
+        id: cache-androidstudio
+        uses: actions/cache@v4
+        with:
+          path: |
+            C:\ProgramData\chocolatey\lib\androidstudio
+            C:\ProgramData\chocolatey\bin\studio64.exe
+            C:\Program Files\Android\Android Studio
+          key: androidstudio-${{ runner.os }}-v1
+
       - name: 📦 Setup Visual Studio Code
         run: |
           if [[ "${{ runner.os }}" == "Linux" ]]; then
@@ -26,7 +48,11 @@ jobs:
           elif [[ "${{ runner.os }}" == "macOS" ]]; then
             brew install --cask visual-studio-code
           elif [[ "${{ runner.os }}" == "Windows" ]]; then
-            choco install vscode
+            if [ ! -f "/c/Program Files/Microsoft VS Code/bin/code.cmd" ]; then
+              choco install vscode --yes --no-progress
+            else
+              echo "Visual Studio Code found in cache, skipping installation."
+            fi
           fi
         shell: bash
       
@@ -48,7 +74,11 @@ jobs:
           elif [[ "${{ runner.os }}" == "macOS" ]]; then
             brew install --cask android-studio
           elif [[ "${{ runner.os }}" == "Windows" ]]; then
-            choco install androidstudio
+            if [ ! -f "/c/Program Files/Android/Android Studio/bin/studio64.exe" ]; then
+              choco install androidstudio --yes --no-progress
+            else
+              echo "Android Studio found in cache, skipping installation."
+            fi
           fi
         shell: bash
       
@@ -65,8 +95,8 @@ jobs:
 
       - name: 📦 Install Dependencies
         run: |
-         dart pub global activate coverage
-         dart pub get
+          dart pub global activate coverage
+          dart pub get
 
       - name: ✨ Check Formatting
         run: dart format --set-exit-if-changed .
