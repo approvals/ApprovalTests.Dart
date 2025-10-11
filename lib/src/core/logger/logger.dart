@@ -28,13 +28,13 @@ final class ApprovalLogger {
       settings: TalkerSettings(
         titles: _defaultTitles,
         colors: {
-          TalkerLogType.critical.key: AnsiPen()..red(),
-          TalkerLogType.warning.key: AnsiPen()..yellow(),
-          TalkerLogType.verbose.key: AnsiPen()..gray(),
-          TalkerLogType.info.key: AnsiPen()..cyan(),
-          TalkerLogType.debug.key: AnsiPen()..gray(),
-          TalkerLogType.error.key: ApprovalUtils.hexToAnsiPen('de7979'),
-          TalkerLogType.exception.key: ApprovalUtils.hexToAnsiPen('de7979'),
+          'critical': AnsiPen()..red(),
+          'warning': AnsiPen()..yellow(),
+          'verbose': AnsiPen()..gray(),
+          'info': AnsiPen()..cyan(),
+          'debug': AnsiPen()..gray(),
+          'error': ApprovalUtils.hexToAnsiPen('de7979'),
+          'exception': ApprovalUtils.hexToAnsiPen('de7979'),
         },
       ),
     ),
@@ -48,13 +48,13 @@ final class ApprovalLogger {
 
   // Define default titles for different log types.
   static Map<String, String> _defaultTitles = {
-    TalkerLogType.critical.key: '💀 $_approvalTitle',
-    TalkerLogType.warning.key: '🟡 $_approvalTitle',
-    TalkerLogType.verbose.key: '🐛 $_approvalTitle',
-    TalkerLogType.info.key: '🔍 $_approvalTitle',
-    TalkerLogType.debug.key: '🐛 $_approvalTitle',
-    TalkerLogType.error.key: '🔴 $_approvalTitle',
-    TalkerLogType.exception.key: '🔴 $_approvalTitle',
+    'critical': '💀 $_approvalTitle',
+    'warning': '🟡 $_approvalTitle',
+    'verbose': '🐛 $_approvalTitle',
+    'info': '🔍 $_approvalTitle',
+    'debug': '🐛 $_approvalTitle',
+    'error': '🔴 $_approvalTitle',
+    'exception': '🔴 $_approvalTitle',
   };
 
   /// `log` method to log messages with debug log level.
