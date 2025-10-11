@@ -139,8 +139,7 @@ void registerReporterArgumentsTests() {
 
     test('throws ProcessException when custom command exits non-zero',
         () async {
-      final tempDir =
-          Directory.systemTemp.createTempSync('diff_reporter_fail');
+      final tempDir = Directory.systemTemp.createTempSync('diff_reporter_fail');
       addTearDown(() => tempDir.deleteSync(recursive: true));
 
       final approved = File('${tempDir.path}/approved.txt')
