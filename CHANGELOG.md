@@ -1,3 +1,8 @@
+## 1.4.0
+### Testing
+- Ensured `test/approval_test.dart` invokes every suite under `test/groups`, so the aggregated run covers all group-level tests.
+- Restored synchronous verification helpers and reporter interfaces to maintain backwards compatibility for 1.x consumers.
+
 ## 1.3.6
 ### Improvements
 - Normalized JSON conversion to produce valid output for any map keys and optional class wrappers.
@@ -11,8 +16,6 @@
 - Added regression coverage for whitespace comparisons, date scrubbing, converter encoding, and options copy semantics.
 - Introduced deterministic stubs for network query tests and refreshed related approvals.
 - Added reporter regression tests covering Git/Diff custom command execution and argument expansion.
-- Ensured `test/approval_test.dart` invokes every suite under `test/groups`, so the aggregated run covers all group-level tests.
-- Restored synchronous verification helpers and reporter interfaces to maintain backwards compatibility for 1.x consumers.
 
 ## 1.2.1
 ### Indexed Namer
