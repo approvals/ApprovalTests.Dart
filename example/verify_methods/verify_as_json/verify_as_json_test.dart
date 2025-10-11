@@ -19,8 +19,8 @@ void main() {
     ),
   );
 
-  test('verify model', () {
-    Approvals.verifyAsJson(
+  test('verify model', () async {
+    await Approvals.verifyAsJson(
       jsonItem,
       options: const Options(
         approveResult:

@@ -12,9 +12,9 @@ void main() {
       );
     });
 
-    test("Method «verify» must throw DoesntMatchException", () {
-      expect(
-        () => helper.verify(
+    test("Method «verify» must throw DoesntMatchException", () async {
+      await expectLater(
+        helper.verify(
           'Hello W0rld',
           'verify',
           expectException: true,
@@ -29,9 +29,9 @@ void main() {
     });
 
     test("Method «verify» must throw DoesntMatchException with error handling",
-        () {
-      expect(
-        () => helper.verify(
+        () async {
+      await expectLater(
+        helper.verify(
           'Hello W0rld',
           'verify',
         ),
@@ -42,9 +42,10 @@ void main() {
       );
     });
 
-    test('Verify model (not map). Must throw UnsupportedError exception.', () {
-      expect(
-        () => Approvals.verifyAsJson(
+    test('Verify model (not map). Must throw UnsupportedError exception.',
+        () async {
+      await expectLater(
+        Approvals.verifyAsJson(
           const ErrorItem(
             id: 1,
             name: "JsonItem",

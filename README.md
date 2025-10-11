@@ -32,7 +32,7 @@
 
 `Approval tests` simplify this by taking a snapshot of the results, and confirming that they have not changed.   
 
-In normal unit testing, you say `expect(person.getAge(), 5)`. Approvals allow you to do this when the thing that you want to assert is no longer a primitive but a complex object. For example, you can say, `Approvals.verify(person)`.
+In normal unit testing, you say `expect(person.getAge(), 5)`. Approvals allow you to do this when the thing that you want to assert is no longer a primitive but a complex object. For example, you can say, `await Approvals.verify(person)` inside an async test.
 
 I am writing an implementation of **[Approval Tests](https://approvaltests.com/)** in Dart. If anyone wants to help, please **[text](https://t.me/yelmuratoff)** me. 🙏
 
@@ -113,14 +113,14 @@ If you want the result to be automatically saved after running the test, you nee
 <a id='snippet-sample_verify_as_json_test'></a>
 ```dart
 void main() {
-  test('test JSON object', () {
+  test('test JSON object', () async {
     final complexObject = {
       'name': 'JsonTest',
       'features': ['Testing', 'JSON'],
       'version': 0.1,
     };
 
-    Approvals.verifyAsJson(
+    await Approvals.verifyAsJson(
       complexObject,
       options: const Options(
         approveResult: true,
@@ -230,8 +230,8 @@ void main() {
     ),
   );
 
-  test('verify model', () {
-    Approvals.verifyAsJson(
+  test('verify model', () async {
+    await Approvals.verifyAsJson(
       jsonItem,
       options: const Options(
         approveResult:

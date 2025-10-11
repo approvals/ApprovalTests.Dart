@@ -87,4 +87,19 @@ final class ApprovalUtils {
   /// Returns:
   /// `'where'` on Windows, `'which'` on other platforms.
   static String get commandWhere => Platform.isWindows ? 'where' : 'which';
+
+  /// Removes the specified [extension] from the end of [path] when present.
+  ///
+  /// The [extension] may be provided with or without the leading dot.
+  static String removeFileExtension(String path, {required String extension}) {
+    if (extension.isEmpty) {
+      return path;
+    }
+    final normalizedExtension =
+        extension.startsWith('.') ? extension : '.$extension';
+    if (path.endsWith(normalizedExtension)) {
+      return path.substring(0, path.length - normalizedExtension.length);
+    }
+    return path;
+  }
 }

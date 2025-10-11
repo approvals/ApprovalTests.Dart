@@ -24,13 +24,16 @@ class Approvals {
   // ================== Verify methods ==================
 
   // Method to verify if the content in response matches the approved content
-  static void verify(
+  static Future<void> verify(
     String response, {
     Options options = const Options(),
-  }) {
+  }) async {
     // Get the file path without extension or use the provided file path
     final completedPath = options.namer.filePath ??
-        filePathExtractor.filePath.split('.dart').first;
+        ApprovalUtils.removeFileExtension(
+          filePathExtractor.filePath,
+          extension: '.dart',
+        );
 
     // Create namer object with given or computed file name
     final namer = options.namer.copyWith(
@@ -60,7 +63,7 @@ class Approvals {
 
       // Log results and throw exception if files do not match
       if (!isFilesMatch) {
-        options.reporter.report(namer.approved, namer.received);
+        await options.reporter.report(namer.approved, namer.received);
         throw DoesntMatchException(
           'Oops: [${namer.approvedFileName}] does not match [${namer.receivedFileName}].\n\n - Approved file path: ${namer.approved}\n\n - Received file path: ${namer.received}',
         );
@@ -110,7 +113,10 @@ class Approvals {
     }
     final resolvedNamer = namer ??
         Namer(
-          filePath: filePathExtractor.filePath.split('.dart').first,
+          filePath: ApprovalUtils.removeFileExtension(
+            filePathExtractor.filePath,
+            extension: '.dart',
+          ),
         );
     return filePathResolver(resolvedNamer);
   }
@@ -122,11 +128,11 @@ class Approvals {
   };
 
   /// Verifies all combinations of inputs for a provided function.
-  static void verifyAll<T>(
+  static Future<void> verifyAll<T>(
     List<T> inputs, {
     required String Function(T item) processor,
     Options options = const Options(),
-  }) {
+  }) async {
     try {
       // Process the combination to get the response
       final response = inputs.map((e) => processor(e));
@@ -134,17 +140,17 @@ class Approvals {
       final responseString = response.join('\n');
 
       // Verify the processed response
-      verify(responseString, options: options);
+      await verify(responseString, options: options);
     } catch (_) {
       rethrow;
     }
   }
 
   // Method to encode object to JSON and then verify it
-  static void verifyAsJson(
+  static Future<void> verifyAsJson(
     dynamic encodable, {
     Options options = const Options(),
-  }) {
+  }) async {
     try {
       // Encode the object into JSON format
       final jsonContent = ApprovalConverter.encodeReflectively(
@@ -154,23 +160,23 @@ class Approvals {
       final prettyJson = ApprovalConverter.convert(jsonContent);
 
       // Call the verify method on encoded JSON content
-      verify(prettyJson, options: options);
+      await verify(prettyJson, options: options);
     } catch (_) {
       rethrow;
     }
   }
 
   // Method to convert a sequence of objects to string format and then verify it
-  static void verifySequence(
+  static Future<void> verifySequence(
     List<dynamic> sequence, {
     Options options = const Options(),
-  }) {
+  }) async {
     try {
       // Convert the sequence of objects into a multiline string
       final content = sequence.map((e) => e.toString()).join('\n');
 
       // Call the verify method on this content
-      verify(content, options: options);
+      await verify(content, options: options);
     } catch (_) {
       rethrow;
     }
@@ -189,7 +195,7 @@ class Approvals {
       final resultString = await query.executeQuery(queryString);
 
       // Use the existing verify method to check the result against approved content
-      verify(resultString, options: options);
+      await verify(resultString, options: options);
     } catch (_) {
       rethrow;
     }
@@ -198,11 +204,11 @@ class Approvals {
   // ================== Combinations ==================
 
   /// Verifies all combinations of inputs for a provided function.
-  static void verifyAllCombinations<T>(
+  static Future<void> verifyAllCombinations<T>(
     List<List<T>> inputs, {
     required String Function(Iterable<List<T>> combination) processor,
     Options options = const Options(),
-  }) {
+  }) async {
     // Generate all combinations of inputs
     final combinations = ApprovalUtils.cartesianProduct(inputs);
 
@@ -213,7 +219,7 @@ class Approvals {
       final response = processor(combinations);
 
       // Verify the processed response
-      verify(response, options: options);
+      await verify(response, options: options);
     } catch (_) {
       rethrow;
     }

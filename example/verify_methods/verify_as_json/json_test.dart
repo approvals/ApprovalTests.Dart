@@ -3,13 +3,13 @@ import 'package:test/test.dart';
 
 void main() {
   group('Approval Tests for Complex Objects', () {
-    test('test JSON object', () {
+    test('test JSON object', () async {
       const complexObject = {
         'name': 'JsonTest',
         'features': ['Testing', 'JSON'],
         'version': 0.1,
       };
-      Approvals.verifyAsJson(
+      await Approvals.verifyAsJson(
         complexObject,
       );
     });

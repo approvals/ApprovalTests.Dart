@@ -9,6 +9,8 @@ void main() {
       GitReporter.resetProcessRunners();
     });
 
+    tearDown(GitReporter.resetProcessRunners);
+
     test('report throws ProcessException when process exit code > 1', () async {
       final tempDir =
           Directory.systemTemp.createTempSync('git_reporter_failure');
