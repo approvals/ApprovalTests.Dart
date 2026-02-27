@@ -32,14 +32,12 @@ class ScrubDates implements ApprovalScrubber {
   @override
   String scrub(String input) {
     var index = 0;
-    return input
-        .replaceAllMapped(
-          _dateRegExp,
-          (_) {
-            index++;
-            return '<date$index>';
-          },
-        )
-        .trim();
+    return input.replaceAllMapped(
+      _dateRegExp,
+      (_) {
+        index++;
+        return '<date$index>';
+      },
+    ).trim();
   }
 }

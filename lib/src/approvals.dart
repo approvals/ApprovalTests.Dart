@@ -83,7 +83,7 @@ class Approvals {
         _deleteFileAfterTest(namer: namer, fileType: FileType.received);
       }
     } catch (e, st) {
-      if (options.logErrors) {
+      if (options.logErrors && e is! DoesntMatchException) {
         ApprovalLogger.exception(e, stackTrace: st);
       }
       rethrow;

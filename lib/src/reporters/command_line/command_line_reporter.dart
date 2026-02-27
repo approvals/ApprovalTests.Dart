@@ -32,9 +32,8 @@ class CommandLineReporter implements Reporter {
   @override
   Future<void> report(
     String approvedPath,
-    String receivedPath, {
-    String? message,
-  }) async {
+    String receivedPath,
+  ) async {
     try {
       final approvedLines = _readFileLines(approvedPath);
       final receivedLines = _readFileLines(receivedPath);
@@ -52,8 +51,7 @@ class CommandLineReporter implements Reporter {
       }
 
       if (diffBuffer.isNotEmpty) {
-        final header = message ?? "Differences:\n";
-        ApprovalLogger.exception('$header$diffBuffer');
+        ApprovalLogger.exception('Differences:\n$diffBuffer');
       }
     } catch (e) {
       exceptionLogger("Error while reporting differences: $e");

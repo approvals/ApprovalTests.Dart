@@ -77,7 +77,8 @@ void registerReporterArgumentsTests() {
       final received = File('${tempDir.path}/received.txt')
         ..writeAsStringSync('hello world');
 
-      final diffOutput = GitReporter.gitDiffFiles(approved, received);
+      const gitReporter = GitReporter();
+      final diffOutput = gitReporter.gitDiffFiles(approved, received);
 
       expect(diffOutput.contains('-hello'), isTrue);
       expect(diffOutput.contains('+hello world'), isTrue);

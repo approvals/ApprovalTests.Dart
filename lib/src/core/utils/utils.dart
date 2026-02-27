@@ -104,18 +104,15 @@ final class ApprovalUtils {
   ///
   /// The optional [context] string is included in the error message to
   /// identify the caller (e.g. "DiffToolReporter", "GitReporter").
-  static Future<void> checkFileExists(String path, {String? context}) {
-    return Future<void>.sync(() {
-      if (!isFileExists(path)) {
-        final prefix =
-            context != null ? 'From $context: ' : '';
-        throw PathNotFoundException(
-          path,
-          const OSError('File not found'),
-          '${prefix}File not found at path: [$path]. Please check the path and try again.',
-        );
-      }
-    });
+  static void checkFileExists(String path, {String? context}) {
+    if (!isFileExists(path)) {
+      final prefix = context != null ? 'From $context: ' : '';
+      throw PathNotFoundException(
+        path,
+        const OSError('File not found'),
+        '${prefix}File not found at path: [$path]. Please check the path and try again.',
+      );
+    }
   }
 
   /// Removes the specified [extension] from the end of [path] when present.

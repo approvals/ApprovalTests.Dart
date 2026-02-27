@@ -160,7 +160,8 @@ Future<void> processFile(File? approvedFile, File receivedFile) async {
     final unapprovedText = receivedFile.readAsStringSync();
     resultString = "Data in '${receivedFile.path}':\n$unapprovedText";
   } else {
-    final gitDiff = GitReporter.gitDiffFiles(approvedFile, receivedFile);
+    const gitReporter = GitReporter();
+    final gitDiff = gitReporter.gitDiffFiles(approvedFile, receivedFile);
     resultString = gitDiff;
   }
 
@@ -221,10 +222,4 @@ Future<void> processFile(File? approvedFile, File receivedFile) async {
   } else {
     ApprovalLogger.success('No differences found. Approval test approved.');
   }
-}
-
-bool isCodeCommandAvailable() {
-  final result = Process.runSync('which', ['code']);
-
-  return result.exitCode == 0;
 }

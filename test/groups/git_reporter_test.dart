@@ -7,12 +7,6 @@ void main() => registerGitReporterTests();
 
 void registerGitReporterTests() {
   group('GitReporter behavior', () {
-    setUp(() {
-      GitReporter.resetProcessRunners();
-    });
-
-    tearDown(GitReporter.resetProcessRunners);
-
     test('report throws ProcessException when process exit code > 1', () async {
       final tempDir =
           Directory.systemTemp.createTempSync('git_reporter_failure');
@@ -23,16 +17,15 @@ void registerGitReporterTests() {
       final received = File('${tempDir.path}/received.txt')
         ..writeAsStringSync('received');
 
-      GitReporter.runProcess = (command, arguments) async {
-        return ProcessResult(0, 2, '', 'error');
-      };
-
       final reporter = GitReporter(
         customDiffInfo: const DiffInfo(
           name: 'custom',
           command: 'git',
           arg: '--flag',
         ),
+        runProcess: (command, arguments) async {
+          return ProcessResult(0, 2, '', 'error');
+        },
       );
 
       await expectLater(
@@ -47,12 +40,14 @@ void registerGitReporterTests() {
     });
 
     test('gitDiffFiles throws ProcessException for failing command sync', () {
-      GitReporter.runProcessSync = (command, arguments) {
-        return ProcessResult(0, 5, '', 'error');
-      };
+      final reporter = GitReporter(
+        runProcessSync: (command, arguments) {
+          return ProcessResult(0, 5, '', 'error');
+        },
+      );
 
       expect(
-        () => GitReporter.gitDiffFiles(
+        () => reporter.gitDiffFiles(
           File('/path/approved'),
           File('/path/received'),
         ),
@@ -71,17 +66,16 @@ void registerGitReporterTests() {
         ..writeAsStringSync('received');
 
       final captured = <List<String>>[];
-      GitReporter.runProcess = (command, arguments) async {
-        captured.add(arguments);
-        return ProcessResult(0, 0, '', '');
-      };
-
       final reporter = GitReporter(
         customDiffInfo: const DiffInfo(
           name: 'capture',
           command: 'git',
           arg: '   ',
         ),
+        runProcess: (command, arguments) async {
+          captured.add(arguments);
+          return ProcessResult(0, 0, '', '');
+        },
       );
 
       await reporter.report(approved.path, received.path);

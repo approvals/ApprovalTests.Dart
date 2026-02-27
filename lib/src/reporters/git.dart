@@ -4,14 +4,22 @@ part of '../../approval_tests.dart';
 class GitReporter implements Reporter {
   final DiffInfo? customDiffInfo;
 
-  static Future<ProcessResult> Function(String command, List<String> arguments)
-      runProcess = _defaultRunProcess;
-  static ProcessResult Function(String command, List<String> arguments)
-      runProcessSync = _defaultRunProcessSync;
+  /// Process runner for async operations. Injected for testability.
+  final Future<ProcessResult> Function(String command, List<String> arguments)
+      _runProcess;
+
+  /// Process runner for sync operations. Injected for testability.
+  final ProcessResult Function(String command, List<String> arguments)
+      _runProcessSync;
 
   const GitReporter({
     this.customDiffInfo,
-  });
+    Future<ProcessResult> Function(String command, List<String> arguments)
+        runProcess = _defaultRunProcess,
+    ProcessResult Function(String command, List<String> arguments)
+        runProcessSync = _defaultRunProcessSync,
+  })  : _runProcess = runProcess,
+        _runProcessSync = runProcessSync;
 
   @override
   Future<void> report(String approvedPath, String receivedPath) async {
@@ -19,14 +27,12 @@ class GitReporter implements Reporter {
         const DiffInfo(name: "Git", command: 'git', arg: 'diff --no-index');
 
     try {
-      await Future.wait([
-        ApprovalUtils.checkFileExists(approvedPath, context: 'GitReporter'),
-        ApprovalUtils.checkFileExists(receivedPath, context: 'GitReporter'),
-      ]);
+      ApprovalUtils.checkFileExists(approvedPath, context: 'GitReporter');
+      ApprovalUtils.checkFileExists(receivedPath, context: 'GitReporter');
 
       final args = ApprovalUtils.expandArgs(diffInfo.arg)
         ..addAll([approvedPath, receivedPath]);
-      final result = await runProcess(
+      final result = await _runProcess(
         diffInfo.command,
         args,
       );
@@ -58,10 +64,10 @@ class GitReporter implements Reporter {
     }
   }
 
-  /// return the diff of two files
-  static String gitDiffFiles(File path0, FileSystemEntity path1) {
+  /// Returns the diff of two files.
+  String gitDiffFiles(File path0, FileSystemEntity path1) {
     final args = ['diff', '--no-index', path0.path, path1.path];
-    final processResult = runProcessSync('git', args);
+    final processResult = _runProcessSync('git', args);
 
     if (processResult.exitCode > 1) {
       throw ProcessException(
@@ -120,9 +126,4 @@ class GitReporter implements Reporter {
     List<String> arguments,
   ) =>
       Process.runSync(command, arguments);
-
-  static void resetProcessRunners() {
-    runProcess = _defaultRunProcess;
-    runProcessSync = _defaultRunProcessSync;
-  }
 }

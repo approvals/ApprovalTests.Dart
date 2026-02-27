@@ -8,6 +8,12 @@
 - Guarded `unawaited` reporter call in `Approvals.verify` with `.catchError` to prevent unhandled async exceptions.
 - Cached `RegExp` in `ScrubDates` and `ScrubWithRegEx` to avoid recompilation on every call.
 - Added `resetCounters()` to `IndexedNamer` for clearing accumulated state between tests.
+- Removed unused `StringExtensions.replacingOccurrences` extension and `isCodeCommandAvailable()` dead code.
+- Fixed double logging of `DoesntMatchException` in `Approvals.verify`: expected test failures no longer produce duplicate error output.
+- Aligned `CommandLineReporter.report` signature with the `Reporter` interface by removing extra `message` parameter.
+- Replaced global mutable state in `GitReporter` (`static runProcess`/`runProcessSync`) with constructor injection for testability without shared state.
+- Simplified `ApprovalUtils.checkFileExists` from `Future.sync` wrapper to a plain synchronous method.
+- Flattened nested `if-else` in `DiffReporter.defaultDiffInfo` to early-return style.
 
 ## 1.4.1
 

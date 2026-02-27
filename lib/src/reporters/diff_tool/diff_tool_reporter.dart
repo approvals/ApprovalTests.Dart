@@ -36,10 +36,8 @@ class DiffReporter implements Reporter {
     final bool shouldDetach = customDiffInfo == null;
 
     try {
-      await Future.wait([
-        ApprovalUtils.checkFileExists(approvedPath, context: 'DiffToolReporter'),
-        ApprovalUtils.checkFileExists(receivedPath, context: 'DiffToolReporter'),
-      ]);
+      ApprovalUtils.checkFileExists(approvedPath, context: 'DiffToolReporter');
+      ApprovalUtils.checkFileExists(receivedPath, context: 'DiffToolReporter');
 
       final args = ApprovalUtils.expandArgs(diffInfo.arg)
         ..addAll([approvedPath, receivedPath]);
@@ -84,23 +82,24 @@ class DiffReporter implements Reporter {
   DiffInfo get defaultDiffInfo {
     if (customDiffInfo != null) {
       return customDiffInfo!;
-    } else {
-      if (platformWrapper.isMacOS) {
-        return switch (ide) {
-          ComparatorIDE.vsCode => MacDiffTools.visualStudioCode,
-          ComparatorIDE.studio => MacDiffTools.androidStudio,
-        };
-      } else if (platformWrapper.isWindows) {
-        return switch (ide) {
-          ComparatorIDE.vsCode => WindowsDiffTools.visualStudioCode,
-          ComparatorIDE.studio => WindowsDiffTools.androidStudio,
-        };
-      } else if (platformWrapper.isLinux) {
-        return switch (ide) {
-          ComparatorIDE.vsCode => LinuxDiffTools.visualStudioCode,
-          ComparatorIDE.studio => LinuxDiffTools.androidStudio,
-        };
-      }
+    }
+    if (platformWrapper.isMacOS) {
+      return switch (ide) {
+        ComparatorIDE.vsCode => MacDiffTools.visualStudioCode,
+        ComparatorIDE.studio => MacDiffTools.androidStudio,
+      };
+    }
+    if (platformWrapper.isWindows) {
+      return switch (ide) {
+        ComparatorIDE.vsCode => WindowsDiffTools.visualStudioCode,
+        ComparatorIDE.studio => WindowsDiffTools.androidStudio,
+      };
+    }
+    if (platformWrapper.isLinux) {
+      return switch (ide) {
+        ComparatorIDE.vsCode => LinuxDiffTools.visualStudioCode,
+        ComparatorIDE.studio => LinuxDiffTools.androidStudio,
+      };
     }
     throw NoDiffToolException(
       message:

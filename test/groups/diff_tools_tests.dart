@@ -172,7 +172,8 @@ void registerDiffToolTests() {
       final File path0 = File('/path/to/existing/file0');
       final FileSystemEntity path1 = File('/path/to/existing/file1');
 
-      final diffResult = GitReporter.gitDiffFiles(path0, path1);
+      const reporter = GitReporter();
+      final diffResult = reporter.gitDiffFiles(path0, path1);
 
       expect(diffResult, equals(''));
     });
