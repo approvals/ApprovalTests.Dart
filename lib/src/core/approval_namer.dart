@@ -137,17 +137,15 @@ abstract class BaseNamer implements ApprovalNamer {
   ///
   /// If [useSubfolder] is true, the files will be placed inside an `approvals` subdirectory.
   String get _basePath {
-    final separator = Platform.pathSeparator;
-    final directory = filePath?.substring(0, filePath!.lastIndexOf(separator));
-    final fileName = filePath?.split(separator).last.split('.dart').first;
+    final directory = p.dirname(filePath!);
+    final fileName = p.basenameWithoutExtension(filePath!);
     final baseDir =
-        useSubfolder ? '$directory${separator}approvals' : directory;
-    return '$baseDir$separator$fileName';
+        useSubfolder ? p.join(directory, 'approvals') : directory;
+    return p.join(baseDir, fileName);
   }
 
   /// Extracts the file name without the directory path.
-  String get _fileName =>
-      filePath!.split(Platform.pathSeparator).last.split('.dart').first;
+  String get _fileName => p.basenameWithoutExtension(filePath!);
 
   /// Constants defining file extensions used for approval testing.
   static const String approvedExtension = 'approved.txt';
