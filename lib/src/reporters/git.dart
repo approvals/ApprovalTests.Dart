@@ -87,18 +87,14 @@ class GitReporter implements Reporter {
     return _stripGitDiff(processString);
   }
 
+  static const _stripPrefixes = ['diff', 'index', '@@'];
+
   static String _stripGitDiff(String multiLineString) {
-    bool startsWithAny(String line, List<String> prefixes) =>
-        prefixes.any((prefix) => line.startsWith(prefix));
-
-    final List<String> lines = multiLineString.split('\n');
-    final List<String> filteredLines = lines
-        .where((line) => !startsWithAny(line, ['diff', 'index', '@@']))
-        .toList();
-
-    final String result = filteredLines.join('\n');
-
-    return result;
+    return multiLineString
+        .split('\n')
+        .where(
+            (line) => !_stripPrefixes.any((prefix) => line.startsWith(prefix)))
+        .join('\n');
   }
 
   static void printGitDiffs(

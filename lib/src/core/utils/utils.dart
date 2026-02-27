@@ -88,6 +88,8 @@ final class ApprovalUtils {
   /// `'where'` on Windows, `'which'` on other platforms.
   static String get commandWhere => Platform.isWindows ? 'where' : 'which';
 
+  static final RegExp _whitespaceRegExp = RegExp(r'\s+');
+
   /// Splits a whitespace-delimited argument string into a list of arguments.
   ///
   /// Returns an empty list if the input is empty or blank.
@@ -96,7 +98,7 @@ final class ApprovalUtils {
     if (trimmed.isEmpty) {
       return <String>[];
     }
-    return trimmed.split(RegExp(r'\s+'));
+    return trimmed.split(_whitespaceRegExp);
   }
 
   /// Verifies that a file exists at [path], throwing [PathNotFoundException]
