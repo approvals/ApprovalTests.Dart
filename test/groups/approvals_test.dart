@@ -73,11 +73,20 @@ void registerApprovalsTests() {
 
   group('Approvals.verify error handling', () {
     test('logs non-DoesntMatchException when logErrors is true', () {
-      // Writing to a non-existent directory causes FileSystemException,
-      // which is NOT a DoesntMatchException, so the logging branch fires.
+      // Create a regular file, then attempt to write inside it as if it
+      // were a directory. This reliably triggers FileSystemException on
+      // every platform (you cannot create a subdirectory inside a file).
+      final tempDir = Directory.systemTemp.createTempSync('approval_blocker');
+      final blocker = File('${tempDir.path}${Platform.pathSeparator}not_a_dir')
+        ..createSync();
+      addTearDown(() {
+        if (tempDir.existsSync()) tempDir.deleteSync(recursive: true);
+      });
+
       final options = Options(
         namer: Namer(
-          filePath: '/nonexistent/dir/deep/path',
+          filePath:
+              '${blocker.path}${Platform.pathSeparator}impossible.dart',
           addTestName: false,
         ),
         logErrors: true,
