@@ -1,3 +1,14 @@
+## 1.4.2
+
+### Improvements
+
+- Eliminated double JSON parse/encode in `ApprovalConverter` by adding `convertObject()` that goes directly from object to pretty JSON.
+- Extracted duplicated `_checkFileExists` from `DiffReporter` and `GitReporter` into `ApprovalUtils.checkFileExists`.
+- Removed dead commented-out code in `GitReporter`.
+- Guarded `unawaited` reporter call in `Approvals.verify` with `.catchError` to prevent unhandled async exceptions.
+- Cached `RegExp` in `ScrubDates` and `ScrubWithRegEx` to avoid recompilation on every call.
+- Added `resetCounters()` to `IndexedNamer` for clearing accumulated state between tests.
+
 ## 1.4.1
 
 ### Improvements

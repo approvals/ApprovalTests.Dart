@@ -37,8 +37,8 @@ class DiffReporter implements Reporter {
 
     try {
       await Future.wait([
-        _checkFileExists(approvedPath),
-        _checkFileExists(receivedPath),
+        ApprovalUtils.checkFileExists(approvedPath, context: 'DiffToolReporter'),
+        ApprovalUtils.checkFileExists(receivedPath, context: 'DiffToolReporter'),
       ]);
 
       final args = ApprovalUtils.expandArgs(diffInfo.arg)
@@ -79,18 +79,6 @@ class DiffReporter implements Reporter {
       }
       rethrow;
     }
-  }
-
-  Future<void> _checkFileExists(String path) {
-    return Future<void>.sync(() {
-      if (!ApprovalUtils.isFileExists(path)) {
-        throw PathNotFoundException(
-          path,
-          const OSError('File not found'),
-          'From DiffToolReporter: File not found at path: [$path]. Please check the path and try again.',
-        );
-      }
-    });
   }
 
   DiffInfo get defaultDiffInfo {

@@ -22,6 +22,8 @@ class ScrubWithRegEx implements ApprovalScrubber {
   final String pattern;
   final String Function(String)? replacementFunction;
 
+  static final Map<String, RegExp> _regExpCache = {};
+
   /// Creates a `ScrubWithRegEx` with an optional custom regular expression pattern.
   /// If no pattern is provided, a default pattern that matches whitespace is used.
   const ScrubWithRegEx({String? pattern})
@@ -35,12 +37,13 @@ class ScrubWithRegEx implements ApprovalScrubber {
   });
 
   @override
-  String scrub(String input) => input
-      .replacingOccurrences(
-        matchingPattern: pattern,
-        replacementProvider: replacementFunction ?? (match) => ' ',
-      )
-      .trim();
+  String scrub(String input) {
+    final regExp = _regExpCache.putIfAbsent(pattern, () => RegExp(pattern));
+    final provider = replacementFunction ?? (String _) => ' ';
+    return input
+        .replaceAllMapped(regExp, (match) => provider(match.group(0)!))
+        .trim();
+  }
 
   static const defaultPattern = r'\s+';
 }

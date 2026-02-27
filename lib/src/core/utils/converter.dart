@@ -22,6 +22,8 @@ part of '../../../approval_tests.dart';
 /// with indentation and to encode objects reflectively, supporting basic
 /// types, lists, maps, and objects with a `toJson` method.
 final class ApprovalConverter {
+  static const _prettyEncoder = JsonEncoder.withIndent('  ');
+
   /// Converts a raw JSON string into a formatted, indented JSON string.
   ///
   /// - [jsonString]: A valid JSON string.
@@ -29,7 +31,23 @@ final class ApprovalConverter {
   /// Returns:
   /// A properly indented JSON string.
   static String convert(String jsonString) {
-    return const JsonEncoder.withIndent('  ').convert(jsonDecode(jsonString));
+    return _prettyEncoder.convert(jsonDecode(jsonString));
+  }
+
+  /// Converts an object directly to a pretty-printed JSON string.
+  ///
+  /// Skips the intermediate jsonEncode/jsonDecode round-trip that would occur
+  /// when calling [encodeReflectively] followed by [convert].
+  static String convertObject(
+    Object? object, {
+    bool includeClassName = false,
+  }) {
+    final normalized = _normalizeForJson(
+      object,
+      includeClassName: includeClassName,
+      isRoot: true,
+    );
+    return _prettyEncoder.convert(normalized);
   }
 
   /// Recursively encodes an object into a JSON-compatible string.

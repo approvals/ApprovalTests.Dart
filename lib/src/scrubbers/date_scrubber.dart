@@ -23,6 +23,8 @@ class ScrubDates implements ApprovalScrubber {
   static const String _datePattern =
       r'\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+';
 
+  static final RegExp _dateRegExp = RegExp(_datePattern);
+
   /// Creates a `ScrubDates` instance with a predefined pattern to match date strings.
   /// Replaces matched date strings with a fixed placeholder `<date>`.
   const ScrubDates();
@@ -31,9 +33,9 @@ class ScrubDates implements ApprovalScrubber {
   String scrub(String input) {
     var index = 0;
     return input
-        .replacingOccurrences(
-          matchingPattern: _datePattern,
-          replacementProvider: (_) {
+        .replaceAllMapped(
+          _dateRegExp,
+          (_) {
             index++;
             return '<date$index>';
           },

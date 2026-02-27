@@ -63,7 +63,11 @@ class Approvals {
 
       // Log results and throw exception if files do not match
       if (!isFilesMatch) {
-        unawaited(options.reporter.report(namer.approved, namer.received));
+        unawaited(
+          options.reporter
+              .report(namer.approved, namer.received)
+              .catchError((Object _) {}),
+        );
         throw DoesntMatchException(
           'Oops: [${namer.approvedFileName}] does not match [${namer.receivedFileName}].\n\n - Approved file path: ${namer.approved}\n\n - Received file path: ${namer.received}',
         );
@@ -143,11 +147,10 @@ class Approvals {
     dynamic encodable, {
     Options options = const Options(),
   }) {
-    final jsonContent = ApprovalConverter.encodeReflectively(
+    final prettyJson = ApprovalConverter.convertObject(
       encodable,
       includeClassName: options.includeClassNameDuringSerialization,
     );
-    final prettyJson = ApprovalConverter.convert(jsonContent);
     verify(prettyJson, options: options);
   }
 

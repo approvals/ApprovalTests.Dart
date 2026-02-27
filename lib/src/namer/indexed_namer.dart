@@ -27,6 +27,10 @@ final class IndexedNamer extends BaseNamer {
   /// Stores the count of approvals for each test name to ensure unique names.
   static final Map<String, int> _approvalCounts = {};
 
+  /// Clears the internal counter state. Useful for resetting between tests.
+  @visibleForTesting
+  static void resetCounters() => _approvalCounts.clear();
+
   /// Creates an [IndexedNamer] instance with an incremented counter.
   ///
   /// - [filePath]: The base file path where files will be saved.

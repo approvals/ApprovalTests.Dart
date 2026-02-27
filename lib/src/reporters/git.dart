@@ -20,8 +20,8 @@ class GitReporter implements Reporter {
 
     try {
       await Future.wait([
-        _checkFileExists(approvedPath),
-        _checkFileExists(receivedPath),
+        ApprovalUtils.checkFileExists(approvedPath, context: 'GitReporter'),
+        ApprovalUtils.checkFileExists(receivedPath, context: 'GitReporter'),
       ]);
 
       final args = ApprovalUtils.expandArgs(diffInfo.arg)
@@ -56,18 +56,6 @@ class GitReporter implements Reporter {
       }
       rethrow;
     }
-  }
-
-  Future<void> _checkFileExists(String path) {
-    return Future<void>.sync(() {
-      if (!ApprovalUtils.isFileExists(path)) {
-        throw PathNotFoundException(
-          path,
-          const OSError('File not found'),
-          'From GitReporter: File not found at path: [$path]. Please check the path and try again.',
-        );
-      }
-    });
   }
 
   /// return the diff of two files
@@ -106,13 +94,6 @@ class GitReporter implements Reporter {
 
     return result;
   }
-
-  // static void printGitDiffs(String testDescription, String differences) {
-  //   ApprovalLogger.log(
-  //     "Results of git diff during approvalTest('$testDescription'):",
-  //   );
-  //   ApprovalLogger.log(differences.trim());
-  // }
 
   static void printGitDiffs(
     String unapprovedFullPath,
