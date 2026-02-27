@@ -44,6 +44,11 @@ void registerExceptionTests() {
       );
     });
 
+    test('DoesntMatchException toString returns message', () {
+      const exception = DoesntMatchException('test message');
+      expect(exception.toString(), equals('test message'));
+    });
+
     test('Verify model (not map). Must throw UnsupportedError exception.', () {
       expect(
         () => Approvals.verifyAsJson(

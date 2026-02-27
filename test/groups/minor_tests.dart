@@ -317,5 +317,26 @@ void registerMinorTests() {
 
       expect(options1, isNot(same(options2)));
     });
+
+    test('FilePathExtractor extracts Windows file path', () {
+      const fakeTrace =
+          'file:///C:/Users/dev/project/test.dart:10:11\nother lines...';
+      const fetcher = FakeStackTraceFetcher(fakeTrace);
+      const extractor = FilePathExtractor(stackTraceFetcher: fetcher);
+
+      FilePathExtractor.isWindows = true;
+      addTearDown(FilePathExtractor.resetPlatform);
+
+      final path = extractor.filePath;
+      expect(path, equals('C:\\Users\\dev\\project\\test.dart'));
+    });
+
+    test('PlatformWrapper exposes all platform getters', () {
+      const wrapper = PlatformWrapper();
+      // On macOS: isWindows=false, isLinux=false, isMacOS=true
+      expect(wrapper.isWindows, equals(Platform.isWindows));
+      expect(wrapper.isLinux, equals(Platform.isLinux));
+      expect(wrapper.isMacOS, equals(Platform.isMacOS));
+    });
   });
 }

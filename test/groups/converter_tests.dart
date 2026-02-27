@@ -30,6 +30,12 @@ void registerConverterTests() {
       expect(decoded['list'], equals(['entry', 2]));
     });
 
+    test('convert formats a raw JSON string', () {
+      final result = ApprovalConverter.convert('{"key":"value","num":42}');
+      expect(result, contains('"key": "value"'));
+      expect(result, contains('"num": 42'));
+    });
+
     test('encodeReflectively includes class wrapper when requested', () {
       const model = SampleModel('Sample', 3);
       final encoded = ApprovalConverter.encodeReflectively(

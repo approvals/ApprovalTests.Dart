@@ -129,6 +129,22 @@ void registerNamerTests() {
       );
     });
 
+    test('resetCounters clears internal counter state', () {
+      IndexedNamer.resetCounters();
+      final before = IndexedNamer(
+        filePath: 'test${separator}reset_check',
+        addTestName: false,
+      );
+      expect(before.counter, equals(0));
+
+      IndexedNamer.resetCounters();
+      final after = IndexedNamer(
+        filePath: 'test${separator}reset_check',
+        addTestName: false,
+      );
+      expect(after.counter, equals(0));
+    });
+
     test('IndexedNamer default receivedFileName uses counter', () {
       final tempDir =
           Directory.systemTemp.createTempSync('indexed_received_counter');

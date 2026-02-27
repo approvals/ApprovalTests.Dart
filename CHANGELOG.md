@@ -1,38 +1,24 @@
+## 1.4.3
+
+- Clearer failure messages: file paths now shown in `DoesntMatchException` and `CommandLineReporter`.
+- Platform-agnostic path handling.
+- Release notes now include CHANGELOG content.
+- Minor performance optimizations and new test coverage.
+
 ## 1.4.2
 
-### Improvements
-
-- Eliminated double JSON parse/encode in `ApprovalConverter` by adding `convertObject()` that goes directly from object to pretty JSON.
-- Extracted duplicated `_checkFileExists` from `DiffReporter` and `GitReporter` into `ApprovalUtils.checkFileExists`.
-- Removed dead commented-out code in `GitReporter`.
-- Guarded `unawaited` reporter call in `Approvals.verify` with `.catchError` to prevent unhandled async exceptions.
-- Cached `RegExp` in `ScrubDates` and `ScrubWithRegEx` to avoid recompilation on every call.
-- Added `resetCounters()` to `IndexedNamer` for clearing accumulated state between tests.
-- Removed unused `StringExtensions.replacingOccurrences` extension and `isCodeCommandAvailable()` dead code.
-- Fixed double logging of `DoesntMatchException` in `Approvals.verify`: expected test failures no longer produce duplicate error output.
-- Aligned `CommandLineReporter.report` signature with the `Reporter` interface by removing extra `message` parameter.
-- Replaced global mutable state in `GitReporter` (`static runProcess`/`runProcessSync`) with constructor injection for testability without shared state.
-- Simplified `ApprovalUtils.checkFileExists` from `Future.sync` wrapper to a plain synchronous method.
-- Flattened nested `if-else` in `DiffReporter.defaultDiffInfo` to early-return style.
-- Cached compiled `RegExp` in `FilePathExtractor` and `ApprovalUtils.expandArgs` to avoid recompilation on every call.
-- Reused single `DiffMatchPatch` instance across all lines in `CommandLineReporter` instead of allocating per line.
-- Simplified `ApprovalTextWriter.writeToFile` by replacing `StringBuffer` with direct string interpolation.
-- Cleaned up `GitReporter._stripGitDiff`: removed unnecessary `.toList()` allocation and intermediate variable, lifted prefix list to `static const`.
-- Extracted shared test name formatting into `BaseNamer.formatTestName()` to eliminate duplication between `BaseNamer.currentTestName` and `IndexedNamer._getNextCounter`.
+- Added `convertObject()` to `ApprovalConverter` for direct object-to-JSON conversion.
+- Added `resetCounters()` to `IndexedNamer`.
+- Fixed double logging of `DoesntMatchException` in `Approvals.verify`.
+- Guarded unawaited reporter call with `.catchError` to prevent unhandled async exceptions.
+- Internal refactoring: extracted shared utilities, cached `RegExp` instances, simplified code paths.
 
 ## 1.4.1
 
-### Improvements
-
-- Eliminated code duplication in `ApprovalTextWriter.writeToFile`.
-- Simplified string comparison in `FileComparator` by replacing `compareTo` with `==`.
-- Extracted shared `_expandArgs` logic from `DiffReporter` and `GitReporter` into `ApprovalUtils.expandArgs`.
-- Deduplicated `_buildFilePath` and `_buildFileName` in `BaseNamer` via a shared `_buildName` method.
-- Fixed `ScrubDates` to implement `ApprovalScrubber` directly instead of falsely extending `ScrubWithRegEx`.
-- Fixed dead code in `CommandLineReporter`: `buffer.isNotEmpty` check now correctly tracks actual differences.
-- Made `_defaultTitles` in `ApprovalLogger` a `const` map.
-- Made `FileNotFoundException` and `NoDiffToolException` consistently `final class`.
+- Fixed `ScrubDates` to implement `ApprovalScrubber` directly.
+- Fixed dead code in `CommandLineReporter` buffer tracking.
 - Fixed typo in filename: `comporator_ide.dart` → `comparator_ide.dart`.
+- Internal refactoring: deduplicated shared logic in namer, reporters, and utilities.
 
 ## 1.4.0
 

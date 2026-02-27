@@ -17,13 +17,40 @@ jobs:
       steps:
         - name: 📚 Git Checkout
           uses: actions/checkout@v6
-  
+
         - name: 📎 Get the latest tag
           id: tag
-          run: echo ::set-output name=tag::${GITHUB_REF##*/}
-  
+          run: echo "tag=${GITHUB_REF##*/}" >> "$GITHUB_OUTPUT"
+
+        - name: 📋 Extract changelog for version
+          id: changelog
+          run: |
+            VERSION="${{ steps.tag.outputs.tag }}"
+            VERSION="${VERSION#v}"
+            CHANGELOG=$(awk -v ver="$VERSION" '
+              /^## / { if (found) exit; if ($2 == ver) found=1; next }
+              found { print }
+            ' CHANGELOG.md)
+            CHANGELOG=$(echo "$CHANGELOG" | sed -e '/./,$!d' -e :a -e '/^\n*$/{$d;N;ba}')
+            if [ -n "$CHANGELOG" ]; then
+              {
+                echo "body<<EOF"
+                echo "## Changelog"
+                echo ""
+                echo "$CHANGELOG"
+                echo "EOF"
+              } >> "$GITHUB_OUTPUT"
+            fi
+
         - name: 📌 Create GitHub release
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            CHANGELOG_BODY: ${{ steps.changelog.outputs.body }}
           run: |
-            gh release create ${{ steps.tag.outputs.tag }} --generate-notes
+            if [ -n "$CHANGELOG_BODY" ]; then
+              gh release create ${{ steps.tag.outputs.tag }} \
+                --notes "$CHANGELOG_BODY" \
+                --generate-notes
+            else
+              gh release create ${{ steps.tag.outputs.tag }} --generate-notes
+            fi

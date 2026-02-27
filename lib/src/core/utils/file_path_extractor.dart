@@ -79,7 +79,12 @@ final class FilePathExtractor {
   }
 
   /// Indicates whether the current platform is Windows.
-  static final bool isWindows = Platform.isWindows;
+  @visibleForTesting
+  static bool isWindows = Platform.isWindows;
+
+  /// Resets [isWindows] to the actual platform value.
+  @visibleForTesting
+  static void resetPlatform() => isWindows = Platform.isWindows;
 
   /// Compiled regular expression for extracting file paths on Windows.
   static final RegExp _windowsRegExp = RegExp(r'file:///([a-zA-Z]:/[^:\s]+)');
