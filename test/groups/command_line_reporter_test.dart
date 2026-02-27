@@ -30,9 +30,7 @@ void registerCommandLineReporterTests() {
       );
 
       expect(loggedExceptions, hasLength(1));
-      final String message = loggedExceptions.first.toString();
-      expect(message, contains('Error while reporting differences:'));
-      expect(message, contains('PathNotFoundException'));
+      expect(loggedExceptions.first, isA<PathNotFoundException>());
     });
   });
 }

@@ -7,20 +7,7 @@ import 'package:test/test.dart';
 void main() => registerApprovalsTests();
 
 void registerApprovalsTests() {
-  late Map<FileType, String Function(ApprovalNamer)> originalMap;
-
-  setUp(() {
-    originalMap = Map<FileType, String Function(ApprovalNamer)>.from(
-      Approvals.fileToNamerMap,
-    );
-  });
-
-  tearDown(() {
-    Approvals.fileToNamerMap =
-        Map<FileType, String Function(ApprovalNamer)>.from(
-      originalMap,
-    );
-  });
+  tearDown(() => Approvals.resetFileToNamerMap());
 
   group('Approvals.filePathForDeletion', () {
     test('returns approved path when namer provided', () {

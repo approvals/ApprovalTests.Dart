@@ -20,7 +20,9 @@ part of '../../approval_tests.dart';
 final class DoesntMatchException implements Exception {
   final String message;
 
-  const DoesntMatchException(this.message);
+  final StackTrace? stackTrace;
+
+  const DoesntMatchException(this.message, {this.stackTrace});
 
   @override
   String toString() => message;

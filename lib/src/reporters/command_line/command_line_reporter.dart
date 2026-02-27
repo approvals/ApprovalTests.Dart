@@ -55,8 +55,12 @@ class CommandLineReporter implements Reporter {
       if (diffBuffer.isNotEmpty) {
         ApprovalLogger.exception('Differences:\n$diffBuffer');
       }
-    } catch (e) {
-      exceptionLogger("Error while reporting differences: $e");
+    } catch (e, st) {
+      if (e is PathNotFoundException) {
+        exceptionLogger(e, stackTrace: st);
+        rethrow;
+      }
+      exceptionLogger("Error while reporting differences: $e", stackTrace: st);
       rethrow;
     }
   }

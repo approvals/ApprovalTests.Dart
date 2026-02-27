@@ -28,67 +28,79 @@ class Approvals {
     String response, {
     Options options = const Options(),
   }) {
-    // Get the file path without extension or use the provided file path
+    final namer = _resolveNamer(options);
+
+    try {
+      _writeApprovalFiles(response, namer, options);
+      _compareAndReport(namer, options);
+      _logSuccessAndCleanup(namer, options);
+    } catch (e, st) {
+      if (options.logErrors && e is! DoesntMatchException) {
+        ApprovalLogger.exception(e, stackTrace: st);
+      }
+      rethrow;
+    }
+  }
+
+  static ApprovalNamer _resolveNamer(Options options) {
     final completedPath = options.namer.filePath ??
         ApprovalUtils.removeFileExtension(
           filePathExtractor.filePath,
           extension: '.dart',
         );
 
-    // Create namer object with given or computed file name
-    final namer = options.namer.copyWith(
+    return options.namer.copyWith(
       filePath: completedPath,
     );
+  }
 
-    try {
-      // Create writer object with scrubbed response and file extension retrieved from options
-      final writer = ApprovalTextWriter(
-        options.scrubber.scrub(response),
+  static void _writeApprovalFiles(
+    String response,
+    ApprovalNamer namer,
+    Options options,
+  ) {
+    final writer = ApprovalTextWriter(
+      options.scrubber.scrub(response),
+    );
+
+    writer.writeToFile(namer.received);
+
+    if (options.approveResult ||
+        !ApprovalUtils.isFileExists(namer.approved)) {
+      writer.writeToFile(namer.approved);
+    }
+  }
+
+  static void _compareAndReport(ApprovalNamer namer, Options options) {
+    final bool isFilesMatch = options.comparator.compare(
+      approvedPath: namer.approved,
+      receivedPath: namer.received,
+      isLogError: options.logErrors,
+    );
+
+    if (!isFilesMatch) {
+      unawaited(
+        options.reporter
+            .report(namer.approved, namer.received)
+            .catchError((Object e, StackTrace st) {
+          ApprovalLogger.exception('Reporter failed: $e', stackTrace: st);
+        }),
       );
-
-      // Write the content to a file whose path is specified in namer.received
-      writer.writeToFile(namer.received);
-
-      if (options.approveResult ||
-          !ApprovalUtils.isFileExists(namer.approved)) {
-        writer.writeToFile(namer.approved);
-      }
-
-      // Check if received file matches the approved file
-      final bool isFilesMatch = options.comparator.compare(
-        approvedPath: namer.approved,
-        receivedPath: namer.received,
-        isLogError: options.logErrors,
+      throw DoesntMatchException(
+        'Oops: [${namer.approvedFileName}] does not match [${namer.receivedFileName}].\n\n - Approved file path: ${namer.approved}\n\n - Received file path: ${namer.received}',
       );
+    }
+  }
 
-      // Log results and throw exception if files do not match
-      if (!isFilesMatch) {
-        unawaited(
-          options.reporter
-              .report(namer.approved, namer.received)
-              .catchError((Object e, StackTrace st) {
-            ApprovalLogger.exception('Reporter failed: $e', stackTrace: st);
-          }),
-        );
-        throw DoesntMatchException(
-          'Oops: [${namer.approvedFileName}] does not match [${namer.receivedFileName}].\n\n - Approved file path: ${namer.approved}\n\n - Received file path: ${namer.received}',
-        );
-      }
+  static void _logSuccessAndCleanup(ApprovalNamer namer, Options options) {
+    if (options.logResults) {
+      ApprovalLogger.success(
+        'Test passed: [${namer.approvedFileName}] matches [${namer.receivedFileName}]\n\n- Approved file path: ${namer.approved}\n\n- Received file path: ${namer.received}',
+      );
+    }
 
-      if (options.logResults) {
-        ApprovalLogger.success(
-          'Test passed: [${namer.approvedFileName}] matches [${namer.receivedFileName}]\n\n- Approved file path: ${namer.approved}\n\n- Received file path: ${namer.received}',
-        );
-      }
-
-      if (options.deleteReceivedFile) {
-        _deleteFileAfterTest(namer: namer, fileType: FileType.received);
-      }
-    } catch (e, st) {
-      if (options.logErrors && e is! DoesntMatchException) {
-        ApprovalLogger.exception(e, stackTrace: st);
-      }
-      rethrow;
+    if (options.deleteReceivedFile) {
+      _deleteFileAfterTest(namer: namer, fileType: FileType.received);
     }
   }
 
@@ -127,11 +139,27 @@ class Approvals {
     return filePathResolver(resolvedNamer);
   }
 
-  @visibleForTesting
-  static Map<FileType, String Function(ApprovalNamer)> fileToNamerMap = {
-    FileType.approved: (ApprovalNamer n) => n.approved,
-    FileType.received: (ApprovalNamer n) => n.received,
+  static const Map<FileType, String Function(ApprovalNamer)>
+      _defaultFileToNamerMap = {
+    FileType.approved: _approvedPath,
+    FileType.received: _receivedPath,
   };
+
+  static String _approvedPath(ApprovalNamer n) => n.approved;
+  static String _receivedPath(ApprovalNamer n) => n.received;
+
+  @visibleForTesting
+  static Map<FileType, String Function(ApprovalNamer)> fileToNamerMap =
+      Map<FileType, String Function(ApprovalNamer)>.from(
+    _defaultFileToNamerMap,
+  );
+
+  @visibleForTesting
+  static void resetFileToNamerMap() {
+    fileToNamerMap = Map<FileType, String Function(ApprovalNamer)>.from(
+      _defaultFileToNamerMap,
+    );
+  }
 
   /// Verifies all combinations of inputs for a provided function.
   static void verifyAll<T>(
