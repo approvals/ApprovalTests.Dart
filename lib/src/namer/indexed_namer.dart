@@ -56,10 +56,8 @@ final class IndexedNamer extends BaseNamer {
   /// - [filePath]: The file path for which the counter should be generated.
   /// - Returns: An incremented counter value.
   static int _getNextCounter(String? filePath) {
-    final testName = Invoker.current?.liveTest.individualName
-            .replaceAll(' ', '_')
-            .toLowerCase() ??
-        '';
+    final testName =
+        BaseNamer.formatTestName(Invoker.current?.liveTest.individualName);
     final key = '$filePath-$testName';
 
     return _approvalCounts.update(key, (value) => value + 1, ifAbsent: () => 0);

@@ -74,16 +74,16 @@ final class FilePathExtractor {
   /// A [RegExpMatch] if a match is found, otherwise `null`.
   RegExpMatch? _extractFileMatch() {
     final stackTraceString = _stackTraceFetcher.currentStackTrace;
-    final uriRegExp = RegExp(isWindows ? _windowsPattern : _linuxMacOSPattern);
+    final uriRegExp = isWindows ? _windowsRegExp : _linuxMacOSRegExp;
     return uriRegExp.firstMatch(stackTraceString);
   }
 
   /// Indicates whether the current platform is Windows.
   static final bool isWindows = Platform.isWindows;
 
-  /// Regular expression pattern for extracting file paths on Windows.
-  static const String _windowsPattern = r'file:///([a-zA-Z]:/[^:\s]+)';
+  /// Compiled regular expression for extracting file paths on Windows.
+  static final RegExp _windowsRegExp = RegExp(r'file:///([a-zA-Z]:/[^:\s]+)');
 
-  /// Regular expression pattern for extracting file paths on Linux and macOS.
-  static const String _linuxMacOSPattern = r'file:///([^\s:]+)';
+  /// Compiled regular expression for extracting file paths on Linux and macOS.
+  static final RegExp _linuxMacOSRegExp = RegExp(r'file:///([^\s:]+)');
 }

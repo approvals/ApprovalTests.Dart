@@ -14,6 +14,11 @@
 - Replaced global mutable state in `GitReporter` (`static runProcess`/`runProcessSync`) with constructor injection for testability without shared state.
 - Simplified `ApprovalUtils.checkFileExists` from `Future.sync` wrapper to a plain synchronous method.
 - Flattened nested `if-else` in `DiffReporter.defaultDiffInfo` to early-return style.
+- Cached compiled `RegExp` in `FilePathExtractor` and `ApprovalUtils.expandArgs` to avoid recompilation on every call.
+- Reused single `DiffMatchPatch` instance across all lines in `CommandLineReporter` instead of allocating per line.
+- Simplified `ApprovalTextWriter.writeToFile` by replacing `StringBuffer` with direct string interpolation.
+- Cleaned up `GitReporter._stripGitDiff`: removed unnecessary `.toList()` allocation and intermediate variable, lifted prefix list to `static const`.
+- Extracted shared test name formatting into `BaseNamer.formatTestName()` to eliminate duplication between `BaseNamer.currentTestName` and `IndexedNamer._getNextCounter`.
 
 ## 1.4.1
 

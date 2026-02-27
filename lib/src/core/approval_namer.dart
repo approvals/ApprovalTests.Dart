@@ -98,12 +98,15 @@ abstract class BaseNamer implements ApprovalNamer {
     this.useSubfolder = false,
   });
 
+  /// Formats a raw test name for use in file paths by replacing spaces
+  /// with underscores and converting to lowercase.
+  static String formatTestName(String? name) =>
+      name?.replaceAll(' ', '_').toLowerCase() ?? '';
+
   /// Retrieves the current test name formatted for file naming.
   @override
-  String get currentTestName {
-    final testName = Invoker.current?.liveTest.individualName;
-    return testName?.replaceAll(' ', '_').toLowerCase() ?? '';
-  }
+  String get currentTestName =>
+      formatTestName(Invoker.current?.liveTest.individualName);
 
   /// Returns a formatted version of the description, replacing spaces with underscores.
   String get _formattedDescription =>

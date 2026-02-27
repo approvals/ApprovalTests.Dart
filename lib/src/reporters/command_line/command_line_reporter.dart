@@ -40,13 +40,15 @@ class CommandLineReporter implements Reporter {
 
       final maxLines = max(approvedLines.length, receivedLines.length);
 
+      final differ = DiffMatchPatch();
       final diffBuffer = StringBuffer();
       for (var i = 0; i < maxLines; i++) {
         final approvedLine = i < approvedLines.length ? approvedLines[i] : "";
         final receivedLine = i < receivedLines.length ? receivedLines[i] : "";
 
         if (approvedLine != receivedLine) {
-          _appendDifference(diffBuffer, i + 1, approvedLine, receivedLine);
+          _appendDifference(
+              diffBuffer, i + 1, approvedLine, receivedLine, differ);
         }
       }
 
@@ -64,15 +66,15 @@ class CommandLineReporter implements Reporter {
       ApprovalUtils.readFile(filePath).split('\n');
 
   /// Appends a formatted difference to the provided buffer.
-  void _appendDifference(
-      StringBuffer buffer, int lineNumber, String approved, String received) {
+  void _appendDifference(StringBuffer buffer, int lineNumber, String approved,
+      String received, DiffMatchPatch differ) {
     buffer.writeln(
       '${ApprovalUtils.lines(20)} Difference at line $lineNumber ${ApprovalUtils.lines(20)}\n',
     );
     buffer.writeln('Approved file, line $lineNumber: '
-        '${_highlightDifference(approved, received, isApprovedFile: true)}');
+        '${_highlightDifference(approved, received, differ, isApprovedFile: true)}');
     buffer.writeln('Received file, line $lineNumber: '
-        '${_highlightDifference(approved, received)}');
+        '${_highlightDifference(approved, received, differ)}');
   }
 
   /// Highlights differences between the approved and received lines.
@@ -81,10 +83,10 @@ class CommandLineReporter implements Reporter {
   /// codes to highlight insertions (red) and deletions (green).
   String _highlightDifference(
     String approvedLine,
-    String receivedLine, {
+    String receivedLine,
+    DiffMatchPatch differ, {
     bool isApprovedFile = false,
   }) {
-    final differ = DiffMatchPatch();
     final diffs = differ.diff_main(approvedLine, receivedLine);
     differ.diff_cleanupSemantic(diffs);
 

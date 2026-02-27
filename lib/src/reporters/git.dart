@@ -27,11 +27,12 @@ class GitReporter implements Reporter {
         const DiffInfo(name: "Git", command: 'git', arg: 'diff --no-index');
 
     try {
-      ApprovalUtils.checkFileExists(approvedPath, context: 'GitReporter');
-      ApprovalUtils.checkFileExists(receivedPath, context: 'GitReporter');
-
-      final args = ApprovalUtils.expandArgs(diffInfo.arg)
-        ..addAll([approvedPath, receivedPath]);
+      final args = ApprovalUtils.buildDiffArgs(
+        approvedPath: approvedPath,
+        receivedPath: receivedPath,
+        diffInfo: diffInfo,
+        context: 'GitReporter',
+      );
       final result = await _runProcess(
         diffInfo.command,
         args,
@@ -51,12 +52,10 @@ class GitReporter implements Reporter {
         rethrow;
       }
       if (e is ProcessException) {
-        final ProcessResult result = await Process.run(
-          ApprovalUtils.commandWhere,
-          [diffInfo.command],
-        );
-        ApprovalLogger.exception(
-          'Error during comparison via Git. Please make sure that Git is installed and available in the system path. Error: ${e.message}. Git path: ${result.stdout}',
+        await ApprovalUtils.logCommandDiagnostics(
+          command: diffInfo.command,
+          messageBuilder: (commandPath) =>
+              'Error during comparison via Git. Please make sure that Git is installed and available in the system path. Error: ${e.message}. Git path: $commandPath',
           stackTrace: st,
         );
       }
@@ -78,27 +77,19 @@ class GitReporter implements Reporter {
       );
     }
 
-    final stdoutString = processResult.stdout as String? ?? '';
-    final stderrString = processResult.stderr as String? ?? '';
-
-    final processString =
-        stdoutString.isNotEmpty || stderrString.isNotEmpty ? stdoutString : '';
+    final processString = processResult.stdout as String? ?? '';
 
     return _stripGitDiff(processString);
   }
 
+  static const _stripPrefixes = ['diff', 'index', '@@'];
+
   static String _stripGitDiff(String multiLineString) {
-    bool startsWithAny(String line, List<String> prefixes) =>
-        prefixes.any((prefix) => line.startsWith(prefix));
-
-    final List<String> lines = multiLineString.split('\n');
-    final List<String> filteredLines = lines
-        .where((line) => !startsWithAny(line, ['diff', 'index', '@@']))
-        .toList();
-
-    final String result = filteredLines.join('\n');
-
-    return result;
+    return multiLineString
+        .split('\n')
+        .where(
+            (line) => !_stripPrefixes.any((prefix) => line.startsWith(prefix)))
+        .join('\n');
   }
 
   static void printGitDiffs(

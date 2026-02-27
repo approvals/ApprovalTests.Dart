@@ -29,13 +29,9 @@ class ApprovalTextWriter extends ApprovalWriter {
   void writeToFile(String path) {
     final File file = File(path);
 
-    final StringBuffer buffer = StringBuffer();
-    buffer.writeln(ApprovalTestsConstants.baseHeader);
-    buffer.write(content);
-
     if (!file.existsSync()) {
       file.createSync(recursive: true);
     }
-    file.writeAsStringSync(buffer.toString());
+    file.writeAsStringSync('${ApprovalTestsConstants.baseHeader}\n$content');
   }
 }

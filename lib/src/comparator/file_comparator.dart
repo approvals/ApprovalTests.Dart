@@ -42,5 +42,5 @@ final class FileComparator implements Comparator {
 
   /// Normalizes file content by standardizing line endings.
   String _normalizeContent(String content) =>
-      content.replaceAll('\r\n', '\n').replaceAll('\r', '\n');
+      content.replaceAll(RegExp(r'\r\n?'), '\n');
 }

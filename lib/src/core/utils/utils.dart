@@ -88,6 +88,8 @@ final class ApprovalUtils {
   /// `'where'` on Windows, `'which'` on other platforms.
   static String get commandWhere => Platform.isWindows ? 'where' : 'which';
 
+  static final RegExp _whitespaceRegExp = RegExp(r'\s+');
+
   /// Splits a whitespace-delimited argument string into a list of arguments.
   ///
   /// Returns an empty list if the input is empty or blank.
@@ -96,7 +98,7 @@ final class ApprovalUtils {
     if (trimmed.isEmpty) {
       return <String>[];
     }
-    return trimmed.split(RegExp(r'\s+'));
+    return trimmed.split(_whitespaceRegExp);
   }
 
   /// Verifies that a file exists at [path], throwing [PathNotFoundException]
@@ -113,6 +115,31 @@ final class ApprovalUtils {
         '${prefix}File not found at path: [$path]. Please check the path and try again.',
       );
     }
+  }
+
+  /// Checks that both files exist and builds the argument list for a diff command.
+  static List<String> buildDiffArgs({
+    required String approvedPath,
+    required String receivedPath,
+    required DiffInfo diffInfo,
+    String? context,
+  }) {
+    checkFileExists(approvedPath, context: context);
+    checkFileExists(receivedPath, context: context);
+    return expandArgs(diffInfo.arg)..addAll([approvedPath, receivedPath]);
+  }
+
+  /// Logs diagnostics when a diff command fails with [ProcessException].
+  static Future<void> logCommandDiagnostics({
+    required String command,
+    required String Function(String commandPath) messageBuilder,
+    required StackTrace stackTrace,
+  }) async {
+    final result = await Process.run(commandWhere, [command]);
+    ApprovalLogger.exception(
+      messageBuilder('${result.stdout}'),
+      stackTrace: stackTrace,
+    );
   }
 
   /// Removes the specified [extension] from the end of [path] when present.

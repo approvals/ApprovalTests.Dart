@@ -66,7 +66,9 @@ class Approvals {
         unawaited(
           options.reporter
               .report(namer.approved, namer.received)
-              .catchError((Object _) {}),
+              .catchError((Object e, StackTrace st) {
+            ApprovalLogger.exception('Reporter failed: $e', stackTrace: st);
+          }),
         );
         throw DoesntMatchException(
           'Oops: [${namer.approvedFileName}] does not match [${namer.receivedFileName}].\n\n - Approved file path: ${namer.approved}\n\n - Received file path: ${namer.received}',
