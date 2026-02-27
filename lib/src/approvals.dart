@@ -133,17 +133,9 @@ class Approvals {
     required String Function(T item) processor,
     Options options = const Options(),
   }) {
-    try {
-      // Process the combination to get the response
-      final response = inputs.map((e) => processor(e));
-
-      final responseString = response.join('\n');
-
-      // Verify the processed response
-      verify(responseString, options: options);
-    } catch (_) {
-      rethrow;
-    }
+    final response = inputs.map((e) => processor(e));
+    final responseString = response.join('\n');
+    verify(responseString, options: options);
   }
 
   // Method to encode object to JSON and then verify it
@@ -151,19 +143,12 @@ class Approvals {
     dynamic encodable, {
     Options options = const Options(),
   }) {
-    try {
-      // Encode the object into JSON format
-      final jsonContent = ApprovalConverter.encodeReflectively(
-        encodable,
-        includeClassName: options.includeClassNameDuringSerialization,
-      );
-      final prettyJson = ApprovalConverter.convert(jsonContent);
-
-      // Call the verify method on encoded JSON content
-      verify(prettyJson, options: options);
-    } catch (_) {
-      rethrow;
-    }
+    final jsonContent = ApprovalConverter.encodeReflectively(
+      encodable,
+      includeClassName: options.includeClassNameDuringSerialization,
+    );
+    final prettyJson = ApprovalConverter.convert(jsonContent);
+    verify(prettyJson, options: options);
   }
 
   // Method to convert a sequence of objects to string format and then verify it
@@ -171,15 +156,8 @@ class Approvals {
     List<dynamic> sequence, {
     Options options = const Options(),
   }) {
-    try {
-      // Convert the sequence of objects into a multiline string
-      final content = sequence.map((e) => e.toString()).join('\n');
-
-      // Call the verify method on this content
-      verify(content, options: options);
-    } catch (_) {
-      rethrow;
-    }
+    final content = sequence.map((e) => e.toString()).join('\n');
+    verify(content, options: options);
   }
 
   // Method to verify executable queries
@@ -187,18 +165,9 @@ class Approvals {
     ExecutableQuery query, {
     Options options = const Options(),
   }) async {
-    try {
-      // Get the query string from the ExecutableQuery instance
-      final queryString = query.getQuery();
-
-      // Write and possibly execute the query, then verify the result
-      final resultString = await query.executeQuery(queryString);
-
-      // Use the existing verify method to check the result against approved content
-      verify(resultString, options: options);
-    } catch (_) {
-      rethrow;
-    }
+    final queryString = query.getQuery();
+    final resultString = await query.executeQuery(queryString);
+    verify(resultString, options: options);
   }
 
   // ================== Combinations ==================
@@ -209,19 +178,8 @@ class Approvals {
     required String Function(Iterable<List<T>> combination) processor,
     Options options = const Options(),
   }) {
-    // Generate all combinations of inputs
     final combinations = ApprovalUtils.cartesianProduct(inputs);
-
-    // Iterate over each combination, apply the processor function, and verify the result
-
-    try {
-      // Process the combination to get the response
-      final response = processor(combinations);
-
-      // Verify the processed response
-      verify(response, options: options);
-    } catch (_) {
-      rethrow;
-    }
+    final response = processor(combinations);
+    verify(response, options: options);
   }
 }

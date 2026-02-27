@@ -36,27 +36,26 @@ class CommandLineReporter implements Reporter {
     String? message,
   }) async {
     try {
-      final buffer = StringBuffer(message ?? "Differences:\n");
-
       final approvedLines = _readFileLines(approvedPath);
       final receivedLines = _readFileLines(receivedPath);
 
       final maxLines = max(approvedLines.length, receivedLines.length);
 
+      final diffBuffer = StringBuffer();
       for (var i = 0; i < maxLines; i++) {
         final approvedLine = i < approvedLines.length ? approvedLines[i] : "";
         final receivedLine = i < receivedLines.length ? receivedLines[i] : "";
 
         if (approvedLine != receivedLine) {
-          _appendDifference(buffer, i + 1, approvedLine, receivedLine);
+          _appendDifference(diffBuffer, i + 1, approvedLine, receivedLine);
         }
       }
 
-      if (buffer.isNotEmpty) {
-        ApprovalLogger.exception(buffer.toString());
+      if (diffBuffer.isNotEmpty) {
+        final header = message ?? "Differences:\n";
+        ApprovalLogger.exception('$header$diffBuffer');
       }
     } catch (e) {
-      // Logging and rethrowing to preserve error stack trace
       exceptionLogger("Error while reporting differences: $e");
       rethrow;
     }

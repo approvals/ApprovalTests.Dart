@@ -88,6 +88,17 @@ final class ApprovalUtils {
   /// `'where'` on Windows, `'which'` on other platforms.
   static String get commandWhere => Platform.isWindows ? 'where' : 'which';
 
+  /// Splits a whitespace-delimited argument string into a list of arguments.
+  ///
+  /// Returns an empty list if the input is empty or blank.
+  static List<String> expandArgs(String arg) {
+    final trimmed = arg.trim();
+    if (trimmed.isEmpty) {
+      return <String>[];
+    }
+    return trimmed.split(RegExp(r'\s+'));
+  }
+
   /// Removes the specified [extension] from the end of [path] when present.
   ///
   /// The [extension] may be provided with or without the leading dot.

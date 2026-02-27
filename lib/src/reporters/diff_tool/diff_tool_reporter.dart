@@ -41,7 +41,7 @@ class DiffReporter implements Reporter {
         _checkFileExists(receivedPath),
       ]);
 
-      final args = _expandArgs(diffInfo.arg)
+      final args = ApprovalUtils.expandArgs(diffInfo.arg)
         ..addAll([approvedPath, receivedPath]);
 
       if (shouldDetach) {
@@ -133,14 +133,6 @@ class DiffReporter implements Reporter {
   /// Visible for testing to validate arg parsing without invoking a diff tool.
   @visibleForTesting
   List<String> expandArgsForTesting(String arg) {
-    return _expandArgs(arg);
-  }
-
-  List<String> _expandArgs(String arg) {
-    final trimmed = arg.trim();
-    if (trimmed.isEmpty) {
-      return <String>[];
-    }
-    return trimmed.split(RegExp(r'\s+'));
+    return ApprovalUtils.expandArgs(arg);
   }
 }

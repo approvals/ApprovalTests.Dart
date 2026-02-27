@@ -16,9 +16,9 @@
 
 part of '../../approval_tests.dart';
 
-/// A class named `ScrubDates` that extends `ScrubWithRegEx`.
-/// `ScrubDates` uses a regular expression to scrub date strings in a specific format.
-class ScrubDates extends ScrubWithRegEx {
+/// A scrubber that replaces date strings with indexed placeholders.
+/// Uses a regular expression to match date strings in `yyyy-MM-dd HH:mm:ss.SSS` format.
+class ScrubDates implements ApprovalScrubber {
   /// Constant pattern to match date strings
   static const String _datePattern =
       r'\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+';

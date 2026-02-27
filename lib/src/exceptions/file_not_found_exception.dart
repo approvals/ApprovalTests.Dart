@@ -17,7 +17,7 @@
 part of '../../approval_tests.dart';
 
 /// `FileNotFoundException` is thrown when a file is not found.
-class FileNotFoundException implements Exception {
+final class FileNotFoundException implements Exception {
   final String message;
 
   final StackTrace? stackTrace;

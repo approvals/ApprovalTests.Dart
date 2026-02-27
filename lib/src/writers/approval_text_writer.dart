@@ -27,23 +27,15 @@ class ApprovalTextWriter extends ApprovalWriter {
   // A method that writes the given content to the file at the specified path
   @override
   void writeToFile(String path) {
-    // File instance is created with the given path
     final File file = File(path);
 
     final StringBuffer buffer = StringBuffer();
     buffer.writeln(ApprovalTestsConstants.baseHeader);
     buffer.write(content);
 
-    // Check if the file already exists at the specific path
     if (!file.existsSync()) {
-      // If the file does not exist, then it is created
       file.createSync(recursive: true);
-
-      // After creating the file, the content is written to it
-      file.writeAsStringSync(buffer.toString());
-    } else {
-      // If the file already exists, then the content is simply overwritten
-      file.writeAsStringSync(buffer.toString());
     }
+    file.writeAsStringSync(buffer.toString());
   }
 }

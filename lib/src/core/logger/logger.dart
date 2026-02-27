@@ -47,7 +47,7 @@ final class ApprovalLogger {
   static const _approvalTitle = "ApprovalTests";
 
   // Define default titles for different log types.
-  static Map<String, String> _defaultTitles = {
+  static const Map<String, String> _defaultTitles = {
     'critical': '💀 $_approvalTitle',
     'warning': '🟡 $_approvalTitle',
     'verbose': '🐛 $_approvalTitle',

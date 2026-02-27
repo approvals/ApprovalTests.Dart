@@ -28,22 +28,22 @@
 
 ## 📖 About
 
-**[Approval Tests](https://approvaltests.com/)** are an alternative to assertions. You’ll find them useful for testing objects with complex values *(such as long strings)*, lots of properties, or collections of objects.
+**[Approval Tests](https://approvaltests.com/)** are an alternative to assertions. You’ll find them useful for testing objects with complex values _(such as long strings)_, lots of properties, or collections of objects.
 
-`Approval tests` simplify this by taking a snapshot of the results, and confirming that they have not changed.   
+`Approval tests` simplify this by taking a snapshot of the results, and confirming that they have not changed.
 
 In normal unit testing, you say `expect(person.getAge(), 5)`. Approvals allow you to do this when the thing that you want to assert is no longer a primitive but a complex object. For example, you can say, `Approvals.verify(person)` inside an async test.
 
 I am writing an implementation of **[Approval Tests](https://approvaltests.com/)** in Dart. If anyone wants to help, please **[text](https://t.me/yelmuratoff)** me. 🙏
 
 ## Packages
+
 ApprovalTests is designed for two level: Dart and Flutter. <br>
 
-| Package | Version | Description | 
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| [approval_tests](https://github.com/approvals/ApprovalTests.Dart) | [![Pub](https://img.shields.io/pub/v/approval_tests.svg?style=flat-square)](https://pub.dev/packages/approval_tests) | **Dart** package for approval testing of `unit` tests *(main)* |
-| [approval_tests_flutter](https://github.com/approvals/ApprovalTests.Dart.Flutter) | [![Pub](https://img.shields.io/pub/v/approval_tests_flutter.svg)](https://pub.dev/packages/approval_tests_flutter) | **Flutter** package for approval testing of `widget`, `integration` tests |
-
+| Package                                                                           | Version                                                                                                              | Description                                                               |
+| --------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| [approval_tests](https://github.com/approvals/ApprovalTests.Dart)                 | [![Pub](https://img.shields.io/pub/v/approval_tests.svg?style=flat-square)](https://pub.dev/packages/approval_tests) | **Dart** package for approval testing of `unit` tests _(main)_            |
+| [approval_tests_flutter](https://github.com/approvals/ApprovalTests.Dart.Flutter) | [![Pub](https://img.shields.io/pub/v/approval_tests_flutter.svg)](https://pub.dev/packages/approval_tests_flutter)   | **Flutter** package for approval testing of `widget`, `integration` tests |
 
 ## 📋 How it works
 
@@ -58,13 +58,14 @@ Add the following to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  approval_tests: ^1.4.0
+  approval_tests: ^1.4.1
 ```
 
 ## 👀 Getting Started
 
 The best way to get started is to download and open the starter project:
-* [Approvaltests.Dart.StarterProject](https://github.com/approvals/Approvaltests.Dart.StarterProject)
+
+- [Approvaltests.Dart.StarterProject](https://github.com/approvals/Approvaltests.Dart.StarterProject)
 
 This is a standard project that can be imported into any editor or IDE and also includes CI with GitHub Actions.
 
@@ -93,24 +94,32 @@ Approving results just means saving the `.approved.txt` file with your desired r
 We’ll provide more explanation in due course, but, briefly, here are the most common approaches to do this.
 
 #### • Via Diff Tool
+
 Most diff tools have the ability to move text from left to right, and save the result.
 How to use diff tools is just below, there is a `Comparator` class for that.
 
 #### • Via CLI command
+
 You can run the command in a terminal to review your files:
+
 ```bash
 dart run approval_tests:review
 ```
+
 After running the command, the files will be analyzed and you will be asked to choose one of the options:
+
 - `y` - Approve the received file.
 - `n` - Reject the received file.
 - `v`iew - View the differences between the received and approved files. After selecting `v` you will be asked which IDE you want to use to view the differences.
 
 #### • Via approveResult property
+
 If you want the result to be automatically saved after running the test, you need to use the `approveResult` property in `Options`:
 
 <!-- snippet: sample_verify_as_json_test -->
+
 <a id='snippet-sample_verify_as_json_test'></a>
+
 ```dart
 void main() {
   test('test JSON object', () {
@@ -129,13 +138,18 @@ void main() {
   });
 }
 ```
+
 <sup><a href='/test/example/example_test.dart#L4-L21' title='Snippet source file'>snippet source</a> | <a href='#snippet-sample_verify_as_json_test' title='Start of snippet'>anchor</a></sup>
+
 <!-- endSnippet -->
 
 this will result in the following file
 `example_test.test_JSON_object.approved.txt`
+
 <!-- snippet: example_test.test_JSON_object.approved.txt -->
+
 <a id='snippet-example_test.test_JSON_object.approved.txt'></a>
+
 ```txt
 # This file was generated by approval_tests. Please do not edit.
 
@@ -148,10 +162,13 @@ this will result in the following file
   "version": 0.1
 }
 ```
+
 <sup><a href='/test/example/example_test.test_JSON_object.approved.txt#L1-L10' title='Snippet source file'>snippet source</a> | <a href='#snippet-example_test.test_JSON_object.approved.txt' title='Start of snippet'>anchor</a></sup>
+
 <!-- endSnippet -->
 
 #### • Via file rename
+
 You can just rename the `.received` file to `.approved`.
 
 ### Reporters
@@ -159,15 +176,16 @@ You can just rename the `.received` file to `.approved`.
 Reporters are the part of Approval Tests that launch diff tools when things do not match. They are the part of the system that makes it easy to see what has changed.
 
 There are several reporters available in the package:
+
 - `CommandLineReporter` - This is the default reporter, which will output the diff in the terminal.
 - `GitReporter` - This reporter will open the diff in the Git GUI using `git diff --no-index`. Each argument is provided separately to Git and any exit code greater than `1` is surfaced as a failure, so unexpected tool errors are easier to spot. Provide a custom `DiffInfo` if you need extra arguments (for example, `DiffInfo(command: 'git', arg: 'diff --no-index --word-diff')`).
 - `DiffReporter` - This reporter will open the Diff Tool in your IDE. Arguments are tokenized automatically, so values such as `-d --wait` can be supplied in the `DiffInfo.arg` string without additional escaping.
-   - For Diff Reporter I using the default paths to the IDE, if something didn't work then you in the console see the expected correct path to the IDE and specify customDiffInfo. You can also contact me for help.
+  - For Diff Reporter I using the default paths to the IDE, if something didn't work then you in the console see the expected correct path to the IDE and specify customDiffInfo. You can also contact me for help.
 
 <img src="https://github.com/yelmuratoff/packages_assets/blob/main/assets/approval_tests/diff_command_line.png?raw=true" alt="CommandLineComparator img" title="ApprovalTests" style="max-width: 500px;">
 
-
 To use `DiffReporter` you just need to add it to `options`:
+
 ```dart
  options: const Options(
    reporter: const DiffReporter(),
@@ -178,7 +196,6 @@ To use `DiffReporter` you just need to add it to `options`:
   <img src="https://github.com/yelmuratoff/packages_assets/blob/main/assets/approval_tests/diff_tool_vs_code.png?raw=true" alt="Visual Studio code img" style="width: 45%;margin-right: 1%;" />
   <img src="https://github.com/yelmuratoff/packages_assets/blob/main/assets/approval_tests/diff_tool_studio.png?raw=true" alt="Android Studio img" style="width: 45%;" />
 </div>
-
 
 ## 📝 Examples
 
@@ -210,10 +227,13 @@ await Approvals.verifyQuery(query);
 `example/verify_methods/verify_query/verify_network_query_test.dart` demonstrates how to plug the query into an approval test.
 
 ### JSON example
+
 With `verifyAsJson`, if you pass data models as `JsonItem`, with nested other models as `AnotherItem` and `SubItem`, then you need to add an `toJson` method to each model for the serialization to succeed.
 
 <!-- snippet: same_verify_as_json_test_with_model -->
+
 <a id='snippet-same_verify_as_json_test_with_model'></a>
+
 ```dart
 void main() {
   const jsonItem = JsonItem(
@@ -241,13 +261,18 @@ void main() {
   });
 }
 ```
+
 <sup><a href='/example/verify_methods/verify_as_json/verify_as_json_test.dart#L6-L32' title='Snippet source file'>snippet source</a> | <a href='#snippet-same_verify_as_json_test_with_model' title='Start of snippet'>anchor</a></sup>
+
 <!-- endSnippet -->
 
 this will result in the following file
 `verify_as_json_test.verify_model.approved.txt`
+
 <!-- snippet: verify_as_json_test.verify_model.approved.txt -->
+
 <a id='snippet-verify_as_json_test.verify_model.approved.txt'></a>
+
 ```txt
 # This file was generated by approval_tests. Please do not edit.
 
@@ -276,13 +301,15 @@ this will result in the following file
   }
 }
 ```
+
 <sup><a href='/example/verify_methods/verify_as_json/verify_as_json_test.verify_model.approved.txt#L1-L26' title='Snippet source file'>snippet source</a> | <a href='#snippet-verify_as_json_test.verify_model.approved.txt' title='Start of snippet'>anchor</a></sup>
+
 <!-- endSnippet -->
 
 <img src="https://github.com/yelmuratoff/packages_assets/blob/main/assets/approval_tests/passed.png?raw=true" alt="Passed test example" title="ApprovalTests" style="max-width: 800px;">
 
-
 ## ❓ Which File Artifacts to Exclude from Source Control
+
 You must add any `approved` files to your source control system. But `received` files can change with any run and should be ignored. For Git, add this to your `.gitignore`:
 
 ```gitignore
@@ -290,11 +317,14 @@ You must add any `approved` files to your source control system. But `received` 
 ```
 
 ## ✉️ For More Information
-### Questions?  
-Ask me on Telegram: [`@yelmuratoff`](https://t.me/yelmuratoff).   
-Email: [`yelamanyelmuratov@gmail.com`](mailto:yelamanyelmuratov@gmail.com)   
+
+### Questions?
+
+Ask me on Telegram: [`@yelmuratoff`](https://t.me/yelmuratoff).  
+Email: [`yelamanyelmuratov@gmail.com`](mailto:yelamanyelmuratov@gmail.com)
 
 ### Video Tutorials
+
 - [Getting Started with ApprovalTests.Swift](https://qualitycoding.org/approvaltests-swift-getting-started/)
 - [How to Verify Objects (and Simplify TDD)](https://qualitycoding.org/approvaltests-swift-verify-objects/)
 - [Verify Arrays and See Simple, Clear Diffs](https://qualitycoding.org/verify-arrays-approvaltests-swift/)
@@ -304,6 +334,7 @@ Email: [`yelamanyelmuratov@gmail.com`](mailto:yelamanyelmuratov@gmail.com)
 You can also watch a series of short videos about [using ApprovalTests in .Net](https://www.youtube.com/playlist?list=PL0C32F89E8BBB5368) on YouTube.
 
 ### Podcasts
+
 Prefer learning by listening? Then you might enjoy the following podcasts:
 
 - [Hanselminutes](https://www.hanselminutes.com/360/approval-tests-with-llewellyn-falco)
@@ -315,11 +346,13 @@ Prefer learning by listening? Then you might enjoy the following podcasts:
 [![](https://codecov.io/gh/approvals/ApprovalTests.Dart/branch/main/graphs/sunburst.svg)](https://codecov.io/gh/approvals/ApprovalTests.Dart/branch/main)
 
 ## 🤝 Contributing
-Show some 💙 and <a href="https://github.com/approvals/ApprovalTests.Dart.git">star the repo</a> to support the project! 🙌   
-The project is in the process of development and we invite you to contribute through pull requests and issue submissions. 👍   
+
+Show some 💙 and <a href="https://github.com/approvals/ApprovalTests.Dart.git">star the repo</a> to support the project! 🙌  
+The project is in the process of development and we invite you to contribute through pull requests and issue submissions. 👍  
 We appreciate your support. 🫰
 
 <br><br>
+
 <div align="center" >
   <p>Thanks to all contributors of this package</p>
   <a href="https://github.com/approvals/ApprovalTests.Dart/graphs/contributors">

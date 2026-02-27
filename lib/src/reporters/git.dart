@@ -24,7 +24,7 @@ class GitReporter implements Reporter {
         _checkFileExists(receivedPath),
       ]);
 
-      final args = _expandArgs(diffInfo.arg)
+      final args = ApprovalUtils.expandArgs(diffInfo.arg)
         ..addAll([approvedPath, receivedPath]);
       final result = await runProcess(
         diffInfo.command,
@@ -126,14 +126,6 @@ class GitReporter implements Reporter {
       );
       ApprovalLogger.log("To review all, run: dart run approved:review");
     }
-  }
-
-  static List<String> _expandArgs(String arg) {
-    final trimmed = arg.trim();
-    if (trimmed.isEmpty) {
-      return <String>[];
-    }
-    return trimmed.split(RegExp(r'\s+'));
   }
 
   static Future<ProcessResult> _defaultRunProcess(

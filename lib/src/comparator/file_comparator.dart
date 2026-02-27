@@ -31,8 +31,7 @@ final class FileComparator implements Comparator {
       final approved = _normalizeContent(ApprovalUtils.readFile(approvedPath));
       final received = _normalizeContent(ApprovalUtils.readFile(receivedPath));
 
-      // Return true if contents of both files match exactly
-      return approved.compareTo(received) == 0;
+      return approved == received;
     } catch (e, st) {
       if (isLogError) {
         ApprovalLogger.exception("From FileComparator: $e", stackTrace: st);

@@ -109,9 +109,9 @@ abstract class BaseNamer implements ApprovalNamer {
   String get _formattedDescription =>
       description?.replaceAll(' ', '_').toLowerCase() ?? '';
 
-  /// Builds the full file path including the test name, description, and optional counter.
-  String _buildFilePath(String extension, {String counter = ''}) {
-    final base = _basePath;
+  /// Builds a name string from the given [base], appending test name,
+  /// description, counter, and [extension] as dot-separated segments.
+  String _buildName(String base, String extension, {String counter = ''}) {
     final testNameValue = currentTestName;
     final hasTestName = addTestName && testNameValue.isNotEmpty;
     final testNamePart = hasTestName ? '.$testNameValue' : '';
@@ -122,18 +122,13 @@ abstract class BaseNamer implements ApprovalNamer {
     return '$base$testNamePart$descriptionPart$counterPart.$extension';
   }
 
+  /// Builds the full file path including the test name, description, and optional counter.
+  String _buildFilePath(String extension, {String counter = ''}) =>
+      _buildName(_basePath, extension, counter: counter);
+
   /// Constructs the file name without the full directory path.
-  String _buildFileName(String extension, {String counter = ''}) {
-    final name = _fileName;
-    final testNameValue = currentTestName;
-    final hasTestName = addTestName && testNameValue.isNotEmpty;
-    final testNamePart = hasTestName ? '.$testNameValue' : '';
-    final descriptionValue = _formattedDescription;
-    final hasDescription = description != null && descriptionValue.isNotEmpty;
-    final descriptionPart = hasDescription ? '.$descriptionValue' : '';
-    final counterPart = counter.isNotEmpty ? '.$counter' : '';
-    return '$name$testNamePart$descriptionPart$counterPart.$extension';
-  }
+  String _buildFileName(String extension, {String counter = ''}) =>
+      _buildName(_fileName, extension, counter: counter);
 
   /// Computes the base file path without the extension.
   ///
