@@ -85,8 +85,7 @@ void registerApprovalsTests() {
 
       final options = Options(
         namer: Namer(
-          filePath:
-              '${blocker.path}${Platform.pathSeparator}impossible.dart',
+          filePath: '${blocker.path}${Platform.pathSeparator}impossible.dart',
           addTestName: false,
         ),
         logErrors: true,
