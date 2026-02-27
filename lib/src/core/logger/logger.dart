@@ -83,11 +83,13 @@ final class ApprovalLogger {
 class _SuccessLog extends TalkerLog {
   _SuccessLog(String super.message);
 
+  static final AnsiPen _successPen = AnsiPen()..xterm(121);
+
   /// Your custom log title
   @override
   String get title => '🟢 ${ApprovalLogger._approvalTitle}';
 
   /// Your custom log color
   @override
-  AnsiPen get pen => AnsiPen()..xterm(121);
+  AnsiPen get pen => _successPen;
 }

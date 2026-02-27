@@ -42,10 +42,12 @@ final class FileNamerOptions {
   });
 
   /// Returns the full path of the approved file.
-  String get approved => '$folderPath/$approvedFileName';
+  String get approved =>
+      '$folderPath${Platform.pathSeparator}$approvedFileName';
 
   /// Returns the full path of the received file.
-  String get received => '$folderPath/$receivedFileName';
+  String get received =>
+      '$folderPath${Platform.pathSeparator}$receivedFileName';
 
   /// Generates the approved file name.
   String get approvedFileName => _constructFileName('approved');

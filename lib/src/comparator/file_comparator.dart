@@ -21,6 +21,8 @@ part of '../../approval_tests.dart';
 final class FileComparator implements Comparator {
   const FileComparator();
 
+  static final RegExp _lineEndingRegExp = RegExp(r'\r\n?');
+
   @override
   bool compare({
     required String approvedPath,
@@ -42,5 +44,5 @@ final class FileComparator implements Comparator {
 
   /// Normalizes file content by standardizing line endings.
   String _normalizeContent(String content) =>
-      content.replaceAll(RegExp(r'\r\n?'), '\n');
+      content.replaceAll(_lineEndingRegExp, '\n');
 }
