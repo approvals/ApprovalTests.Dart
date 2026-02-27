@@ -65,8 +65,7 @@ class Approvals {
 
     writer.writeToFile(namer.received);
 
-    if (options.approveResult ||
-        !ApprovalUtils.isFileExists(namer.approved)) {
+    if (options.approveResult || !ApprovalUtils.isFileExists(namer.approved)) {
       writer.writeToFile(namer.approved);
     }
   }
