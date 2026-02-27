@@ -139,8 +139,7 @@ abstract class BaseNamer implements ApprovalNamer {
   String get _basePath {
     final directory = p.dirname(filePath!);
     final fileName = p.basenameWithoutExtension(filePath!);
-    final baseDir =
-        useSubfolder ? p.join(directory, 'approvals') : directory;
+    final baseDir = useSubfolder ? p.join(directory, 'approvals') : directory;
     return p.join(baseDir, fileName);
   }
 
