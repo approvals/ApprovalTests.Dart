@@ -1,3 +1,8 @@
+## Unreleased
+
+- Added `CompositeScrubber` for applying multiple scrubbers in a predictable
+  order.
+
 ## 1.4.3
 
 - Clearer failure messages: file paths now shown in `DoesntMatchException` and `CommandLineReporter`.

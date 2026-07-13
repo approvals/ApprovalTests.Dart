@@ -55,6 +55,7 @@ part 'src/reporters/command_line/command_line_reporter.dart';
 part 'src/reporters/diff_tool/diff_info.dart';
 part 'src/reporters/diff_tool/diff_tool_reporter.dart';
 part 'src/reporters/diff_tool/diff_tools.dart';
+part 'src/scrubbers/composite_scrubber.dart';
 part 'src/scrubbers/date_scrubber.dart';
 part 'src/scrubbers/nothing_scrubber.dart';
 part 'src/scrubbers/reg_exp_scrubber.dart';

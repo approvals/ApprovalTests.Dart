@@ -13,6 +13,7 @@ import 'groups/minor_tests.dart' as minor_tests;
 import 'groups/namer.dart' as namer_tests;
 import 'groups/options_tests.dart' as options_tests;
 import 'groups/reporter_arguments_test.dart' as reporter_arguments_tests;
+import 'groups/scrubber_tests.dart' as scrubber_tests;
 import 'groups/verify_tests.dart' as verify_tests;
 
 import 'models/item.dart';
@@ -43,6 +44,7 @@ void main() {
   approvals_tests.registerApprovalsTests();
   converter_tests.registerConverterTests();
   options_tests.registerOptionsTests();
+  scrubber_tests.registerScrubberTests();
 
   /// ================== Approvals: verify methods ==================
 

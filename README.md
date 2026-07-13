@@ -189,6 +189,23 @@ To use `DiffReporter` you just need to add it to `options`:
   <img src="https://github.com/yelmuratoff/packages_assets/blob/main/assets/approval_tests/diff_tool_studio.png?raw=true" alt="Android Studio img" style="width: 45%;" />
 </div>
 
+### Scrubber pipelines
+
+Use `CompositeScrubber` when a snapshot contains more than one kind of
+volatile value. Scrubbers run in the order they are supplied:
+
+```dart
+Approvals.verify(
+  response,
+  options: Options(
+    scrubber: CompositeScrubber([
+      const ScrubDates(),
+      const ScrubWithRegEx(),
+    ]),
+  ),
+);
+```
+
 ## 📝 Examples
 
 I have provided a couple of small examples here to show you how to use the package.
