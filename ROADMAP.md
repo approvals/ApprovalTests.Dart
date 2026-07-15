@@ -1,14 +1,18 @@
 # ApprovalTests.Dart Roadmap
 
-Last updated: 2026-07-14
+Last updated: 2026-07-15
 
 Current baseline:
 
 - latest published package:
   [`approval_tests 1.4.3`](https://pub.dev/packages/approval_tests);
-- repository baseline: `main` at `42753f6`;
-- unreleased work: `CompositeScrubber` is implemented, tested, documented, and
-  recorded in `CHANGELOG.md`;
+- repository baseline: `main` at `1f8b096`;
+- current package version: `1.5.0`;
+- version 1.5.0 includes `CompositeScrubber`, the sequential and validated
+  review CLI, and the `ispectify` logging migration; these changes are
+  implemented, tested, documented, and recorded in `CHANGELOG.md`;
+- version 1.5.0 requires Dart 3.6 because `ispectify 6.1.2` is the internal
+  console logging backend;
 - compatibility policy: existing `verify()` calls and `.approved.txt` files
   remain valid throughout 1.x.
 
@@ -76,8 +80,12 @@ The package should provide:
 - [x] Command-line, Git, and IDE diff reporters.
 - [x] Interactive review CLI with listing, indexed selection, and path-based
   review.
+- [x] Sequential review prompts, deterministic discovery, strict
+      `.received.txt` validation, and awaited diff-tool failures.
 - [x] Custom regular-expression and date scrubbers.
 - [x] `CompositeScrubber` for applying multiple scrubbers in declaration order.
+- [x] `ispectify`-based console diagnostics with preserved exception stacks and
+      disabled in-memory history.
 - [x] Indexed and descriptive approval naming.
 - [x] Cross-platform path handling and deterministic regression tests.
 
@@ -99,7 +107,7 @@ policy explicit.
 - [ ] Make strict mode produce a typed `missingApproved` mismatch and leave a
   reviewable received artifact.
 - [ ] Ensure strict mode never writes or mutates an approved file.
-- [ ] Document that `approveResult` is a local migration tool and must not be
+- [x] Document that `approveResult` is a local migration tool and must not be
   enabled in normal CI.
 - [ ] Decide the 2.0 default only after publishing migration guidance and
   collecting 1.x usage feedback.
@@ -125,26 +133,28 @@ Acceptance criteria:
 
 ### Review CLI correctness — P0
 
-- [ ] Review multiple received files sequentially; never run concurrent stdin
+- [x] Review multiple received files sequentially; never run concurrent stdin
   prompts through `Future.wait`.
-- [ ] Await diff reporters opened from the review flow and surface failures.
-- [ ] Validate that an input is a supported received artifact before deriving
+- [x] Await diff reporters opened from the review flow and surface failures.
+- [x] Validate that an input is a supported received artifact before deriving
   or replacing its approved path.
-- [ ] Sort discovered files by normalized relative path.
+- [x] Sort discovered files by normalized relative path.
 - [ ] Replace hard-coded `.received.txt` assumptions with the artifact model
   once Milestone 2 lands.
-- [ ] Correct command hints to use `dart run approval_tests:review`.
+- [x] Correct command hints to use `dart run approval_tests:review`.
 
 ### Documentation and release alignment — P0
 
-- [ ] Correct examples that pass arbitrary objects to the string-only
+- [x] Correct examples that pass arbitrary objects to the string-only
   `verify()` API; use `verifyAsJson()` or an explicit formatter.
-- [ ] Publish the completed `CompositeScrubber` change in the next compatible
-  release with API docs and a migration-neutral example.
+- [ ] Publish the completed `CompositeScrubber` change in version 1.5.0 with
+      API docs and a migration-neutral example.
 - [ ] Keep README installation snippets, `pubspec.yaml`, CHANGELOG, tags, and
   release notes on the same version.
-- [ ] Document exactly which files belong in source control:
+- [x] Document exactly which files belong in source control:
   `*.approved.*` tracked and `*.received.*` ignored.
+- [x] Document the Dart 3.6 minimum introduced by the `ispectify` migration in
+      README and CHANGELOG.
 
 ## Milestone 1 — Deterministic text approvals
 
@@ -525,7 +535,8 @@ release milestone.
 
 - A universal number scrubber that can hide meaningful business changes.
 - Implicit approval of all received files in CI.
-- Mandatory XML, HTML, image, or logging dependencies in the core package.
+- Mandatory XML, HTML, image, or application-observability integrations in the
+  core package.
 - Global mutable configuration shared by parallel tests.
 - Magic serialization of arbitrary Dart objects through reflection or mirrors.
 - A process-wide mutable converter registry required by normal verification.
@@ -552,7 +563,7 @@ validated during API review, but responsibility stays within the listed files.
 
 | Order | Deliverable | Primary files | Focused verification |
 | --- | --- | --- | --- |
-| 1 | Sequential and validated review CLI | `bin/review.dart`, `test/groups/review_cli_test.dart` | `dart test test/groups/review_cli_test.dart` |
+| 1 | Sequential and validated review CLI (complete) | `bin/review.dart`, `lib/src/cli/review_cli.dart`, `test/cli/review_cli_test.dart` | `dart test test/cli/review_cli_test.dart` |
 | 2 | Explicit missing-approved policy | `lib/src/core/options.dart`, `lib/src/approvals.dart`, `test/groups/approvals_test.dart` | `dart test test/groups/approvals_test.dart` |
 | 3 | Safe names and collision diagnostics | `lib/src/core/approval_namer.dart`, `lib/src/namer/`, `test/groups/namer.dart` | `dart test test/groups/namer.dart` |
 | 4 | Explicit `ApprovalContext` with legacy fallback | `lib/src/core/approval_context.dart`, `lib/src/approvals.dart`, `lib/src/core/approval_namer.dart`, context tests | `dart test test/groups/context_test.dart` |

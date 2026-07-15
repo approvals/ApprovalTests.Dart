@@ -16,80 +16,37 @@
 
 part of '../../../approval_tests.dart';
 
-/// `ApprovalLogger` is a class that provides methods to log messages with different log levels.
+/// Provides the package's console diagnostics.
 final class ApprovalLogger {
-  // Private property holding the instance of Logger
-  final Talker _logger;
+  final ISpectLogger _logger;
 
-  // Singleton instance of AppLogger
   static final ApprovalLogger _instance = ApprovalLogger._internal(
-    Talker(
-      logger: TalkerLogger(settings: TalkerLoggerSettings(maxLineWidth: 130)),
-      settings: TalkerSettings(
-        titles: _defaultTitles,
-        colors: {
-          'critical': AnsiPen()..red(),
-          'warning': AnsiPen()..yellow(),
-          'verbose': AnsiPen()..gray(),
-          'info': AnsiPen()..cyan(),
-          'debug': AnsiPen()..gray(),
-          'error': ApprovalUtils.hexToAnsiPen('de7979'),
-          'exception': ApprovalUtils.hexToAnsiPen('de7979'),
+    ISpectLogger(
+      options: ISpectLoggerOptions(
+        useHistory: false,
+        customColors: {
+          ISpectLogType.error.key: ApprovalUtils.hexToAnsiPen('de7979'),
+          ISpectLogType.exception.key: ApprovalUtils.hexToAnsiPen('de7979'),
         },
       ),
     ),
   );
 
-  // Private internal constructor for initializing the Logger instance
   ApprovalLogger._internal(this._logger);
 
-  // Define constant title with ANSI color codes.
-  static const _approvalTitle = "ApprovalTests";
-
-  // Define default titles for different log types.
-  static const Map<String, String> _defaultTitles = {
-    'critical': '💀 $_approvalTitle',
-    'warning': '🟡 $_approvalTitle',
-    'verbose': '🐛 $_approvalTitle',
-    'info': '🔍 $_approvalTitle',
-    'debug': '🐛 $_approvalTitle',
-    'error': '🔴 $_approvalTitle',
-    'exception': '🔴 $_approvalTitle',
-  };
-
-  /// `log` method to log messages with debug log level.
+  /// Logs a diagnostic message.
   static void log(String message) => _instance._logger.debug(message);
 
-  /// `info` method to log messages with success log level.
-  static void success(String message) => _instance._logger.logCustom(
-        _SuccessLog(message),
-      );
+  /// Logs a successful operation.
+  static void success(String message) => _instance._logger.good(message);
 
-  /// `warning` method to log messages with warning log level.
+  /// Logs a warning.
   static void warning(String message) => _instance._logger.warning(message);
 
-  /// `exception` method to handle exceptions and log them with error log level.
-  static void exception(Object exception, {StackTrace? stackTrace}) {
-    final message = exception.toString();
-    _instance._logger.error(
-      message,
-      null,
-      stackTrace,
-    );
-  }
-}
-
-/// `_SuccessLog` is a class that extends `TalkerLog` to provide success logs.
-class _SuccessLog extends TalkerLog {
-  _SuccessLog(String super.message);
-
-  static final AnsiPen _successPen = AnsiPen()..xterm(121);
-
-  /// Your custom log title
-  @override
-  String get title => '🟢 ${ApprovalLogger._approvalTitle}';
-
-  /// Your custom log color
-  @override
-  AnsiPen get pen => _successPen;
+  /// Logs an exception without discarding its original stack trace.
+  static void exception(Object exception, {StackTrace? stackTrace}) =>
+      _instance._logger.handle(
+        exception: exception,
+        stackTrace: stackTrace,
+      );
 }

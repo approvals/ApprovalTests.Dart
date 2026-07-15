@@ -100,9 +100,11 @@ class GitReporter implements Reporter {
     ApprovalLogger.log("Results of git diff:\n${differences.trim()}");
     if (showTip) {
       ApprovalLogger.log(
-        "To review, run: dart run approved:review '$unapprovedFullPath'",
+        "To review, run: dart run approval_tests:review '$unapprovedFullPath'",
       );
-      ApprovalLogger.log("To review all, run: dart run approved:review");
+      ApprovalLogger.log(
+        'To review all, run: dart run approval_tests:review',
+      );
     }
   }
 

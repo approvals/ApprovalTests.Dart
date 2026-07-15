@@ -32,7 +32,7 @@
 
 `Approval tests` simplify this by taking a snapshot of the results, and confirming that they have not changed.
 
-In normal unit testing, you say `expect(person.getAge(), 5)`. Approvals allow you to do this when the thing that you want to assert is no longer a primitive but a complex object. For example, you can say, `Approvals.verify(person)` inside an async test.
+In normal unit testing, you say `expect(person.getAge(), 5)`. Approvals allow you to do this when the thing that you want to assert is no longer a primitive but a complex object. `Approvals.verify()` accepts text; for a model with a `toJson()` method, use `Approvals.verifyAsJson(person.toJson())`.
 
 I am writing an implementation of **[Approval Tests](https://approvaltests.com/)** in Dart. If anyone wants to help, please **[text](https://t.me/yelmuratoff)** me. 🙏
 
@@ -58,8 +58,11 @@ Add the following to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  approval_tests: ^1.4.3
+  approval_tests: ^1.5.0
 ```
+
+Version 1.5.0 requires Dart 3.6 or newer because the internal console logger
+uses `ispectify 6.1.2`.
 
 ## 👀 Getting Started
 
@@ -71,7 +74,8 @@ This is a standard project that can be imported into any editor or IDE and also 
 
 It comes ready with:
 
-- A suitable `.gitignore` to exclude approval artifacts
+- A suitable `.gitignore` that ignores received artifacts while keeping
+  approved artifacts under source control
 - A ready linter with all rules in place
 - A GitHub action to run tests and you can always check the status of the tests on the badge in the `README.md` file.
 
@@ -112,9 +116,21 @@ After running the command, the files will be analyzed and you will be asked to c
 - `n` - Reject the received file.
 - `v`iew - View the differences between the received and approved files. After selecting `v` you will be asked which IDE you want to use to view the differences.
 
+With no arguments, the command discovers supported `.received.txt` files,
+sorts them by normalized relative path, and reviews them one at a time so only
+one terminal prompt is active. `--list` prints that same deterministic order;
+you can then pass an index or a path from the list. Paths must identify an
+existing `.received.txt` file. Diff tools are awaited, so launch and execution
+failures are reported instead of being silently ignored.
+
 #### • Via approveResult property
 
 If you want the result to be automatically saved after running the test, you need to use the `approveResult` property in `Options`:
+
+> `approveResult` is intended for a deliberate, local migration or initial
+> snapshot-generation step. Remove it after reviewing the generated file, and
+> never enable it in normal CI: CI should verify approved artifacts, not mutate
+> them.
 
 <!-- snippet: sample_verify_as_json_test -->
 <a id='snippet-sample_verify_as_json_test'></a>
@@ -183,6 +199,14 @@ To use `DiffReporter` you just need to add it to `options`:
    reporter: const DiffReporter(),
  ),
 ```
+
+### Console diagnostics
+
+Approval Tests emits compact, typed console diagnostics through `ispectify`.
+Exceptions retain their original stack traces, while in-memory log history is
+disabled so test runs do not accumulate diagnostic events. This internal
+logging change does not alter approved or received file contents and requires
+no application-level logger setup.
 
 <div style="display: flex; justify-content: center; align-items: center;">
   <img src="https://github.com/yelmuratoff/packages_assets/blob/main/assets/approval_tests/diff_tool_vs_code.png?raw=true" alt="Visual Studio code img" style="width: 45%;margin-right: 1%;" />
@@ -311,11 +335,15 @@ this will result in the following file
 
 ## ❓ Which File Artifacts to Exclude from Source Control
 
-You must add any `approved` files to your source control system. But `received` files can change with any run and should be ignored. For Git, add this to your `.gitignore`:
+Commit every `*.approved.*` artifact: it is the reviewed test expectation.
+Ignore every `*.received.*` artifact because it is regenerated when a
+verification fails. For Git, use:
 
 ```gitignore
 *.received.*
 ```
+
+Do not add `*.approved.*` to `.gitignore`.
 
 ## ✉️ For More Information
 

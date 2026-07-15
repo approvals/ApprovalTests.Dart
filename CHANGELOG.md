@@ -1,7 +1,22 @@
-## Unreleased
+## 1.5.0
+
+### Added
 
 - Added `CompositeScrubber` for applying multiple scrubbers in a predictable
   order.
+
+### Changed
+
+- Replaced `talker` with the pure-Dart `ispectify 6.1.2` logging core. Console
+  diagnostics now preserve exception stack traces without retaining in-memory
+  log history.
+- Raised the minimum supported Dart SDK to 3.6 for `ispectify 6.1.2`.
+
+### Fixed
+
+- Fixed the review CLI to process prompts sequentially, validate received
+  artifact paths, sort discovered files deterministically, and await diff
+  reporter failures.
 
 ## 1.4.3
 
