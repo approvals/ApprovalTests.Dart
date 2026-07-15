@@ -1,3 +1,17 @@
+## 1.6.1
+
+### Fixed
+
+- Fixed atomic text replacement on Windows when concurrent readers temporarily
+  lock the destination. Access, sharing, and lock violations are retried with a
+  bounded attempt count while the existing artifact remains intact.
+
+### Internal
+
+- Corrected cross-platform path expectations to use native separators on Windows, macOS, and Linux.
+- Added deterministic coverage for successful Windows lock retries, non-retryable failures, and retry exhaustion.
+- Added project AgentSync rules for portable path handling and atomic file replacement semantics.
+
 ## 1.6.0
 
 ### Added

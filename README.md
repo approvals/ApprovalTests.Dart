@@ -102,7 +102,9 @@ collide.
 `ApprovalTextWriter` writes to a same-directory temporary file, flushes it,
 and atomically replaces the destination. Concurrent readers therefore observe
 either the previous complete artifact or the new complete artifact, never a
-partially written file. Temporary files are cleaned up if replacement fails.
+partially written file. On Windows, transient access, sharing, and lock
+violations caused by concurrent readers are retried with a bounded attempt
+count. Temporary files are cleaned up if replacement fails.
 
 ## 📦 Installation
 
@@ -110,10 +112,10 @@ Add the following to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  approval_tests: ^1.6.0
+  approval_tests: ^1.6.1
 ```
 
-These docs target the 1.6.0 development release. Dart 3.6 or newer has been
+These docs target the 1.6.1 release. Dart 3.6 or newer has been
 required since 1.5.0 because the internal console logger uses
 `ispectify 6.1.2`.
 
@@ -448,9 +450,9 @@ Prefer learning by listening? Then you might enjoy the following podcasts:
 
 ## Coverage
 
-The 1.6.0 development tree has 100% line coverage for executable code under
-`lib` (728/728 lines). The full suite and a randomized-order run each pass all
-166 test executions.
+The 1.6.1 release has 100% line coverage for executable code under `lib`
+(742/742 lines). The full suite and a randomized-order run each pass all 170
+test executions.
 
 To reproduce the line-coverage report locally:
 
