@@ -16,13 +16,29 @@
 
 part of '../../approval_tests.dart';
 
+/// Identifies why an approval verification failed.
+enum ApprovalMismatchKind {
+  /// The approved and received artifacts contain different values.
+  contentMismatch,
+
+  /// Verification required an approved artifact, but none existed.
+  missingApproved,
+}
+
 /// Exception thrown when the actual value doesn't match the expected value.
 final class DoesntMatchException implements Exception {
   final String message;
 
   final StackTrace? stackTrace;
 
-  const DoesntMatchException(this.message, {this.stackTrace});
+  /// The typed reason for this mismatch.
+  final ApprovalMismatchKind kind;
+
+  const DoesntMatchException(
+    this.message, {
+    this.stackTrace,
+    this.kind = ApprovalMismatchKind.contentMismatch,
+  });
 
   @override
   String toString() => message;

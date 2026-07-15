@@ -52,6 +52,29 @@ ApprovalTests is designed for two level: Dart and Flutter. <br>
 - If there's a difference, a `reporter` tool will highlight the mismatch and the test fails.
 - If the test is passed, the `received` file is deleted automatically. You can change this by changing the `deleteReceivedFile` value in `options`. If the test fails, the received file remains for analysis.
 
+### Missing approved files
+
+The default policy preserves the 1.x first-run workflow: verification creates
+the missing approved file and passes. Use strict mode when verification must
+never create or update approved artifacts, such as in CI:
+
+```dart
+Approvals.verify(
+  response,
+  options: const Options(
+    missingApprovedPolicy: MissingApprovedPolicy.writeReceivedAndFail,
+  ),
+);
+```
+
+Strict mode writes a reviewable received file and throws a
+`DoesntMatchException` whose `kind` is
+`ApprovalMismatchKind.missingApproved`. Generate or approve the expected file
+locally after reviewing it; `dart run approval_tests:review` is the preferred
+review workflow. The `approveResult` option is a deliberate local migration
+tool and is ignored by strict mode so verification cannot mutate an approved
+artifact.
+
 ## 📦 Installation
 
 Add the following to your `pubspec.yaml` file:

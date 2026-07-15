@@ -65,7 +65,21 @@ class Approvals {
 
     writer.writeToFile(namer.received);
 
-    if (options.approveResult || !ApprovalUtils.isFileExists(namer.approved)) {
+    final approvedExists = ApprovalUtils.isFileExists(namer.approved);
+
+    if (!approvedExists &&
+        options.missingApprovedPolicy ==
+            MissingApprovedPolicy.writeReceivedAndFail) {
+      throw DoesntMatchException(
+        'No approved file exists for [${namer.receivedFileName}].\n\n'
+        ' - Approved file path: ${namer.approved}\n\n'
+        ' - Received file path: ${namer.received}',
+        kind: ApprovalMismatchKind.missingApproved,
+      );
+    }
+
+    if (options.missingApprovedPolicy == MissingApprovedPolicy.createAndPass &&
+        (options.approveResult || !approvedExists)) {
       writer.writeToFile(namer.approved);
     }
   }

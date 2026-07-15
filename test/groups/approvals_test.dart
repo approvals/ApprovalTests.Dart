@@ -14,6 +14,15 @@ class _FailingReporter implements Reporter {
   }
 }
 
+final class _RecordingReporter implements Reporter {
+  var callCount = 0;
+
+  @override
+  Future<void> report(String approvedPath, String receivedPath) async {
+    callCount++;
+  }
+}
+
 void main() => registerApprovalsTests();
 
 void registerApprovalsTests() {
@@ -120,6 +129,136 @@ void registerApprovalsTests() {
       } finally {
         tempDir.deleteSync(recursive: true);
       }
+    });
+  });
+
+  group('Approvals.verify missing-approved policy', () {
+    test('creates approved file and passes by default', () {
+      final tempDir = Directory.systemTemp.createTempSync(
+        'approval_missing_compatibility',
+      );
+      addTearDown(() {
+        if (tempDir.existsSync()) {
+          tempDir.deleteSync(recursive: true);
+        }
+      });
+      final fileBase = '${tempDir.path}/compatibility';
+
+      Approvals.verify(
+        'received content',
+        options: Options(
+          namer: Namer(filePath: fileBase, addTestName: false),
+          logResults: false,
+        ),
+      );
+
+      expect(File('$fileBase.approved.txt').existsSync(), isTrue);
+      expect(File('$fileBase.received.txt').existsSync(), isFalse);
+    });
+
+    test('strict mode leaves received file and throws typed mismatch', () {
+      final tempDir = Directory.systemTemp.createTempSync(
+        'approval_missing_strict',
+      );
+      addTearDown(() {
+        if (tempDir.existsSync()) {
+          tempDir.deleteSync(recursive: true);
+        }
+      });
+      final fileBase = '${tempDir.path}/strict';
+      final reporter = _RecordingReporter();
+
+      expect(
+        () => Approvals.verify(
+          'received content',
+          options: Options(
+            namer: Namer(filePath: fileBase, addTestName: false),
+            missingApprovedPolicy: MissingApprovedPolicy.writeReceivedAndFail,
+            reporter: reporter,
+            logErrors: false,
+          ),
+        ),
+        throwsA(
+          isA<DoesntMatchException>().having(
+            (error) => error.kind,
+            'kind',
+            ApprovalMismatchKind.missingApproved,
+          ),
+        ),
+      );
+
+      expect(File('$fileBase.approved.txt').existsSync(), isFalse);
+      final receivedContent = File('$fileBase.received.txt').readAsStringSync();
+      expect(receivedContent, contains('received content'));
+      expect(reporter.callCount, isZero);
+    });
+
+    test('strict mode does not let approveResult create approved file', () {
+      final tempDir = Directory.systemTemp.createTempSync(
+        'approval_missing_strict_approve',
+      );
+      addTearDown(() {
+        if (tempDir.existsSync()) {
+          tempDir.deleteSync(recursive: true);
+        }
+      });
+      final fileBase = '${tempDir.path}/strict_approve';
+
+      expect(
+        () => Approvals.verify(
+          'received content',
+          options: Options(
+            namer: Namer(filePath: fileBase, addTestName: false),
+            approveResult: true,
+            missingApprovedPolicy: MissingApprovedPolicy.writeReceivedAndFail,
+            logErrors: false,
+          ),
+        ),
+        throwsA(
+          isA<DoesntMatchException>().having(
+            (error) => error.kind,
+            'kind',
+            ApprovalMismatchKind.missingApproved,
+          ),
+        ),
+      );
+
+      expect(File('$fileBase.approved.txt').existsSync(), isFalse);
+    });
+
+    test('strict mode does not let approveResult mutate approved file', () {
+      final tempDir = Directory.systemTemp.createTempSync(
+        'approval_existing_strict_approve',
+      );
+      addTearDown(() {
+        if (tempDir.existsSync()) {
+          tempDir.deleteSync(recursive: true);
+        }
+      });
+      final fileBase = '${tempDir.path}/strict_approve';
+      final approvedFile = File('$fileBase.approved.txt')
+        ..writeAsStringSync('existing approved content');
+
+      expect(
+        () => Approvals.verify(
+          'new received content',
+          options: Options(
+            namer: Namer(filePath: fileBase, addTestName: false),
+            approveResult: true,
+            missingApprovedPolicy: MissingApprovedPolicy.writeReceivedAndFail,
+            logErrors: false,
+          ),
+        ),
+        throwsA(
+          isA<DoesntMatchException>().having(
+            (error) => error.kind,
+            'kind',
+            ApprovalMismatchKind.contentMismatch,
+          ),
+        ),
+      );
+
+      expect(approvedFile.readAsStringSync(), 'existing approved content');
     });
   });
 }

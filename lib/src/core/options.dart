@@ -16,6 +16,15 @@
 
 part of '../../approval_tests.dart';
 
+/// Defines how verification behaves when no approved file exists.
+enum MissingApprovedPolicy {
+  /// Creates the approved file and passes, preserving the 1.x behavior.
+  createAndPass,
+
+  /// Keeps the received file and fails without writing the approved file.
+  writeReceivedAndFail,
+}
+
 /// `Options` class is a class used to set options for the approval test.
 class Options {
   /// `scrubber` is a scrubber that is used to clean up strings before they are compared.
@@ -29,6 +38,9 @@ class Options {
 
   /// A final bool variable `approveResult` used to determine if the result should be approved after the test.
   final bool approveResult;
+
+  /// Controls verification when the approved file does not exist.
+  final MissingApprovedPolicy missingApprovedPolicy;
 
   /// A final bool variable `deleteReceivedFile` used to determine if the received file should be deleted after passed test.
   final bool deleteReceivedFile;
@@ -49,6 +61,7 @@ class Options {
   const Options({
     this.scrubber = const ScrubNothing(),
     this.approveResult = false,
+    this.missingApprovedPolicy = MissingApprovedPolicy.createAndPass,
     this.comparator = const FileComparator(),
     this.reporter = const CommandLineReporter(),
     this.deleteReceivedFile = true,
@@ -61,6 +74,7 @@ class Options {
   Options copyWith({
     ApprovalScrubber? scrubber,
     bool? approveResult,
+    MissingApprovedPolicy? missingApprovedPolicy,
     Comparator? comparator,
     Reporter? reporter,
     bool? deleteReceivedFile,
@@ -72,6 +86,8 @@ class Options {
       Options(
         scrubber: scrubber ?? this.scrubber,
         approveResult: approveResult ?? this.approveResult,
+        missingApprovedPolicy:
+            missingApprovedPolicy ?? this.missingApprovedPolicy,
         comparator: comparator ?? this.comparator,
         reporter: reporter ?? this.reporter,
         deleteReceivedFile: deleteReceivedFile ?? this.deleteReceivedFile,

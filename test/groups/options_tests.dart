@@ -19,11 +19,41 @@ void registerOptionsTests() {
     });
 
     test('keeps previous values when parameters omitted', () {
-      const options = Options(logResults: false, approveResult: true);
+      const options = Options(
+        logResults: false,
+        approveResult: true,
+        missingApprovedPolicy: MissingApprovedPolicy.writeReceivedAndFail,
+      );
       final updated = options.copyWith();
 
       expect(updated.logResults, isFalse);
       expect(updated.approveResult, isTrue);
+      expect(
+        updated.missingApprovedPolicy,
+        MissingApprovedPolicy.writeReceivedAndFail,
+      );
+    });
+
+    test('uses compatibility policy by default', () {
+      const options = Options();
+
+      expect(
+        options.missingApprovedPolicy,
+        MissingApprovedPolicy.createAndPass,
+      );
+    });
+
+    test('replaces missing-approved policy explicitly', () {
+      const options = Options();
+
+      final updated = options.copyWith(
+        missingApprovedPolicy: MissingApprovedPolicy.writeReceivedAndFail,
+      );
+
+      expect(
+        updated.missingApprovedPolicy,
+        MissingApprovedPolicy.writeReceivedAndFail,
+      );
     });
   });
 }

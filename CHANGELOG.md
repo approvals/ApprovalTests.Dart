@@ -4,6 +4,10 @@
 
 - Added `CompositeScrubber` for applying multiple scrubbers in a predictable
   order.
+- Added `MissingApprovedPolicy` with backwards-compatible `createAndPass` and
+  strict `writeReceivedAndFail` modes. Strict failures expose
+  `ApprovalMismatchKind.missingApproved` and leave the received artifact for
+  review without writing the approved file.
 
 ### Changed
 

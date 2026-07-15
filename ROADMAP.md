@@ -102,11 +102,11 @@ The current implementation creates an approved file and passes when no
 approved file exists. Preserve that behavior for compatibility, but make the
 policy explicit.
 
-- [ ] Add an immutable missing-approved policy with at least compatibility
+- [x] Add an immutable missing-approved policy with at least compatibility
   (`createAndPass`) and strict (`writeReceivedAndFail`) modes.
-- [ ] Make strict mode produce a typed `missingApproved` mismatch and leave a
+- [x] Make strict mode produce a typed `missingApproved` mismatch and leave a
   reviewable received artifact.
-- [ ] Ensure strict mode never writes or mutates an approved file.
+- [x] Ensure strict mode never writes or mutates an approved file.
 - [x] Document that `approveResult` is a local migration tool and must not be
   enabled in normal CI.
 - [ ] Decide the 2.0 default only after publishing migration guidance and
