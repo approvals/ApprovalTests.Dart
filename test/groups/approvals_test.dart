@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:approval_tests/approval_tests.dart';
 import 'package:approval_tests/src/core/enums/file_type.dart';
+import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
 /// Reporter that always fails, used to exercise the catchError handler.
@@ -341,7 +342,7 @@ void registerApprovalsTests() {
           tempDir.deleteSync(recursive: true);
         }
       });
-      final fileBase = '${tempDir.path}/shared';
+      final fileBase = p.join(tempDir.path, 'shared');
       final options = Options(
         namer: Namer(filePath: fileBase, addTestName: false),
         logErrors: false,

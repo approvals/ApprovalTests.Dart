@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:approval_tests/approval_tests.dart';
 import 'package:approval_tests/src/cli/review_cli.dart';
+import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
 void main() {
@@ -55,12 +56,15 @@ void main() {
           await Directory.systemTemp.createTemp('approval_review_cli_');
       addTearDown(() => tempDirectory.delete(recursive: true));
 
-      final nestedDirectory = Directory('${tempDirectory.path}/nested');
+      final nestedDirectory = Directory(p.join(tempDirectory.path, 'nested'));
       await nestedDirectory.create();
-      await File('${tempDirectory.path}/z.received.txt').writeAsString('z');
-      await File('${nestedDirectory.path}/b.received.txt').writeAsString('b');
-      await File('${nestedDirectory.path}/a.received.txt').writeAsString('a');
-      await File('${tempDirectory.path}/ignored.approved.txt')
+      await File(p.join(tempDirectory.path, 'z.received.txt'))
+          .writeAsString('z');
+      await File(p.join(nestedDirectory.path, 'b.received.txt'))
+          .writeAsString('b');
+      await File(p.join(nestedDirectory.path, 'a.received.txt'))
+          .writeAsString('a');
+      await File(p.join(tempDirectory.path, 'ignored.approved.txt'))
           .writeAsString('ignored');
 
       final files = await ReviewCli(
@@ -70,8 +74,8 @@ void main() {
       expect(
         files.map((file) => file.path.substring(tempDirectory.path.length + 1)),
         equals([
-          'nested/a.received.txt',
-          'nested/b.received.txt',
+          p.join('nested', 'a.received.txt'),
+          p.join('nested', 'b.received.txt'),
           'z.received.txt',
         ]),
       );
@@ -324,8 +328,8 @@ void main() {
       final tempDirectory =
           await Directory.systemTemp.createTemp('approval_review_cli_');
       addTearDown(() => tempDirectory.delete(recursive: true));
-      final firstFile = File('${tempDirectory.path}/a.received.txt');
-      final secondFile = File('${tempDirectory.path}/b.received.txt');
+      final firstFile = File(p.join(tempDirectory.path, 'a.received.txt'));
+      final secondFile = File(p.join(tempDirectory.path, 'b.received.txt'));
       await secondFile.writeAsString('b');
       await firstFile.writeAsString('a');
       final console = _FakeReviewConsole(['n']);

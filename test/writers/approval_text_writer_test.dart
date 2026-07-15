@@ -99,7 +99,10 @@ void main() {
             invalidObservation = 'partial file with ${observed.length} bytes';
           }
         } on FileSystemException catch (error) {
-          invalidObservation = 'missing file: ${error.message}';
+          // Windows may deny a read during replace while the path still exists.
+          if (!File(path).existsSync()) {
+            invalidObservation = 'missing file: ${error.message}';
+          }
         }
         await Future<void>.delayed(Duration.zero);
       }

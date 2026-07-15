@@ -1,0 +1,35 @@
+# AgentSync — Project Configuration
+# All keys are optional — remove any that you leave at the default.
+
+agentsync_version: "0.30.0"
+
+# Tools: which ones to sync for this project.
+# Each name must match a base tool (see `agentsync list`) or a custom override
+# file under .ai/src/tools/<name>.yaml.
+tools:
+  enabled:
+    - codex
+
+# Source paths (override if you use a custom layout).
+source:
+  agents: ".ai/src/AGENTS.md"
+  rules: ".ai/src/rules"
+  skills: ".ai/src/skills"
+  commands: ".ai/src/commands"
+  subagents: ".ai/src/agents"
+  tools: ".ai/src/tools"
+
+# Global defaults applied to all tools.
+defaults:
+  enabled: false
+  cleanup: true
+
+# Post-sync hooks run arbitrary shell — enabling them requires an out-of-repo
+# signal (AGENTSYNC_ALLOW_POST_SYNC=true or allow: true in the install-dir
+# config.yaml), never this in-repo file. `skip: true` here always disables them.
+post_sync:
+  skip: false
+
+# .gitignore management.
+gitignore:
+  update: true
