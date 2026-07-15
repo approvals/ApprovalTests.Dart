@@ -20,6 +20,8 @@ part of '../approval_tests.dart';
 class Approvals {
   static const FilePathExtractor filePathExtractor =
       FilePathExtractor(stackTraceFetcher: StackTraceFetcher());
+  static final Expando<_ApprovalPathRegistry> _pathRegistries =
+      Expando<_ApprovalPathRegistry>();
 
   // ================== Verify methods ==================
 
@@ -31,6 +33,7 @@ class Approvals {
     final namer = _resolveNamer(options);
 
     try {
+      _registerArtifactPaths(namer);
       _writeApprovalFiles(response, namer, options);
       _compareAndReport(namer, options);
       _logSuccessAndCleanup(namer, options);
@@ -52,6 +55,64 @@ class Approvals {
     return options.namer.copyWith(
       filePath: completedPath,
     );
+  }
+
+  static void _registerArtifactPaths(ApprovalNamer namer) {
+    final owner = Invoker.current?.liveTest.suite ?? Zone.current;
+    final registry = _pathRegistries[owner] ??= _ApprovalPathRegistry();
+    final verificationNumber = ++registry.verificationCount;
+    final testName =
+        Invoker.current?.liveTest.test.name ?? 'standalone verification';
+    final description = namer.description;
+    final descriptionPart = description == null || description.isEmpty
+        ? ''
+        : ', description: $description';
+    final verification =
+        '$testName [verification $verificationNumber$descriptionPart]';
+    final pendingPaths = <String, String>{};
+
+    _stageArtifactPath(
+      registry: registry,
+      pendingPaths: pendingPaths,
+      path: namer.approved,
+      artifactRole: 'approved',
+      verification: verification,
+    );
+    _stageArtifactPath(
+      registry: registry,
+      pendingPaths: pendingPaths,
+      path: namer.received,
+      artifactRole: 'received',
+      verification: verification,
+    );
+    registry.paths.addAll(pendingPaths);
+  }
+
+  static void _stageArtifactPath({
+    required _ApprovalPathRegistry registry,
+    required Map<String, String> pendingPaths,
+    required String path,
+    required String artifactRole,
+    required String verification,
+  }) {
+    _ApprovalName.validateArtifactPath(
+      path,
+      component: '$artifactRole artifact name',
+    );
+    final absolutePath = p.normalize(p.absolute(path));
+    final collisionKey =
+        Platform.isWindows ? absolutePath.toLowerCase() : absolutePath;
+    final identity = '$verification ($artifactRole)';
+    final firstVerification =
+        registry.paths[collisionKey] ?? pendingPaths[collisionKey];
+    if (firstVerification != null) {
+      throw ApprovalPathCollisionException(
+        path: absolutePath,
+        firstVerification: firstVerification,
+        secondVerification: identity,
+      );
+    }
+    pendingPaths[collisionKey] = identity;
   }
 
   static void _writeApprovalFiles(
@@ -228,4 +289,9 @@ class Approvals {
     final response = processor(combinations);
     verify(response, options: options);
   }
+}
+
+final class _ApprovalPathRegistry {
+  final Map<String, String> paths = {};
+  var verificationCount = 0;
 }

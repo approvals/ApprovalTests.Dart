@@ -75,17 +75,47 @@ review workflow. The `approveResult` option is a deliberate local migration
 tool and is ignored by strict mode so verification cannot mutate an approved
 artifact.
 
+### Safe artifact names
+
+Test names, descriptions, custom file names, and final artifact names are
+validated as filename segments. `/` and `\` are rejected with
+`InvalidApprovalNameException` instead of being interpreted as directories.
+Control characters, Windows-invalid characters, trailing dots or spaces, and
+reserved names such as `CON` are normalized consistently on every platform.
+Existing valid names remain unchanged.
+
+Generated filename segments are limited to 255 UTF-8 bytes. Longer names keep
+a readable prefix and receive a stable 16-character hash while preserving the
+artifact extension. If two verifications in one loaded test suite target the
+same normalized path, the second fails before writing with
+`ApprovalPathCollisionException`; the exception exposes the path and both
+verification identities.
+
+Approved and received paths are validated and claimed together before any
+artifact is written. If either path is invalid, neither path remains claimed.
+When one test performs several logical approvals, give each verification a
+unique description or use `IndexedNamer` so their artifact paths do not
+collide.
+
+### Atomic text artifacts
+
+`ApprovalTextWriter` writes to a same-directory temporary file, flushes it,
+and atomically replaces the destination. Concurrent readers therefore observe
+either the previous complete artifact or the new complete artifact, never a
+partially written file. Temporary files are cleaned up if replacement fails.
+
 ## 📦 Installation
 
 Add the following to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  approval_tests: ^1.5.0
+  approval_tests: ^1.6.0
 ```
 
-Version 1.5.0 requires Dart 3.6 or newer because the internal console logger
-uses `ispectify 6.1.2`.
+These docs target the 1.6.0 development release. Dart 3.6 or newer has been
+required since 1.5.0 because the internal console logger uses
+`ispectify 6.1.2`.
 
 ## 👀 Getting Started
 
@@ -253,6 +283,29 @@ Approvals.verify(
 );
 ```
 
+Use aliases when repeated volatile values carry meaning. The same source value
+receives the same alias within one `scrub()` call, while distinct values are
+numbered by first appearance. Alias state resets for every call.
+
+```dart
+Approvals.verify(
+  response,
+  options: Options(
+    scrubber: CompositeScrubber([
+      const ScrubUuids(),
+      const ScrubWithAliases(
+        pattern: r'user-\d+',
+        alias: 'user',
+      ),
+    ]),
+  ),
+);
+```
+
+`ScrubUuids` treats case variants of a canonical UUID as the same value.
+`ScrubWithAliases` is case-sensitive by default; set `caseSensitive: false`
+when case should not affect alias identity.
+
 ## 📝 Examples
 
 I have provided a couple of small examples here to show you how to use the package.
@@ -394,6 +447,23 @@ Prefer learning by listening? Then you might enjoy the following podcasts:
 - [The Watir Podcast](https://watirpodcast.com/podcast-53/)
 
 ## Coverage
+
+The 1.6.0 development tree has 100% line coverage for executable code under
+`lib` (728/728 lines). The full suite and a randomized-order run each pass all
+166 test executions.
+
+To reproduce the line-coverage report locally:
+
+```shell
+dart pub global activate coverage
+dart test --coverage=coverage
+dart pub global run coverage:format_coverage \
+  --packages=.dart_tool/package_config.json \
+  --report-on=lib \
+  --lcov \
+  -o coverage/lcov.info \
+  -i coverage
+```
 
 [![](https://codecov.io/gh/approvals/ApprovalTests.Dart/branch/main/graphs/sunburst.svg)](https://codecov.io/gh/approvals/ApprovalTests.Dart/branch/main)
 

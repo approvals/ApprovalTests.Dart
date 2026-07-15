@@ -1,11 +1,13 @@
-import 'dart:io'; // For Platform.pathSeparator
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:approval_tests/approval_tests.dart';
+import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
 void main() => registerNamerTests();
 
 void registerNamerTests() {
-  // Use the platform-specific path separator
   final String separator = Platform.pathSeparator;
 
   group('Namer Tests', () {
@@ -161,6 +163,195 @@ void registerNamerTests() {
 
       expect(first.receivedFileName, equals('sample.0.received.txt'));
       expect(second.receivedFileName, equals('sample.1.received.txt'));
+    });
+  });
+
+  group('Approval name safety', () {
+    test('reports the rejected component without echoing its value', () {
+      const exception = InvalidApprovalNameException(
+        component: 'description',
+        value: 'private/unsafe',
+        reason: 'path separators are not allowed',
+      );
+
+      expect(
+        exception.toString(),
+        'Invalid approval description: path separators are not allowed',
+      );
+      expect(exception.toString(), isNot(contains('private/unsafe')));
+    });
+
+    test('rejects path separators in descriptions', () {
+      final namer = Namer(
+        filePath: 'test${separator}sample.dart',
+        addTestName: false,
+        description: 'group/name',
+      );
+
+      expect(
+        () => namer.approvedFileName,
+        throwsA(
+          isA<InvalidApprovalNameException>()
+              .having(
+                (error) => error.component,
+                'component',
+                'description',
+              )
+              .having(
+                (error) => error.value,
+                'value',
+                'group/name',
+              ),
+        ),
+      );
+    });
+
+    test('rejects path separators in test and file name segments', () {
+      const testNameOptions = FileNamerOptions(
+        folderPath: 'test',
+        fileName: 'sample',
+        testName: r'group\case',
+      );
+      const fileNameOptions = FileNamerOptions(
+        folderPath: 'test',
+        fileName: 'nested/name',
+        testName: 'case',
+      );
+
+      expect(
+        () => testNameOptions.approvedFileName,
+        throwsA(
+          isA<InvalidApprovalNameException>().having(
+            (error) => error.component,
+            'component',
+            'test name',
+          ),
+        ),
+      );
+      expect(
+        () => fileNameOptions.approvedFileName,
+        throwsA(
+          isA<InvalidApprovalNameException>().having(
+            (error) => error.component,
+            'component',
+            'file name',
+          ),
+        ),
+      );
+    });
+
+    test('normalizes invalid and trailing characters consistently', () {
+      const options = FileNamerOptions(
+        folderPath: 'test',
+        fileName: 'sample',
+        testName: 'bad:name\u0001',
+        description: 'tail. ',
+      );
+
+      expect(
+        options.approvedFileName,
+        'sample.bad_name_.tail__.approved.txt',
+      );
+    });
+
+    test('prefixes platform-reserved segments', () {
+      const options = FileNamerOptions(
+        folderPath: 'test',
+        fileName: 'CON',
+        testName: 'case',
+      );
+
+      expect(options.approvedFileName, '_CON.case.approved.txt');
+    });
+
+    test('uses the normalized base segment in full paths', () {
+      final namer = Namer(
+        filePath: 'test${separator}CON.dart',
+        addTestName: false,
+      );
+
+      expect(namer.approved, 'test${separator}_CON.approved.txt');
+      expect(namer.approvedFileName, '_CON.approved.txt');
+    });
+
+    test('keeps existing valid names byte-for-byte compatible', () {
+      const options = FileNamerOptions(
+        folderPath: 'custom/folder',
+        fileName: 'base',
+        testName: 'test_case',
+        description: 'details',
+      );
+
+      expect(options.approvedFileName, 'base.test_case.details.approved.txt');
+      expect(options.receivedFileName, 'base.test_case.details.received.txt');
+    });
+
+    test('keeps a 255-byte filename unchanged', () {
+      final base = List.filled(242, 'a').join();
+      final namer = Namer(
+        filePath: 'test${separator}$base.dart',
+        addTestName: false,
+      );
+
+      expect(namer.approvedFileName, '$base.approved.txt');
+      expect(namer.approvedFileName.codeUnits, hasLength(255));
+    });
+
+    test('shortens a filename above 255 UTF-8 bytes with a stable hash', () {
+      final base = List.filled(243, 'a').join();
+      final first = Namer(
+        filePath: 'test${separator}$base.dart',
+        addTestName: false,
+      ).approvedFileName;
+      final second = Namer(
+        filePath: 'test${separator}$base.dart',
+        addTestName: false,
+      ).approvedFileName;
+
+      expect(first, second);
+      expect(first.codeUnits.length, lessThanOrEqualTo(255));
+      expect(
+        first,
+        '${List.filled(225, 'a').join()}.'
+        '3ff1ecf4916c4935.approved.txt',
+      );
+    });
+
+    test('hash distinguishes long names with the same readable prefix', () {
+      final sharedPrefix = List.filled(260, 'a').join();
+      final first = Namer(
+        filePath: 'test${separator}${sharedPrefix}x.dart',
+        addTestName: false,
+      ).approvedFileName;
+      final second = Namer(
+        filePath: 'test${separator}${sharedPrefix}y.dart',
+        addTestName: false,
+      ).approvedFileName;
+
+      expect(first, isNot(second));
+    });
+
+    test('applies the length limit to UTF-8 bytes', () {
+      final base = List.filled(130, 'é').join();
+      final result = Namer(
+        filePath: 'test${separator}$base.dart',
+        addTestName: false,
+      ).approvedFileName;
+
+      expect(utf8.encode(result).length, lessThanOrEqualTo(255));
+      expect(result, endsWith('.approved.txt'));
+    });
+
+    test('applies the length limit without changing the directory', () {
+      final directory = p.join('root', List.filled(220, 'd').join());
+      final base = List.filled(243, 'a').join();
+      final result = Namer(
+        filePath: p.join(directory, '$base.dart'),
+        addTestName: false,
+      ).approved;
+
+      expect(p.dirname(result), directory);
+      expect(utf8.encode(p.basename(result)).length, lessThanOrEqualTo(255));
     });
   });
 }

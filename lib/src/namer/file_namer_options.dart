@@ -55,12 +55,31 @@ final class FileNamerOptions {
   /// Generates the received file name.
   String get receivedFileName => _constructFileName('received');
 
-  /// Constructs a file name based on type and description.
   String _constructFileName(String status) {
+    final normalizedFileName = _ApprovalName.normalizeSegment(
+      fileName,
+      component: 'file name',
+    );
+    final normalizedTestName = _ApprovalName.normalizeSegment(
+      testName,
+      component: 'test name',
+    );
+    final normalizedStatus = _ApprovalName.normalizeSegment(
+      status,
+      component: 'extension',
+    );
     final descPart = description != null ? '.$_updatedDescription' : '';
-    return '$fileName.$testName$descPart.$status.txt';
+    return _ApprovalName.buildFileName(
+      stem: '$normalizedFileName.$normalizedTestName$descPart',
+      extension: '$normalizedStatus.txt',
+    );
   }
 
-  /// Converts spaces in the description to underscores.
-  String get _updatedDescription => description?.replaceAll(' ', '_') ?? '';
+  String get _updatedDescription {
+    final normalized = _ApprovalName.normalizeSegment(
+      description ?? '',
+      component: 'description',
+    );
+    return normalized.replaceAll(' ', '_');
+  }
 }

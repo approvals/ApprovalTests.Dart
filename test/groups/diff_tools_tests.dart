@@ -13,10 +13,34 @@ void registerDiffToolTests() {
   const gitReporter = GitReporter();
 
   group('Approvals: test for Diff Tools', () {
+    late Directory fixtureDirectory;
+    late String existentApprovedPath;
+    late String existentReceivedPath;
+
     setUpAll(() {
       ApprovalLogger.log(
         "$lines25 Group: Diff Tool tests are starting $lines25",
       );
+    });
+
+    setUp(() {
+      fixtureDirectory = Directory.systemTemp.createTempSync(
+        'approval_tests_diff_tools_',
+      );
+      existentApprovedPath = File(
+        '${fixtureDirectory.path}${Platform.pathSeparator}fixture.approved.txt',
+      ).path;
+      existentReceivedPath = File(
+        '${fixtureDirectory.path}${Platform.pathSeparator}fixture.received.txt',
+      ).path;
+      File(existentApprovedPath).writeAsStringSync('approved');
+      File(existentReceivedPath).writeAsStringSync('received');
+    });
+
+    tearDown(() {
+      if (fixtureDirectory.existsSync()) {
+        fixtureDirectory.deleteSync(recursive: true);
+      }
     });
 
     test('Verify string with Android Studio DiffReporter on Windows', () async {
@@ -25,13 +49,6 @@ void registerDiffToolTests() {
         platformWrapper: WindowsPlatformWrapper(),
       );
 
-      // Setup: paths to existent files
-      const existentApprovedPath =
-          'test/approved_files/approval_test.verify.approved.txt';
-      const existentReceivedPath =
-          'test/approved_files/approval_test.verify.received.txt';
-
-      // Expect an exception to be thrown
       if (isWindows) {
         await expectLater(
           reporter.report(
@@ -61,13 +78,6 @@ void registerDiffToolTests() {
         platformWrapper: LinuxPlatformWrapper(),
       );
 
-      // Setup: paths to existent files
-      const existentApprovedPath =
-          'test/approved_files/approval_test.verify.approved.txt';
-      const existentReceivedPath =
-          'test/approved_files/approval_test.verify.received.txt';
-
-      // Expect an exception to be thrown
       if (isLinux) {
         await expectLater(
           reporter.report(
@@ -97,7 +107,6 @@ void registerDiffToolTests() {
         platformWrapper: LinuxPlatformWrapper(),
       );
 
-      // Expect an exception to be thrown
       expect(
         reporter.isReporterAvailable,
         isLinux,
@@ -114,13 +123,6 @@ void registerDiffToolTests() {
         platformWrapper: NoPlatformWrapper(),
       );
 
-      // Setup: paths to existent files
-      const existentApprovedPath =
-          'test/approved_files/approval_test.verify.approved.txt';
-      const existentReceivedPath =
-          'test/approved_files/approval_test.verify.received.txt';
-
-      // Expect an exception to be thrown
       await expectLater(
         reporter.report(
           existentApprovedPath,
@@ -135,13 +137,6 @@ void registerDiffToolTests() {
     });
 
     test('verify string with Git reporter', () async {
-      // Setup: paths to existent files
-      const existentApprovedPath =
-          'test/approved_files/approval_test.verify.approved.txt';
-      const existentReceivedPath =
-          'test/approved_files/approval_test.verify.received.txt';
-
-      // Expect an exception to be thrown
       await expectLater(
         gitReporter.report(
           existentApprovedPath,
@@ -184,12 +179,6 @@ void registerDiffToolTests() {
 
       const gitReporter = GitReporter(customDiffInfo: customDiffInfo);
 
-      const existentApprovedPath =
-          'test/approved_files/approval_test.verify.approved.txt';
-      const existentReceivedPath =
-          'test/approved_files/approval_test.verify.received.txt';
-
-      // Expect an exception to be thrown
       await expectLater(
         gitReporter.report(
           existentApprovedPath,

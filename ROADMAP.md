@@ -5,12 +5,16 @@ Last updated: 2026-07-15
 Current baseline:
 
 - latest published package:
-  [`approval_tests 1.4.3`](https://pub.dev/packages/approval_tests);
-- repository baseline: `main` at `1f8b096`;
-- current package version: `1.5.0`;
+  [`approval_tests 1.5.0`](https://pub.dev/packages/approval_tests);
+- repository baseline: `main` at `4e3fd3e`, with the 1.6.0 delivery slices
+  completed in the current working tree;
+- current development version: `1.6.0`;
 - version 1.5.0 includes `CompositeScrubber`, the sequential and validated
-  review CLI, and the `ispectify` logging migration; these changes are
-  implemented, tested, documented, and recorded in `CHANGELOG.md`;
+  review CLI, the `ispectify` logging migration, explicit missing-approved
+  policy, and the Dart 3.6 minimum;
+- version 1.6.0 adds atomic text writes, safe naming, deterministic length
+  limits, typed collision diagnostics, alias-preserving scrubbers, and 100%
+  line coverage for executable library code;
 - version 1.5.0 requires Dart 3.6 because `ispectify 6.1.2` is the internal
   console logging backend;
 - compatibility policy: existing `verify()` calls and `.approved.txt` files
@@ -84,10 +88,17 @@ The package should provide:
       `.received.txt` validation, and awaited diff-tool failures.
 - [x] Custom regular-expression and date scrubbers.
 - [x] `CompositeScrubber` for applying multiple scrubbers in declaration order.
+- [x] Alias-preserving regular-expression and UUID scrubbers.
 - [x] `ispectify`-based console diagnostics with preserved exception stacks and
       disabled in-memory history.
 - [x] Indexed and descriptive approval naming.
 - [x] Cross-platform path handling and deterministic regression tests.
+- [x] Explicit missing-approved policy with strict verification support.
+- [x] Atomic text-artifact replacement under concurrent writes.
+- [x] Safe filename segments, deterministic length limits, and collision
+      diagnostics.
+- [x] 100% line coverage across executable library code, including failure,
+      cleanup, process, and default CLI wiring paths.
 
 ## Milestone 0 — Safe 1.x maintenance
 
@@ -121,17 +132,33 @@ Acceptance criteria:
 
 ### Naming safety and collision detection — P0
 
-- [ ] Validate test names, descriptions, extensions, and converter-produced
+Status: complete for the 1.6.0 development tree.
+
+- [x] Validate test names, descriptions, extensions, and converter-produced
   artifact names as filename segments rather than accepting path separators.
-- [ ] Normalize reserved names, control characters, trailing dots/spaces, and
+- [x] Normalize reserved names, control characters, trailing dots/spaces, and
   platform-specific invalid characters consistently.
-- [ ] Detect two logical approvals targeting the same output path in one test
+- [x] Detect two logical approvals targeting the same output path in one test
   run and fail with both verification identities.
-- [ ] Define deterministic length limits with a readable prefix plus stable
+- [x] Define deterministic length limits with a readable prefix plus stable
   hash when a generated name is too long.
-- [ ] Keep existing valid names byte-for-byte compatible.
+- [x] Keep existing valid names byte-for-byte compatible.
+
+Acceptance criteria:
+
+- [x] Unsafe separators fail with `InvalidApprovalNameException` before I/O.
+- [x] Invalid characters and reserved names normalize consistently while valid
+      names retain their existing bytes.
+- [x] Names over 255 UTF-8 bytes retain a readable prefix and stable hash.
+- [x] Collisions report both verification identities before writing.
+- [x] Approved and received paths are claimed atomically; a rejected pair
+      claims neither path.
 
 ### Review CLI correctness — P0
+
+Status: complete for the current text-artifact model. Generalizing received
+extensions remains intentionally deferred until Milestone 2 provides the
+artifact model.
 
 - [x] Review multiple received files sequentially; never run concurrent stdin
   prompts through `Future.wait`.
@@ -139,6 +166,8 @@ Acceptance criteria:
 - [x] Validate that an input is a supported received artifact before deriving
   or replacing its approved path.
 - [x] Sort discovered files by normalized relative path.
+- [x] Cover console I/O, default Git and diff-tool wiring, and process failures
+  without launching GUI tools.
 - [ ] Replace hard-coded `.received.txt` assumptions with the artifact model
   once Milestone 2 lands.
 - [x] Correct command hints to use `dart run approval_tests:review`.
@@ -147,10 +176,13 @@ Acceptance criteria:
 
 - [x] Correct examples that pass arbitrary objects to the string-only
   `verify()` API; use `verifyAsJson()` or an explicit formatter.
-- [ ] Publish the completed `CompositeScrubber` change in version 1.5.0 with
+- [x] Document the completed `CompositeScrubber` change for version 1.5.0 with
       API docs and a migration-neutral example.
-- [ ] Keep README installation snippets, `pubspec.yaml`, CHANGELOG, tags, and
-  release notes on the same version.
+- [x] Keep the published 1.5.0 history separate from new development changes.
+- [x] Keep the README installation snippet, `pubspec.yaml`, and CHANGELOG
+      development heading aligned at version 1.6.0.
+- [x] Record the 100% line-coverage gate and its reproducible local command.
+- [ ] Publish matching 1.6.0 package, tag, and release notes.
 - [x] Document exactly which files belong in source control:
   `*.approved.*` tracked and `*.received.*` ignored.
 - [x] Document the Dart 3.6 minimum introduced by the `ispectify` migration in
@@ -180,8 +212,8 @@ Acceptance criteria:
 
 ### Alias-preserving scrubbers
 
-- [ ] Add an aliasing regular-expression scrubber.
-- [ ] Add an opt-in UUID scrubber built on aliasing.
+- [x] Add an aliasing regular-expression scrubber.
+- [x] Add an opt-in UUID scrubber built on aliasing.
 - [ ] Expand date/time support to common ISO-8601 forms without changing the
   existing `ScrubDates` contract silently.
 - [ ] Add opt-in normalization for workspace, home-directory, temporary, and
@@ -192,17 +224,17 @@ Acceptance criteria:
 Aliasing must preserve relationships in the snapshot:
 
 ```text
-userId: uuid_1
-ownerId: uuid_1
-requestId: uuid_2
+userId: <uuid1>
+ownerId: <uuid1>
+requestId: <uuid2>
 ```
 
 Acceptance criteria:
 
-- repeated source values receive the same alias within one scrub operation;
-- counters reset between scrub operations;
-- overlapping matches and mixed-case UUIDs are tested;
-- no general-purpose number scrubber is introduced.
+- [x] Repeated source values receive the same alias within one scrub operation.
+- [x] Counters reset between scrub operations.
+- [x] Prefix-overlapping values and mixed-case UUIDs are tested.
+- [x] No general-purpose number scrubber is introduced.
 
 ### Reporter composition
 
@@ -564,8 +596,8 @@ validated during API review, but responsibility stays within the listed files.
 | Order | Deliverable | Primary files | Focused verification |
 | --- | --- | --- | --- |
 | 1 | Sequential and validated review CLI (complete) | `bin/review.dart`, `lib/src/cli/review_cli.dart`, `test/cli/review_cli_test.dart` | `dart test test/cli/review_cli_test.dart` |
-| 2 | Explicit missing-approved policy | `lib/src/core/options.dart`, `lib/src/approvals.dart`, `test/groups/approvals_test.dart` | `dart test test/groups/approvals_test.dart` |
-| 3 | Safe names and collision diagnostics | `lib/src/core/approval_namer.dart`, `lib/src/namer/`, `test/groups/namer.dart` | `dart test test/groups/namer.dart` |
+| 2 | Explicit missing-approved policy (released in 1.5.0) and atomic text-write hardening (complete for 1.6.0) | `lib/src/core/options.dart`, `lib/src/approvals.dart`, `lib/src/writers/approval_text_writer.dart`, policy and writer tests | `dart test test/groups/approvals_test.dart test/writers/approval_text_writer_test.dart` |
+| 3 | Safe names and collision diagnostics (complete for 1.6.0) | namers, final-path validation, typed exceptions, naming and collision tests | `dart test test/groups/namer.dart test/groups/approvals_test.dart` |
 | 4 | Explicit `ApprovalContext` with legacy fallback | `lib/src/core/approval_context.dart`, `lib/src/approvals.dart`, `lib/src/core/approval_namer.dart`, context tests | `dart test test/groups/context_test.dart` |
 | 5 | Awaited single-text verification path | `lib/src/core/verification_engine.dart`, `lib/src/approvals.dart`, reporter tests | `dart test test/groups/approvals_test.dart test/groups/reporter_arguments_test.dart` |
 | 6 | Text and binary artifact model | `lib/src/artifacts/`, `lib/src/core/options.dart`, artifact tests | `dart test test/groups/artifact_test.dart` |
@@ -573,6 +605,16 @@ validated during API review, but responsibility stays within the listed files.
 | 8 | Typed and extension-based converters | `lib/src/converters/`, `lib/src/core/utils/converter.dart`, converter tests | `dart test test/groups/converter_tests.dart` |
 | 9 | JSON manifest, stale checks, and repository checks | `bin/review.dart`, `bin/check.dart`, `lib/src/manifest/`, CLI tests | `dart test test/groups/manifest_test.dart test/groups/check_cli_test.dart` |
 | 10 | Exceptions, commands, combinations, directories, and storyboards | dedicated files under `lib/src/approvals/` with matching tests | run each focused test, then the full suite |
+
+### Completed slice verification
+
+The 1.6.0 development tree passed the local gates on 2026-07-15:
+
+- `dart format --output=none --set-exit-if-changed .` — no changes;
+- `dart analyze` — no issues;
+- full and randomized-order suites — all 166 test executions passed;
+- executable library code — 100% line coverage (728/728 lines);
+- `git diff --check` — clean, with no leftover temporary artifacts.
 
 After every slice run:
 
@@ -610,7 +652,7 @@ Every roadmap item must meet the following gates before release:
 
 - [ ] Public APIs have dartdoc, examples, and explicit failure behavior.
 - [ ] Business logic and error paths have focused tests.
-- [ ] New business logic maintains at least 80% line coverage, with failure and
+- [ ] Executable library code maintains 100% line coverage, with failure and
   cleanup paths covered explicitly.
 - [ ] `dart format` produces no changes.
 - [ ] `dart analyze` reports no issues.

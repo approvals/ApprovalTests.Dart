@@ -30,6 +30,7 @@ class ApprovalTestHelper {
     String? description,
     ApprovalScrubber scrubber = const ScrubNothing(),
     Reporter reporter = const CommandLineReporter(),
+    String folderPath = basePath,
   }) async {
     Approvals.verify(
       content,
@@ -42,6 +43,7 @@ class ApprovalTestHelper {
         reporter: reporter,
         scrubber: scrubber,
         description: description,
+        folderPath: folderPath,
       ),
     );
   }
@@ -57,8 +59,7 @@ class ApprovalTestHelper {
   }) async {
     Approvals.verifyAll(
       contents,
-      processor: (item) => item
-          .toString(), // Simple processor function that returns the item itself.
+      processor: (item) => item.toString(),
       options: _getOptions(
         testName,
         expectException: expectException,
@@ -156,12 +157,13 @@ class ApprovalTestHelper {
     String? description,
     ApprovalScrubber scrubber = const ScrubNothing(),
     Reporter reporter = const CommandLineReporter(),
+    String folderPath = basePath,
   }) =>
       Options(
         namer: useDefaultPath
             ? Namer(
                 options: FileNamerOptions(
-                  folderPath: basePath,
+                  folderPath: folderPath,
                   testName: testName,
                   fileName: 'approval_test',
                   description: description,

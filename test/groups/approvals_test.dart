@@ -23,6 +23,60 @@ final class _RecordingReporter implements Reporter {
   }
 }
 
+final class _FixedApprovalNamer implements ApprovalNamer {
+  @override
+  final String filePath;
+  @override
+  final String approved;
+  @override
+  final String received;
+  @override
+  final String? description;
+
+  const _FixedApprovalNamer({
+    required this.filePath,
+    required this.approved,
+    required this.received,
+    this.description,
+  });
+
+  @override
+  bool get addTestName => false;
+
+  @override
+  String get approvedFileName => _fileNameOf(approved);
+
+  @override
+  String get currentTestName => '';
+
+  @override
+  FileNamerOptions? get options => null;
+
+  @override
+  String get receivedFileName => _fileNameOf(received);
+
+  @override
+  bool get useSubfolder => false;
+
+  @override
+  _FixedApprovalNamer copyWith({
+    String? filePath,
+    FileNamerOptions? options,
+    bool? addTestName,
+    String? description,
+    bool? useSubfolder,
+  }) =>
+      _FixedApprovalNamer(
+        filePath: filePath ?? this.filePath,
+        approved: approved,
+        received: received,
+        description: description ?? this.description,
+      );
+
+  static String _fileNameOf(String path) =>
+      path.substring(path.lastIndexOf(Platform.pathSeparator) + 1);
+}
+
 void main() => registerApprovalsTests();
 
 void registerApprovalsTests() {
@@ -259,6 +313,200 @@ void registerApprovalsTests() {
       );
 
       expect(approvedFile.readAsStringSync(), 'existing approved content');
+    });
+  });
+
+  group('Approvals.verify path collisions', () {
+    test('collision message identifies both verifications', () {
+      const exception = ApprovalPathCollisionException(
+        path: '/tmp/shared.approved.txt',
+        firstVerification: 'first verification',
+        secondVerification: 'second verification',
+      );
+
+      expect(
+        exception.toString(),
+        'Approval path collision at [/tmp/shared.approved.txt].\n'
+        'First verification: first verification\n'
+        'Second verification: second verification',
+      );
+    });
+
+    test('fails before two logical approvals write the same path', () {
+      final tempDir = Directory.systemTemp.createTempSync(
+        'approval_path_collision',
+      );
+      addTearDown(() {
+        if (tempDir.existsSync()) {
+          tempDir.deleteSync(recursive: true);
+        }
+      });
+      final fileBase = '${tempDir.path}/shared';
+      final options = Options(
+        namer: Namer(filePath: fileBase, addTestName: false),
+        logErrors: false,
+        logResults: false,
+      );
+
+      Approvals.verify('first', options: options);
+
+      expect(
+        () => Approvals.verify('first', options: options),
+        throwsA(
+          isA<ApprovalPathCollisionException>()
+              .having(
+                (error) => error.path,
+                'path',
+                File('$fileBase.approved.txt').absolute.path,
+              )
+              .having(
+                (error) => error.firstVerification,
+                'firstVerification',
+                allOf(
+                  contains('fails before two logical approvals'),
+                  contains('(approved)'),
+                ),
+              )
+              .having(
+                (error) => error.secondVerification,
+                'secondVerification',
+                allOf(
+                  contains('fails before two logical approvals'),
+                  contains('(approved)'),
+                ),
+              ),
+        ),
+      );
+      expect(
+        File('$fileBase.approved.txt').readAsStringSync(),
+        contains('first'),
+      );
+    });
+
+    test('validates final paths returned by custom namers', () {
+      final tempDir = Directory.systemTemp.createTempSync(
+        'approval_custom_namer_validation',
+      );
+      addTearDown(() {
+        if (tempDir.existsSync()) {
+          tempDir.deleteSync(recursive: true);
+        }
+      });
+      final separator = Platform.pathSeparator;
+      final approved = '${tempDir.path}${separator}unsafe:name.approved.txt';
+      final received = '${tempDir.path}${separator}safe.received.txt';
+      final options = Options(
+        namer: _FixedApprovalNamer(
+          filePath: '${tempDir.path}${separator}source.dart',
+          approved: approved,
+          received: received,
+        ),
+        logErrors: false,
+      );
+
+      expect(
+        () => Approvals.verify('content', options: options),
+        throwsA(
+          isA<InvalidApprovalNameException>().having(
+            (error) => error.component,
+            'component',
+            'approved artifact name',
+          ),
+        ),
+      );
+      expect(File(received).existsSync(), isFalse);
+    });
+
+    test('rejects custom artifact names above 255 UTF-8 bytes before writing',
+        () {
+      final tempDir = Directory.systemTemp.createTempSync(
+        'approval_custom_namer_length',
+      );
+      addTearDown(() {
+        if (tempDir.existsSync()) {
+          tempDir.deleteSync(recursive: true);
+        }
+      });
+      final separator = Platform.pathSeparator;
+      final oversizedName = '${List.filled(128, 'é').join()}.approved.txt';
+      final approved = '${tempDir.path}$separator$oversizedName';
+      final received = '${tempDir.path}${separator}safe.received.txt';
+
+      expect(
+        () => Approvals.verify(
+          'content',
+          options: Options(
+            namer: _FixedApprovalNamer(
+              filePath: '${tempDir.path}${separator}source.dart',
+              approved: approved,
+              received: received,
+            ),
+            logErrors: false,
+          ),
+        ),
+        throwsA(
+          isA<InvalidApprovalNameException>()
+              .having(
+                (error) => error.component,
+                'component',
+                'approved artifact name',
+              )
+              .having(
+                (error) => error.reason,
+                'reason',
+                contains('exceeds 255 UTF-8 bytes'),
+              ),
+        ),
+      );
+      expect(tempDir.listSync(), isEmpty);
+    });
+
+    test('does not claim either path when pair validation fails', () {
+      final tempDir = Directory.systemTemp.createTempSync(
+        'approval_atomic_path_claim',
+      );
+      addTearDown(() {
+        if (tempDir.existsSync()) {
+          tempDir.deleteSync(recursive: true);
+        }
+      });
+      final separator = Platform.pathSeparator;
+      final approved = '${tempDir.path}${separator}safe.approved.txt';
+      final invalidReceived =
+          '${tempDir.path}${separator}unsafe:name.received.txt';
+      final validReceived = '${tempDir.path}${separator}safe.received.txt';
+
+      expect(
+        () => Approvals.verify(
+          'content',
+          options: Options(
+            namer: _FixedApprovalNamer(
+              filePath: '${tempDir.path}${separator}source.dart',
+              approved: approved,
+              received: invalidReceived,
+            ),
+            logErrors: false,
+          ),
+        ),
+        throwsA(isA<InvalidApprovalNameException>()),
+      );
+
+      expect(
+        () => Approvals.verify(
+          'content',
+          options: Options(
+            namer: _FixedApprovalNamer(
+              filePath: '${tempDir.path}${separator}source.dart',
+              approved: approved,
+              received: validReceived,
+            ),
+            approveResult: true,
+            logErrors: false,
+            logResults: false,
+          ),
+        ),
+        returnsNormally,
+      );
     });
   });
 }

@@ -1,3 +1,36 @@
+## 1.6.0
+
+### Added
+
+- Added `ScrubWithAliases` for preserving relationships between repeated
+  volatile values and `ScrubUuids` for case-insensitive canonical UUID aliases.
+- Added typed `InvalidApprovalNameException` and
+  `ApprovalPathCollisionException` diagnostics for unsafe names and duplicate
+  artifact paths.
+
+### Changed
+
+- Text artifacts are now written through same-directory temporary files and
+  atomically replaced, so concurrent readers cannot observe partial content.
+- Approval filename segments now normalize platform-invalid characters and
+  reserved names consistently. Names longer than 255 UTF-8 bytes keep a
+  readable prefix plus a stable hash; existing valid names are unchanged.
+- Approved and received paths are validated and claimed as one pair before
+  artifact I/O. Duplicate paths fail with both verification identities.
+
+### Fixed
+
+- Failed path-pair validation no longer reserves the valid path, so callers can
+  correct an unsafe custom namer and retry without a false collision.
+
+### Internal
+
+- Expanded deterministic regression coverage for safe naming boundaries,
+  collision claims, atomic replacement and cleanup failures, alias-preserving
+  scrubbers, and the review CLI's console, process, and default-tool wiring.
+- Reached 100% line coverage for executable library code (728/728 lines); both
+  the full and randomized-order suites pass all 166 test executions.
+
 ## 1.5.0
 
 ### Added

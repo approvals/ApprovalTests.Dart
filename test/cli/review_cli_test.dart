@@ -1,12 +1,55 @@
-import 'dart:io';
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:approval_tests/approval_tests.dart';
 import 'package:approval_tests/src/cli/review_cli.dart';
 import 'package:test/test.dart';
 
 void main() {
+  group('SystemReviewConsole', () {
+    test('adapts standard input, output, and every log level', () {
+      final stdout = _RecordingStdout();
+      final printed = <String>[];
+
+      IOOverrides.runWithIOOverrides(
+        () => runZoned<void>(
+          () {
+            const console = SystemReviewConsole();
+
+            expect(console.readLine(), 'answer');
+            console.write('prompt');
+            console.log(ReviewMessageLevel.info, 'info message');
+            console.log(ReviewMessageLevel.success, 'success message');
+            console.log(ReviewMessageLevel.warning, 'warning message');
+            console.log(ReviewMessageLevel.error, 'error message');
+          },
+          zoneSpecification: ZoneSpecification(
+            print: (_, __, ___, line) => printed.add(line),
+          ),
+        ),
+        _ReviewConsoleOverrides(
+          stdin: _FakeStdin('answer'),
+          stdout: stdout,
+        ),
+      );
+
+      expect(stdout.output.toString(), 'prompt');
+      final logs = printed.join('\n');
+      expect(logs, contains('info message'));
+      expect(logs, contains('success message'));
+      expect(logs, contains('warning message'));
+      expect(logs, contains('error message'));
+    });
+  });
+
   group('ReviewCli discovery', () {
+    test('defaults to the current working directory', () {
+      final cli = ReviewCli();
+
+      expect(cli.workingDirectory.path, Directory.current.path);
+    });
+
     test('sorts received files by normalized relative path', () async {
       final tempDirectory =
           await Directory.systemTemp.createTemp('approval_review_cli_');
@@ -74,6 +117,57 @@ void main() {
       expect(
         tool.commandDescription,
         '${Platform.resolvedExecutable} --version',
+      );
+    });
+
+    test('delegates approved and received paths to the reporter', () async {
+      final reporter = _RecordingDiffReporter();
+      final tool = DiffReporterReviewTool(reporter);
+
+      await tool.report('sample.approved.txt', 'sample.received.txt');
+
+      expect(
+        reporter.reports,
+        [('sample.approved.txt', 'sample.received.txt')],
+      );
+    });
+
+    test('open completes on zero exit and surfaces a non-zero exit', () async {
+      final tempDirectory =
+          await Directory.systemTemp.createTemp('approval_review_tool_');
+      addTearDown(() => tempDirectory.delete(recursive: true));
+      final successfulScript = _writeExitScript(
+        directory: tempDirectory,
+        fileName: 'success.dart',
+        exitCode: 0,
+      );
+      final failingScript = _writeExitScript(
+        directory: tempDirectory,
+        fileName: 'failure.dart',
+        exitCode: 7,
+      );
+      final tool = DiffReporterReviewTool(
+        DiffReporter(
+          customDiffInfo: DiffInfo(
+            name: 'Dart',
+            command: Platform.resolvedExecutable,
+            arg: '',
+          ),
+        ),
+      );
+
+      await expectLater(tool.open(successfulScript), completes);
+      await expectLater(
+        tool.open(failingScript),
+        throwsA(
+          isA<ProcessException>()
+              .having((error) => error.errorCode, 'errorCode', 7)
+              .having(
+                (error) => error.executable,
+                'executable',
+                Platform.resolvedExecutable,
+              ),
+        ),
       );
     });
   });
@@ -409,7 +503,159 @@ void main() {
         ),
       );
     });
+
+    test('uses the default Git diff for changed artifacts', () async {
+      final tempDirectory =
+          await Directory.systemTemp.createTemp('approval_review_cli_');
+      addTearDown(() => tempDirectory.delete(recursive: true));
+      final receivedFile = File('${tempDirectory.path}/sample.received.txt');
+      final approvedFile = File('${tempDirectory.path}/sample.approved.txt');
+      await receivedFile.writeAsString('new');
+      await approvedFile.writeAsString('old');
+      final console = _FakeReviewConsole(['n']);
+      final cli = ReviewCli(
+        workingDirectory: tempDirectory,
+        console: console,
+      );
+
+      await cli.reviewFile(receivedFile);
+
+      expect(
+        console.logs,
+        contains(
+          predicate<(ReviewMessageLevel, String)>(
+            (entry) =>
+                entry.$1 == ReviewMessageLevel.info &&
+                entry.$2.contains('Results of git diff:'),
+          ),
+        ),
+      );
+    });
+
+    test('uses the default diff-tool factory for view requests', () async {
+      final tempDirectory =
+          await Directory.systemTemp.createTemp('approval_review_cli_');
+      addTearDown(() => tempDirectory.delete(recursive: true));
+      final receivedFile = File('${tempDirectory.path}/sample.received.txt');
+      final approvedFile = File('${tempDirectory.path}/sample.approved.txt');
+      await receivedFile.writeAsString('received');
+      await approvedFile.writeAsString('approved');
+      final console = _FakeReviewConsole(['v', 'code', 'n']);
+      final defaultCommand = const DiffReporter().defaultDiffInfo.command;
+      final cli = ReviewCli(
+        workingDirectory: tempDirectory,
+        console: console,
+        diffFiles: (_, __) => 'difference',
+      );
+
+      await IOOverrides.runWithIOOverrides(
+        () => cli.reviewFile(receivedFile),
+        _UnavailablePathOverrides(defaultCommand),
+      );
+
+      expect(
+        console.logs,
+        contains(
+          predicate<(ReviewMessageLevel, String)>(
+            (entry) =>
+                entry.$1 == ReviewMessageLevel.warning &&
+                entry.$2.contains('No diff tool available: $defaultCommand'),
+          ),
+        ),
+      );
+    });
   });
+}
+
+final class _ReviewConsoleOverrides extends IOOverrides {
+  _ReviewConsoleOverrides({required this.stdin, required this.stdout});
+
+  @override
+  final Stdin stdin;
+
+  @override
+  final Stdout stdout;
+}
+
+final class _FakeStdin implements Stdin {
+  _FakeStdin(this.line);
+
+  final String? line;
+
+  @override
+  String? readLineSync({
+    Encoding encoding = systemEncoding,
+    bool retainNewlines = false,
+  }) =>
+      line;
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+final class _RecordingStdout implements Stdout {
+  final output = StringBuffer();
+
+  @override
+  void write(Object? object) => output.write(object);
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+final class _UnavailablePathOverrides extends IOOverrides {
+  _UnavailablePathOverrides(this.unavailablePath);
+
+  final String unavailablePath;
+
+  @override
+  File createFile(String path) {
+    final file = super.createFile(path);
+    return path == unavailablePath ? _MissingFile(file) : file;
+  }
+}
+
+final class _MissingFile implements File {
+  _MissingFile(this._delegate);
+
+  final File _delegate;
+
+  @override
+  String get path => _delegate.path;
+
+  @override
+  bool existsSync() => false;
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+final class _RecordingDiffReporter extends DiffReporter {
+  final reports = <(String, String)>[];
+
+  @override
+  Future<void> report(String approvedPath, String receivedPath) async {
+    reports.add((approvedPath, receivedPath));
+  }
+}
+
+String _writeExitScript({
+  required Directory directory,
+  required String fileName,
+  required int exitCode,
+}) {
+  final script = File('${directory.path}/$fileName')
+    ..writeAsStringSync(
+      '''
+import 'dart:io';
+
+void main() {
+  stderr.writeln('Intentional exit code $exitCode');
+  exit($exitCode);
+}
+''',
+    );
+  return script.path;
 }
 
 final class _FakeReviewConsole implements ReviewConsole {

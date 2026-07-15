@@ -16,6 +16,112 @@
 
 part of '../../approval_tests.dart';
 
+final class _ApprovalName {
+  static const int maxSegmentBytes = 255;
+
+  static final RegExp _invalidCharacters = RegExp(
+    r'''[<>:"|?*\x00-\x1F\x7F]''',
+  );
+  static final RegExp _trailingDotsAndSpaces = RegExp(r'[ .]+$');
+  static final RegExp _reservedName = RegExp(
+    r'^(?:con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)',
+    caseSensitive: false,
+  );
+
+  static String normalizeSegment(
+    String value, {
+    required String component,
+  }) {
+    if (value.contains('/') || value.contains(r'\')) {
+      throw InvalidApprovalNameException(
+        component: component,
+        value: value,
+        reason: 'path separators are not allowed in filename segments',
+      );
+    }
+
+    var normalized = value.replaceAll(_invalidCharacters, '_');
+    normalized = normalized.replaceAllMapped(
+      _trailingDotsAndSpaces,
+      (match) => List.filled(match[0]!.length, '_').join(),
+    );
+
+    if (_reservedName.hasMatch(normalized)) {
+      normalized = '_$normalized';
+    }
+
+    return normalized;
+  }
+
+  static String buildFileName({
+    required String stem,
+    required String extension,
+  }) {
+    final normalizedExtension = normalizeSegment(
+      extension,
+      component: 'extension',
+    );
+    final fileName = '$stem.$normalizedExtension';
+    if (utf8.encode(fileName).length <= maxSegmentBytes) {
+      return fileName;
+    }
+
+    final hash = _stableHash(fileName);
+    final suffix = '.$hash.$normalizedExtension';
+    final prefixBudget = maxSegmentBytes - utf8.encode(suffix).length;
+    var prefix = _truncateUtf8(stem, prefixBudget);
+    prefix = prefix.replaceFirst(RegExp(r'[ .]+$'), '');
+    return '$prefix$suffix';
+  }
+
+  static void validateArtifactPath(
+    String path, {
+    required String component,
+  }) {
+    final segment = p.basename(path);
+    final normalized = normalizeSegment(segment, component: component);
+    if (normalized != segment) {
+      throw InvalidApprovalNameException(
+        component: component,
+        value: segment,
+        reason: 'artifact filename contains characters that require '
+            'normalization',
+      );
+    }
+    if (utf8.encode(segment).length > maxSegmentBytes) {
+      throw InvalidApprovalNameException(
+        component: component,
+        value: segment,
+        reason: 'artifact filename exceeds $maxSegmentBytes UTF-8 bytes',
+      );
+    }
+  }
+
+  static String _stableHash(String value) {
+    var hash = 0xcbf29ce484222325;
+    for (final byte in utf8.encode(value)) {
+      hash ^= byte;
+      hash = (hash * 0x100000001b3) & 0xffffffffffffffff;
+    }
+    return hash.toRadixString(16).padLeft(16, '0');
+  }
+
+  static String _truncateUtf8(String value, int maxBytes) {
+    final result = StringBuffer();
+    var byteCount = 0;
+    for (final rune in value.runes) {
+      final character = String.fromCharCode(rune);
+      final characterBytes = utf8.encode(character).length;
+      if (byteCount + characterBytes > maxBytes) {
+        break;
+      }
+      result.write(character);
+      byteCount += characterBytes;
+    }
+    return result.toString();
+  }
+}
+
 /// `ApprovalNamer` is an abstract class that defines a contract for generating
 /// file names for approved and received files in a test approval process.
 ///
@@ -100,20 +206,27 @@ abstract class BaseNamer implements ApprovalNamer {
 
   /// Formats a raw test name for use in file paths by replacing spaces
   /// with underscores and converting to lowercase.
-  static String formatTestName(String? name) =>
-      name?.replaceAll(' ', '_').toLowerCase() ?? '';
+  static String formatTestName(String? name) {
+    final normalized = _ApprovalName.normalizeSegment(
+      name?.toLowerCase() ?? '',
+      component: 'test name',
+    );
+    return normalized.replaceAll(' ', '_');
+  }
 
   /// Retrieves the current test name formatted for file naming.
   @override
   String get currentTestName =>
       formatTestName(Invoker.current?.liveTest.individualName);
 
-  /// Returns a formatted version of the description, replacing spaces with underscores.
-  String get _formattedDescription =>
-      description?.replaceAll(' ', '_').toLowerCase() ?? '';
+  String get _formattedDescription {
+    final normalized = _ApprovalName.normalizeSegment(
+      description?.toLowerCase() ?? '',
+      component: 'description',
+    );
+    return normalized.replaceAll(' ', '_');
+  }
 
-  /// Builds a name string from the given [base], appending test name,
-  /// description, counter, and [extension] as dot-separated segments.
   String _buildName(String base, String extension, {String counter = ''}) {
     final testNameValue = currentTestName;
     final hasTestName = addTestName && testNameValue.isNotEmpty;
@@ -122,31 +235,34 @@ abstract class BaseNamer implements ApprovalNamer {
     final hasDescription = description != null && descriptionValue.isNotEmpty;
     final descriptionPart = hasDescription ? '.$descriptionValue' : '';
     final counterPart = counter.isNotEmpty ? '.$counter' : '';
-    return '$base$testNamePart$descriptionPart$counterPart.$extension';
+    return _ApprovalName.buildFileName(
+      stem: '$base$testNamePart$descriptionPart$counterPart',
+      extension: extension,
+    );
   }
 
-  /// Builds the full file path including the test name, description, and optional counter.
-  String _buildFilePath(String extension, {String counter = ''}) =>
-      _buildName(_basePath, extension, counter: counter);
+  String _buildFilePath(String extension, {String counter = ''}) {
+    final basePath = _basePath;
+    return p.join(
+      p.dirname(basePath),
+      _buildName(p.basename(basePath), extension, counter: counter),
+    );
+  }
 
-  /// Constructs the file name without the full directory path.
   String _buildFileName(String extension, {String counter = ''}) =>
       _buildName(_fileName, extension, counter: counter);
 
-  /// Computes the base file path without the extension.
-  ///
-  /// If [useSubfolder] is true, the files will be placed inside an `approvals` subdirectory.
   String get _basePath {
     final directory = p.dirname(filePath!);
-    final fileName = p.basenameWithoutExtension(filePath!);
     final baseDir = useSubfolder ? p.join(directory, 'approvals') : directory;
-    return p.join(baseDir, fileName);
+    return p.join(baseDir, _fileName);
   }
 
-  /// Extracts the file name without the directory path.
-  String get _fileName => p.basenameWithoutExtension(filePath!);
+  String get _fileName => _ApprovalName.normalizeSegment(
+        p.basenameWithoutExtension(filePath!),
+        component: 'file name',
+      );
 
-  /// Constants defining file extensions used for approval testing.
   static const String approvedExtension = 'approved.txt';
   static const String receivedExtension = 'received.txt';
 }
