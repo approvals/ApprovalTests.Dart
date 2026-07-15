@@ -3,7 +3,41 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:approval_tests/approval_tests.dart';
+import 'package:approval_tests/src/writers/approval_file_replacer.dart';
 import 'package:test/test.dart';
+
+final class _TransientRenameFile implements File {
+  final File _delegate;
+  final int errorCode;
+  int failuresRemaining;
+  int renameAttempts = 0;
+
+  _TransientRenameFile(
+    this._delegate, {
+    required this.failuresRemaining,
+    this.errorCode = 5,
+  });
+
+  @override
+  String get path => _delegate.path;
+
+  @override
+  File renameSync(String newPath) {
+    renameAttempts++;
+    if (failuresRemaining > 0) {
+      failuresRemaining--;
+      throw PathAccessException(
+        path,
+        OSError('Access is denied', errorCode),
+        'Cannot rename file',
+      );
+    }
+    return _delegate.renameSync(newPath);
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
 
 final class _CleanupFailureOverrides extends IOOverrides {
   @override
@@ -57,6 +91,125 @@ final class _FailingTemporaryFile implements File {
 }
 
 void main() {
+  group('ApprovalFileReplacer', () {
+    test('retries transient Windows access errors until replacement succeeds',
+        () {
+      final tempDir = Directory.systemTemp.createTempSync(
+        'approval_file_replacer',
+      );
+      addTearDown(() => tempDir.deleteSync(recursive: true));
+      final replaced = File(
+        '${tempDir.path}${Platform.pathSeparator}approval.txt',
+      )..writeAsStringSync('old');
+      final replacement = _TransientRenameFile(
+        File('${replaced.path}.tmp')..writeAsStringSync('new'),
+        failuresRemaining: 2,
+      );
+      final waits = <Duration>[];
+      final replacer = ApprovalFileReplacer(
+        isWindows: true,
+        wait: waits.add,
+      );
+
+      replacer.replace(replacement: replacement, replaced: replaced);
+
+      expect(replacement.renameAttempts, 3);
+      expect(waits, [
+        ApprovalFileReplacer.windowsRetryDelay,
+        ApprovalFileReplacer.windowsRetryDelay,
+      ]);
+      expect(replaced.readAsStringSync(), 'new');
+    });
+
+    test('does not retry access errors outside Windows', () {
+      final tempDir = Directory.systemTemp.createTempSync(
+        'approval_file_replacer_non_windows',
+      );
+      addTearDown(() => tempDir.deleteSync(recursive: true));
+      final replaced = File(
+        '${tempDir.path}${Platform.pathSeparator}approval.txt',
+      )..writeAsStringSync('old');
+      final replacement = _TransientRenameFile(
+        File('${replaced.path}.tmp')..writeAsStringSync('new'),
+        failuresRemaining: 1,
+      );
+      final replacer = ApprovalFileReplacer(
+        isWindows: false,
+        wait: (_) => fail('must not wait'),
+      );
+
+      expect(
+        () => replacer.replace(
+          replacement: replacement,
+          replaced: replaced,
+        ),
+        throwsA(isA<PathAccessException>()),
+      );
+      expect(replacement.renameAttempts, 1);
+      expect(replaced.readAsStringSync(), 'old');
+    });
+
+    test('does not retry unrelated Windows access errors', () {
+      final tempDir = Directory.systemTemp.createTempSync(
+        'approval_file_replacer_other_error',
+      );
+      addTearDown(() => tempDir.deleteSync(recursive: true));
+      final replaced = File(
+        '${tempDir.path}${Platform.pathSeparator}approval.txt',
+      )..writeAsStringSync('old');
+      final replacement = _TransientRenameFile(
+        File('${replaced.path}.tmp')..writeAsStringSync('new'),
+        failuresRemaining: 1,
+        errorCode: 13,
+      );
+      final replacer = ApprovalFileReplacer(
+        isWindows: true,
+        wait: (_) => fail('must not wait'),
+      );
+
+      expect(
+        () => replacer.replace(
+          replacement: replacement,
+          replaced: replaced,
+        ),
+        throwsA(isA<PathAccessException>()),
+      );
+      expect(replacement.renameAttempts, 1);
+      expect(replaced.readAsStringSync(), 'old');
+    });
+
+    test('stops retrying Windows access errors at the attempt limit', () {
+      final tempDir = Directory.systemTemp.createTempSync(
+        'approval_file_replacer_limit',
+      );
+      addTearDown(() => tempDir.deleteSync(recursive: true));
+      final replaced = File(
+        '${tempDir.path}${Platform.pathSeparator}approval.txt',
+      )..writeAsStringSync('old');
+      final replacement = _TransientRenameFile(
+        File('${replaced.path}.tmp')..writeAsStringSync('new'),
+        failuresRemaining: ApprovalFileReplacer.maxWindowsAttempts,
+      );
+      final replacer = ApprovalFileReplacer(
+        isWindows: true,
+        wait: (_) {},
+      );
+
+      expect(
+        () => replacer.replace(
+          replacement: replacement,
+          replaced: replaced,
+        ),
+        throwsA(isA<PathAccessException>()),
+      );
+      expect(
+        replacement.renameAttempts,
+        ApprovalFileReplacer.maxWindowsAttempts,
+      );
+      expect(replaced.readAsStringSync(), 'old');
+    });
+  });
+
   group('ApprovalTextWriter', () {
     test('readers never observe a partial file during concurrent writes',
         () async {

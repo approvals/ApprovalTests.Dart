@@ -43,7 +43,10 @@ class ApprovalTextWriter extends ApprovalWriter {
         '${ApprovalTestsConstants.baseHeader}\n$content',
         flush: true,
       );
-      temporaryFile.renameSync(path);
+      ApprovalFileReplacer().replace(
+        replacement: temporaryFile,
+        replaced: file,
+      );
     } catch (_) {
       try {
         if (temporaryFile.existsSync()) {

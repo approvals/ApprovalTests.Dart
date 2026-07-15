@@ -27,6 +27,8 @@
 - Preserve the replacement exception when temporary cleanup also fails.
 - Remove temporary files after failures without deleting or truncating the existing approved artifact.
 - Interpret Windows `FileSystemException("Cannot open file")` using `osError` or an existence probe; it may be a sharing violation rather than a missing path.
+- Retry Windows rename errors `5`, `32`, and `33` only with a bounded attempt count and only while the target remains a regular file.
+- Propagate non-Windows, unrelated, missing-target, and exhausted-retry errors without masking the original exception.
 - Define atomic-write tests around observable invariants: every successful read is old or new complete content, the target remains present, and no temporary file remains after success.
 
 ## Tests and CI

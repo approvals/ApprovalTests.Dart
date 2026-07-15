@@ -22,6 +22,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:approval_tests/src/core/enums/file_type.dart';
+import 'package:approval_tests/src/writers/approval_file_replacer.dart';
 import 'package:diff_match_patch2/diff_match_patch.dart';
 import 'package:ispectify/ispectify.dart';
 import 'package:meta/meta.dart';
