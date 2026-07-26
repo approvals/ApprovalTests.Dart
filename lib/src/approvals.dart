@@ -45,10 +45,15 @@ class Approvals {
     }
   }
 
+  static ApprovalContext? _contextOf(ApprovalNamer namer) =>
+      namer is ContextAwareNamer ? namer.context : null;
+
   static ApprovalNamer _resolveNamer(Options options) {
+    // `??` keeps the stack-trace extractor lazy: it must not run — and must not
+    // throw FileNotFoundException — when the path is already known.
     final completedPath = options.namer.filePath ??
         ApprovalUtils.removeFileExtension(
-          filePathExtractor.filePath,
+          _contextOf(options.namer)?.sourcePath ?? filePathExtractor.filePath,
           extension: '.dart',
         );
 
@@ -61,8 +66,9 @@ class Approvals {
     final owner = Invoker.current?.liveTest.suite ?? Zone.current;
     final registry = _pathRegistries[owner] ??= _ApprovalPathRegistry();
     final verificationNumber = ++registry.verificationCount;
-    final testName =
-        Invoker.current?.liveTest.test.name ?? 'standalone verification';
+    final testName = _contextOf(namer)?.testName ??
+        Invoker.current?.liveTest.test.name ??
+        'standalone verification';
     final description = namer.description;
     final descriptionPart = description == null || description.isEmpty
         ? ''

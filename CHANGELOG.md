@@ -1,3 +1,51 @@
+## 1.7.0
+
+### Added
+
+- Added `ApprovalContext`, an explicit verification identity carrying the
+  source path and test name, plus the `ContextAwareNamer` capability that
+  exposes it. Supplying a context replaces stack-trace parsing and
+  `package:test` internals for that verification; omitting it keeps the 1.x
+  inference, so existing approval names are unchanged byte for byte.
+  Constructing an `ApprovalContext` with an empty `sourcePath` is rejected.
+  `Namer` and `IndexedNamer` accept and copy a `context`.
+- A context that supplies no `testName` while no test framework is active and
+  `addTestName` is `true` now fails with `InvalidApprovalNameException` instead
+  of silently collapsing every verification in the file onto one artifact name.
+- Added `ReporterAvailability`, an explicit contract letting a reporter declare
+  whether it can run in the current environment. A `Reporter` that does not
+  implement it is treated as always available, so existing custom reporters
+  keep working unchanged.
+- Added `FirstWorkingReporter`, which reports through the first available entry
+  in declaration order. One configuration now covers a local diff tool and a
+  headless CI runner. Throws `NoAvailableReporterException` when no entry is
+  available.
+- Added `MultiReporter`, which reports through every available entry
+  sequentially in declaration order. The first failure is rethrown after the
+  remaining reporters have run; later failures are logged so none is lost.
+- Added `NoAvailableReporterException`, which names the reporters it checked.
+- `CommandLineReporter`, `DiffReporter`, and `GitReporter` now declare
+  availability. `GitReporter` probes its command with `--version`.
+
+### Changed
+
+- Renamed `DiffReporter.isReporterAvailable` to `DiffReporter.isAvailable` so
+  availability has one name across all reporters. The old getter still works
+  and is deprecated for removal in 2.0.0.
+- `Options.reporter` still defaults to `CommandLineReporter`; reporter
+  composition is opt-in.
+
+### Notes
+
+- `ApprovalContext` deliberately carries no `description`. `ApprovalNamer`
+  already owns one, used in both the artifact name and the collision
+  diagnostic; a second source would need a winner picked in two places.
+  Artifact-level descriptions are deferred to the artifact model.
+- `package:test_api` remains a dependency. `Invoker` still supplies the ambient
+  test name, the collision-registry owner, and the collision diagnostic name.
+  `ApprovalContext` makes it unnecessary per verification, not per package;
+  removing it is a 2.0 concern.
+
 ## 1.6.1
 
 ### Fixed

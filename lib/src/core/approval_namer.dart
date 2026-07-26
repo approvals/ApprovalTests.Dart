@@ -183,7 +183,7 @@ abstract class ApprovalNamer {
 /// Base class for file name generation in approval tests.
 ///
 /// This class centralizes the common logic used by [Namer] and [IndexedNamer].
-abstract class BaseNamer implements ApprovalNamer {
+abstract class BaseNamer implements ApprovalNamer, ContextAwareNamer {
   @override
   final String? filePath;
   @override
@@ -194,6 +194,8 @@ abstract class BaseNamer implements ApprovalNamer {
   final String? description;
   @override
   final bool useSubfolder;
+  @override
+  final ApprovalContext? context;
 
   /// Constructor for the base namer.
   const BaseNamer({
@@ -202,6 +204,7 @@ abstract class BaseNamer implements ApprovalNamer {
     this.addTestName = true,
     this.description,
     this.useSubfolder = false,
+    this.context,
   });
 
   /// Formats a raw test name for use in file paths by replacing spaces
@@ -214,10 +217,44 @@ abstract class BaseNamer implements ApprovalNamer {
     return normalized.replaceAll(' ', '_');
   }
 
+  static String? _invokerTestName() => Invoker.current?.liveTest.individualName;
+
+  /// Reads the test name from the surrounding test framework.
+  ///
+  /// The single point where `package:test` internals are consulted for naming.
+  /// Swap it to name approvals from a custom runner, or to exercise the
+  /// no-ambient-name path; restore it with [resetAmbientTestName].
+  @visibleForTesting
+  static String? Function() ambientTestName = _invokerTestName;
+
+  /// Restores [ambientTestName] to the `package:test` implementation.
+  @visibleForTesting
+  static void resetAmbientTestName() => ambientTestName = _invokerTestName;
+
+  /// Resolves the test name from [context], falling back to the ambient one.
+  static String? resolveTestName(ApprovalContext? context) =>
+      context?.testName ?? ambientTestName();
+
   /// Retrieves the current test name formatted for file naming.
+  ///
+  /// Throws [InvalidApprovalNameException] when an explicit context supplies no
+  /// test name and no test framework is active: every verification in the file
+  /// would otherwise collapse onto one artifact name. Pass
+  /// `ApprovalContext(testName: ...)` or set `addTestName: false`.
   @override
-  String get currentTestName =>
-      formatTestName(Invoker.current?.liveTest.individualName);
+  String get currentTestName {
+    final resolved = resolveTestName(context);
+    if (resolved == null && addTestName && context != null) {
+      throw InvalidApprovalNameException(
+        component: 'test name',
+        value: context!.sourcePath,
+        reason: 'ApprovalContext has no testName and no test framework context '
+            'is active; pass ApprovalContext(testName: ...) or set '
+            'addTestName: false',
+      );
+    }
+    return formatTestName(resolved);
+  }
 
   String get _formattedDescription {
     final normalized = _ApprovalName.normalizeSegment(

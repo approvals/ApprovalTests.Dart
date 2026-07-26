@@ -31,6 +31,7 @@ import 'package:test_api/src/backend/invoker.dart' show Invoker;
 
 part 'src/approvals.dart';
 part 'src/comparator/file_comparator.dart';
+part 'src/core/approval_context.dart';
 part 'src/core/approval_namer.dart';
 part 'src/core/approval_writer.dart';
 part 'src/core/comparator.dart';

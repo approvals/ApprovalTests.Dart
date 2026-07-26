@@ -5,6 +5,7 @@ import 'package:test/test.dart';
 
 import 'groups/approvals_test.dart' as approvals_tests;
 import 'groups/command_line_reporter_test.dart' as command_line_reporter_tests;
+import 'groups/context_test.dart' as context_tests;
 import 'groups/converter_tests.dart' as converter_tests;
 import 'groups/diff_tools_tests.dart' as diff_tools_tests;
 import 'groups/exception_tests.dart' as exception_tests;
@@ -73,6 +74,7 @@ void main() {
   /// ================== Approvals: Namer tests ==================
 
   namer_tests.registerNamerTests();
+  context_tests.registerContextTests();
 
   /// ================== Tear down ==================
 
