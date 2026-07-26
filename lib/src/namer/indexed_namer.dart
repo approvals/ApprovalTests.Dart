@@ -47,7 +47,7 @@ final class IndexedNamer extends BaseNamer {
     super.description,
     super.useSubfolder,
     super.context,
-    int? counter, // Allows manual counter override.
+    int? counter,
   }) : counter = counter ?? _getNextCounter(filePath, context);
 
   /// Retrieves the next available counter value for a given file path.
@@ -141,7 +141,7 @@ final class IndexedNamer extends BaseNamer {
       description: description ?? this.description,
       useSubfolder: useSubfolder ?? this.useSubfolder,
       context: context ?? this.context,
-      counter: counter ?? this.counter, // Ensuring counter is preserved.
+      counter: counter ?? this.counter,
     );
   }
 }

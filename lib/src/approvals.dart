@@ -23,9 +23,7 @@ class Approvals {
   static final Expando<_ApprovalPathRegistry> _pathRegistries =
       Expando<_ApprovalPathRegistry>();
 
-  // ================== Verify methods ==================
-
-  // Method to verify if the content in response matches the approved content
+  /// Verifies [response] against its approved artifact.
   static void verify(
     String response, {
     Options options = const Options(),
@@ -282,8 +280,6 @@ class Approvals {
     final resultString = await query.executeQuery(queryString);
     verify(resultString, options: options);
   }
-
-  // ================== Combinations ==================
 
   /// Verifies all combinations of inputs for a provided function.
   static void verifyAllCombinations<T>(
