@@ -562,10 +562,8 @@ Prefer learning by listening? Then you might enjoy the following podcasts:
 
 ## Coverage
 
-The 1.6.1 release has 100% line coverage for executable code under `lib`
-(742/742 lines). On the 1.7.0 development tree the full suite and two
-randomized-order runs each pass all 256 test executions; the line-coverage
-figure has not yet been re-measured for the code added in 1.7.0.
+The 1.7.0 release has 100% line coverage for executable code under `lib`
+(792/792 lines). The full suite passes all 256 test executions.
 
 To reproduce the line-coverage report locally:
 

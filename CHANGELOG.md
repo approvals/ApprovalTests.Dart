@@ -46,6 +46,11 @@
   `ApprovalContext` makes it unnecessary per verification, not per package;
   removing it is a 2.0 concern.
 
+### Internal
+
+- Maintained 100% executable line coverage (792/792 lines); all 256 test
+  executions pass.
+
 ## 1.6.1
 
 ### Fixed
