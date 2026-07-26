@@ -108,7 +108,7 @@ void registerDiffToolTests() {
       );
 
       expect(
-        reporter.isReporterAvailable,
+        reporter.isAvailable,
         isLinux,
       );
 

@@ -1,7 +1,7 @@
 part of '../../approval_tests.dart';
 
 /// `GitReporter` is a class for reporting the comparison results using the git.
-class GitReporter implements Reporter {
+class GitReporter implements Reporter, ReporterAvailability {
   final DiffInfo? customDiffInfo;
 
   /// Process runner for async operations. Injected for testability.
@@ -60,6 +60,20 @@ class GitReporter implements Reporter {
         );
       }
       rethrow;
+    }
+  }
+
+  /// Whether the `git` executable answers `--version` on this machine.
+  ///
+  /// `Process.runSync` throws instead of returning a non-zero exit code when
+  /// the executable is missing, so both outcomes map to `false`.
+  @override
+  bool get isAvailable {
+    final command = customDiffInfo?.command ?? 'git';
+    try {
+      return _runProcessSync(command, const ['--version']).exitCode == 0;
+    } on ProcessException {
+      return false;
     }
   }
 

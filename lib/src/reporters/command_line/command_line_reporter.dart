@@ -20,7 +20,7 @@ part of '../../../approval_tests.dart';
 ///
 /// This class reads and compares two files (approved and received) line by line,
 /// highlighting the differences in color-coded format.
-class CommandLineReporter implements Reporter {
+class CommandLineReporter implements Reporter, ReporterAvailability {
   final void Function(Object exception, {StackTrace? stackTrace})
       exceptionLogger;
 
@@ -28,6 +28,13 @@ class CommandLineReporter implements Reporter {
   const CommandLineReporter({
     this.exceptionLogger = ApprovalLogger.exception,
   });
+
+  /// Always `true`; console output needs no external tool.
+  ///
+  /// This makes [CommandLineReporter] the terminal-safe last entry of a
+  /// [FirstWorkingReporter] chain on headless CI.
+  @override
+  bool get isAvailable => true;
 
   @override
   Future<void> report(

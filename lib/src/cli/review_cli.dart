@@ -53,7 +53,7 @@ final class DiffReporterReviewTool implements ReviewDiffTool {
   final DiffReporter reporter;
 
   @override
-  bool get isAvailable => reporter.isReporterAvailable;
+  bool get isAvailable => reporter.isAvailable;
 
   @override
   String get commandDescription {

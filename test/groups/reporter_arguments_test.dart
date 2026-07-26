@@ -117,7 +117,7 @@ void registerReporterArgumentsTests() {
       expect(lines.last, equals(received.path));
     });
 
-    test('isReporterAvailable returns true for custom command file', () {
+    test('isAvailable returns true for custom command file', () {
       final tempDir =
           Directory.systemTemp.createTempSync('diff_reporter_available');
       addTearDown(() => tempDir.deleteSync(recursive: true));
@@ -135,7 +135,7 @@ void registerReporterArgumentsTests() {
         ),
       );
 
-      expect(reporter.isReporterAvailable, isTrue);
+      expect(reporter.isAvailable, isTrue);
     });
 
     test('throws ProcessException when custom command exits non-zero',
