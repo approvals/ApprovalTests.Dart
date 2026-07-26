@@ -50,17 +50,11 @@ final class IndexedNamer extends BaseNamer {
     int? counter,
   }) : counter = counter ?? _getNextCounter(filePath, context);
 
-  /// Retrieves the next available counter value for a given file path.
-  ///
-  /// Counters are allocated here, in the constructor, so the key must be built
-  /// from what the caller supplied. [copyWith] carries the allocated counter
-  /// forward rather than re-allocating it; a context added later therefore
-  /// cannot renumber an existing namer.
-  ///
-  /// - [filePath]: The file path for which the counter should be generated.
-  /// - [context]: Explicit context, consulted for the test name and — when
-  ///   [filePath] is still unresolved — for the source identity.
-  /// - Returns: An incremented counter value.
+  // Counters are allocated in the constructor, so the key can only be built
+  // from what the caller supplied — hence the fall back to the context source
+  // while filePath is still unresolved. copyWith carries the allocated counter
+  // forward rather than re-allocating it, so a context added later cannot
+  // renumber an existing namer.
   static int _getNextCounter(String? filePath, ApprovalContext? context) {
     final testName = BaseNamer.formatTestName(
       BaseNamer.resolveTestName(context),
