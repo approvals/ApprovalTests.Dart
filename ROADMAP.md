@@ -1,20 +1,23 @@
 # ApprovalTests.Dart Roadmap
 
-Last updated: 2026-07-15
+Last updated: 2026-07-26
 
 Current baseline:
 
 - latest published package:
   [`approval_tests 1.5.0`](https://pub.dev/packages/approval_tests);
-- repository baseline: `main` at `4e3fd3e`, with the 1.6.0 delivery slices
+- repository baseline: `main` at `552db16`, with the 1.7.0 delivery slices
   completed in the current working tree;
-- current development version: `1.6.0`;
+- current development version: `1.7.0`;
 - version 1.5.0 includes `CompositeScrubber`, the sequential and validated
   review CLI, the `ispectify` logging migration, explicit missing-approved
   policy, and the Dart 3.6 minimum;
 - version 1.6.0 adds atomic text writes, safe naming, deterministic length
   limits, typed collision diagnostics, alias-preserving scrubbers, and 100%
   line coverage for executable library code;
+- version 1.7.0 adds explicit `ApprovalContext` naming with a stack-trace
+  fallback, and reporter composition through `ReporterAvailability`,
+  `FirstWorkingReporter`, and `MultiReporter`;
 - version 1.5.0 requires Dart 3.6 because `ispectify 6.1.2` is the internal
   console logging backend;
 - compatibility policy: existing `verify()` calls and `.approved.txt` files
@@ -99,6 +102,10 @@ The package should provide:
       diagnostics.
 - [x] 100% line coverage across executable library code, including failure,
       cleanup, process, and default CLI wiring paths.
+- [x] Explicit `ApprovalContext` naming with stack-trace and `test_api`
+      discovery kept as the 1.x fallback.
+- [x] Reporter availability contract with first-working and multi-reporter
+      composition.
 
 ## Milestone 0 — Safe 1.x maintenance
 
@@ -238,37 +245,77 @@ Acceptance criteria:
 
 ### Reporter composition
 
-- [ ] Add a first-working reporter that selects the first available reporter.
-- [ ] Add a multi-reporter that invokes every configured reporter.
-- [ ] Move reporter availability into an explicit shared contract rather than
+Status: complete for the 1.7.0 development tree.
+
+- [x] Add a first-working reporter that selects the first available reporter.
+- [x] Add a multi-reporter that invokes every configured reporter.
+- [x] Move reporter availability into an explicit shared contract rather than
   relying on `DiffReporter`-specific knowledge.
-- [ ] Distinguish “not available” from “available but failed”; fallback must not
+- [x] Distinguish “not available” from “available but failed”; fallback must not
   hide an actual reporter execution error.
+
+`ReporterAvailability` is a separate capability contract rather than a member on
+`Reporter`, because `Reporter` is an `abstract interface class`: any new member,
+even one with a body, would break every existing `implements Reporter`. A
+reporter that does not implement the contract is treated as always available.
+
+`MultiReporter` invokes its entries sequentially. Output order is part of the
+contract, and the only reporter that would benefit from concurrency already
+detaches its process.
 
 Acceptance criteria:
 
-- selection order is deterministic;
-- reporter errors remain observable;
-- a command-line fallback works on headless CI;
-- all composition behavior is covered without launching real GUI tools.
+- [x] Selection order is deterministic and follows declaration order.
+- [x] A reporter that is available but fails propagates its error instead of
+      falling through to the next entry.
+- [x] `FirstWorkingReporter` reports asynchronously, so a missing reporter
+      cannot escape a caller's `catchError` and mask the original mismatch.
+- [x] A command-line fallback works on headless CI.
+- [x] All composition behavior is covered without launching real GUI tools.
 
 ### Explicit verification context
 
-- [ ] Introduce an immutable `ApprovalContext` carrying the source path, test
-  name, and optional artifact description.
-- [ ] Let test-framework adapters provide context explicitly instead of making
+Status: complete for the 1.7.0 development tree.
+
+- [x] Introduce an immutable `ApprovalContext` carrying the source path and
+  test name. The optional artifact description was deliberately dropped: the
+  namer already owns `description`, used in both the artifact name and the
+  collision diagnostic, and a second source would need a winner picked in two
+  places. Artifact-level descriptions belong to Milestone 2's artifact model.
+- [x] Let test-framework adapters provide context explicitly instead of making
   stack-trace parsing and `test_api` internals mandatory.
-- [ ] Keep the current stack-trace-based discovery as a compatibility fallback
+- [x] Keep the current stack-trace-based discovery as a compatibility fallback
   during 1.x.
-- [ ] Preserve existing approval names when explicit and inferred context
+- [x] Preserve existing approval names when explicit and inferred context
   describe the same test.
+
+The context lives on the namer, not on `Options`, because `IndexedNamer`
+allocates its counter in its constructor initializer — before `Options` reaches
+`Approvals`. A context pushed in during namer resolution would name artifacts
+after one test while numbering them after another, making counters
+order-dependent.
+
+`ContextAwareNamer` is a separate capability rather than a member on
+`ApprovalNamer`, because adding one there breaks every existing
+`implements ApprovalNamer`. The suite's own `_FixedApprovalNamer` passing
+unmodified is the executable proof.
+
+`BaseNamer.ambientTestName` is now the single point where `package:test`
+internals are read for naming, which is what makes `test_api` optional per
+verification. The package-level dependency stays: `Invoker` still supplies the
+collision-registry owner and the collision diagnostic name.
 
 Acceptance criteria:
 
-- custom test runners can provide naming context without fabricated stacks;
-- optimized or transformed stack traces are not required by the primary API;
-- missing or ambiguous context produces an actionable error;
-- removing the compatibility fallback is reserved for a major release.
+- [x] Custom test runners can provide naming context without fabricated stacks.
+- [x] Optimized or transformed stack traces are not required by the primary
+      API; the extractor stays lazy and is not consulted when a context or an
+      explicit `filePath` is present.
+- [x] Ambiguous context produces an actionable error: a context with no
+      `testName`, no ambient test name, and `addTestName: true` fails with
+      `InvalidApprovalNameException` rather than collapsing every verification
+      in the file onto one artifact name.
+- [x] Removing the compatibility fallback is reserved for a major release.
 
 ## Milestone 2 — Artifact-aware verification
 
@@ -598,7 +645,7 @@ validated during API review, but responsibility stays within the listed files.
 | 1 | Sequential and validated review CLI (complete) | `bin/review.dart`, `lib/src/cli/review_cli.dart`, `test/cli/review_cli_test.dart` | `dart test test/cli/review_cli_test.dart` |
 | 2 | Explicit missing-approved policy (released in 1.5.0) and atomic text-write hardening (complete for 1.6.0) | `lib/src/core/options.dart`, `lib/src/approvals.dart`, `lib/src/writers/approval_text_writer.dart`, policy and writer tests | `dart test test/groups/approvals_test.dart test/writers/approval_text_writer_test.dart` |
 | 3 | Safe names and collision diagnostics (complete for 1.6.0) | namers, final-path validation, typed exceptions, naming and collision tests | `dart test test/groups/namer.dart test/groups/approvals_test.dart` |
-| 4 | Explicit `ApprovalContext` with legacy fallback | `lib/src/core/approval_context.dart`, `lib/src/approvals.dart`, `lib/src/core/approval_namer.dart`, context tests | `dart test test/groups/context_test.dart` |
+| 4 | Explicit `ApprovalContext` with legacy fallback (complete for 1.7.0) | `lib/src/core/approval_context.dart`, `lib/src/approvals.dart`, `lib/src/core/approval_namer.dart`, `lib/src/namer/`, context tests | `dart test test/groups/context_test.dart` |
 | 5 | Awaited single-text verification path | `lib/src/core/verification_engine.dart`, `lib/src/approvals.dart`, reporter tests | `dart test test/groups/approvals_test.dart test/groups/reporter_arguments_test.dart` |
 | 6 | Text and binary artifact model | `lib/src/artifacts/`, `lib/src/core/options.dart`, artifact tests | `dart test test/groups/artifact_test.dart` |
 | 7 | Multi-artifact bundle and typed mismatch aggregation | `lib/src/artifacts/`, `lib/src/exceptions/`, bundle tests | `dart test test/groups/artifact_bundle_test.dart` |

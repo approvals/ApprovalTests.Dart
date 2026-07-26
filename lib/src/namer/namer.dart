@@ -29,12 +29,14 @@ final class Namer extends BaseNamer {
   /// - [addTestName]: Determines whether to append the test name to the file.
   /// - [description]: An optional description appended to the file name.
   /// - [useSubfolder]: Whether to store files inside a dedicated subfolder.
+  /// - [context]: An explicit verification context replacing inferred naming.
   const Namer({
     super.filePath,
     super.options,
     super.addTestName,
     super.description,
     super.useSubfolder,
+    super.context,
   });
 
   /// Returns the fully qualified file path for the approved file.
@@ -77,6 +79,7 @@ final class Namer extends BaseNamer {
   /// - [addTestName]: Whether to append the test name to the file.
   /// - [description]: A new description appended to the file name.
   /// - [useSubfolder]: Whether to use a dedicated subfolder.
+  /// - [context]: A new explicit verification context.
   ///
   /// Returns a new [Namer] instance with updated values.
   @override
@@ -86,6 +89,7 @@ final class Namer extends BaseNamer {
     bool? addTestName,
     String? description,
     bool? useSubfolder,
+    ApprovalContext? context,
   }) {
     return Namer(
       filePath: filePath ?? this.filePath,
@@ -93,6 +97,7 @@ final class Namer extends BaseNamer {
       addTestName: addTestName ?? this.addTestName,
       description: description ?? this.description,
       useSubfolder: useSubfolder ?? this.useSubfolder,
+      context: context ?? this.context,
     );
   }
 }

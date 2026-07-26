@@ -17,7 +17,7 @@
 part of '../../../approval_tests.dart';
 
 /// `DiffReporter` is a class for reporting the comparison results using a `Diff Tool`.
-class DiffReporter implements Reporter {
+class DiffReporter implements Reporter, ReporterAvailability {
   final ComparatorIDE ide;
   final DiffInfo? customDiffInfo;
 
@@ -109,7 +109,12 @@ class DiffReporter implements Reporter {
     );
   }
 
-  bool get isReporterAvailable {
+  /// Whether the configured diff tool is installed on this platform.
+  ///
+  /// Returns `false` rather than throwing when the platform has no default
+  /// diff tool, so a [FirstWorkingReporter] can fall through to the next entry.
+  @override
+  bool get isAvailable {
     try {
       final diffInfo = defaultDiffInfo;
       return ApprovalUtils.isFileExists(diffInfo.command);
@@ -117,6 +122,9 @@ class DiffReporter implements Reporter {
       return false;
     }
   }
+
+  @Deprecated('Use isAvailable instead. Will be removed in 2.0.0.')
+  bool get isReporterAvailable => isAvailable;
 
   /// Visible for testing to validate arg parsing without invoking a diff tool.
   @visibleForTesting

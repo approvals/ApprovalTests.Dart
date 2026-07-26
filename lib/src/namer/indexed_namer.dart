@@ -38,6 +38,7 @@ final class IndexedNamer extends BaseNamer {
   /// - [addTestName]: Whether to append the test name to the file.
   /// - [description]: An optional description appended to the file name.
   /// - [useSubfolder]: Whether to store files inside a dedicated subfolder.
+  /// - [context]: An explicit verification context replacing inferred naming.
   /// - [counter]: A manually provided counter value (optional, defaults to auto-generated).
   IndexedNamer({
     super.filePath,
@@ -45,20 +46,20 @@ final class IndexedNamer extends BaseNamer {
     super.addTestName,
     super.description,
     super.useSubfolder,
-    int? counter, // Allows manual counter override.
-  }) : counter = counter ?? _getNextCounter(filePath);
+    super.context,
+    int? counter,
+  }) : counter = counter ?? _getNextCounter(filePath, context);
 
-  /// Retrieves the next available counter value for a given file path.
-  ///
-  /// Uses the [Invoker] to determine the test name, ensuring each test
-  /// maintains a unique counter.
-  ///
-  /// - [filePath]: The file path for which the counter should be generated.
-  /// - Returns: An incremented counter value.
-  static int _getNextCounter(String? filePath) {
-    final testName =
-        BaseNamer.formatTestName(Invoker.current?.liveTest.individualName);
-    final key = '$filePath-$testName';
+  // Counters are allocated in the constructor, so the key can only be built
+  // from what the caller supplied — hence the fall back to the context source
+  // while filePath is still unresolved. copyWith carries the allocated counter
+  // forward rather than re-allocating it, so a context added later cannot
+  // renumber an existing namer.
+  static int _getNextCounter(String? filePath, ApprovalContext? context) {
+    final testName = BaseNamer.formatTestName(
+      BaseNamer.resolveTestName(context),
+    );
+    final key = '${filePath ?? context?.sourcePath}-$testName';
 
     return _approvalCounts.update(key, (value) => value + 1, ifAbsent: () => 0);
   }
@@ -113,6 +114,7 @@ final class IndexedNamer extends BaseNamer {
   /// - [addTestName]: Whether to append the test name to the file.
   /// - [description]: A new description appended to the file name.
   /// - [useSubfolder]: Whether to use a dedicated subfolder.
+  /// - [context]: A new explicit verification context.
   /// - [counter]: A manually provided counter value.
   ///
   /// Returns a new [IndexedNamer] instance with the updated values.
@@ -123,6 +125,7 @@ final class IndexedNamer extends BaseNamer {
     bool? addTestName,
     String? description,
     bool? useSubfolder,
+    ApprovalContext? context,
     int? counter,
   }) {
     return IndexedNamer(
@@ -131,7 +134,8 @@ final class IndexedNamer extends BaseNamer {
       addTestName: addTestName ?? this.addTestName,
       description: description ?? this.description,
       useSubfolder: useSubfolder ?? this.useSubfolder,
-      counter: counter ?? this.counter, // Ensuring counter is preserved.
+      context: context ?? this.context,
+      counter: counter ?? this.counter,
     );
   }
 }

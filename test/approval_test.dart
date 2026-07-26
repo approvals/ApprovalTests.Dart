@@ -5,6 +5,7 @@ import 'package:test/test.dart';
 
 import 'groups/approvals_test.dart' as approvals_tests;
 import 'groups/command_line_reporter_test.dart' as command_line_reporter_tests;
+import 'groups/context_test.dart' as context_tests;
 import 'groups/converter_tests.dart' as converter_tests;
 import 'groups/diff_tools_tests.dart' as diff_tools_tests;
 import 'groups/exception_tests.dart' as exception_tests;
@@ -13,6 +14,7 @@ import 'groups/minor_tests.dart' as minor_tests;
 import 'groups/namer.dart' as namer_tests;
 import 'groups/options_tests.dart' as options_tests;
 import 'groups/reporter_arguments_test.dart' as reporter_arguments_tests;
+import 'groups/reporter_composition_test.dart' as reporter_composition_tests;
 import 'groups/scrubber_tests.dart' as scrubber_tests;
 import 'groups/verify_tests.dart' as verify_tests;
 
@@ -63,6 +65,7 @@ void main() {
   command_line_reporter_tests.registerCommandLineReporterTests();
   reporter_arguments_tests.registerReporterArgumentsTests();
   git_reporter_tests.registerGitReporterTests();
+  reporter_composition_tests.registerReporterCompositionTests();
 
   /// ================== Approvals: test for Diff Tools ==================
 
@@ -71,6 +74,7 @@ void main() {
   /// ================== Approvals: Namer tests ==================
 
   namer_tests.registerNamerTests();
+  context_tests.registerContextTests();
 
   /// ================== Tear down ==================
 

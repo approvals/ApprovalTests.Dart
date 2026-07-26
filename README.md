@@ -106,16 +106,65 @@ partially written file. On Windows, transient access, sharing, and lock
 violations caused by concurrent readers are retried with a bounded attempt
 count. Temporary files are cleaned up if replacement fails.
 
+### Explicit verification context
+
+By default, approval naming infers two things implicitly: the source file, by
+parsing `StackTrace.current`, and the test name, from `package:test`'s
+internals. Both work under `dart test`, but neither can be supplied by a custom
+runner, a generated harness, or a transformed stack trace.
+
+`ApprovalContext` makes naming explicit. Pass it to the namer:
+
+```dart
+Approvals.verify(
+  report,
+  options: Options(
+    namer: Namer(
+      context: ApprovalContext(
+        sourcePath: 'test/billing/invoice_test.dart',
+        testName: 'renders a paid invoice',
+      ),
+    ),
+  ),
+);
+```
+
+The context lives on the namer rather than on `Options` because `IndexedNamer`
+allocates its counter while being constructed, before `Options` reaches
+`Approvals`. A context supplied later would name files after one test while
+numbering them after another.
+
+Resolution is per field, so a context can be partial:
+
+| Field | When supplied | When omitted |
+| --- | --- | --- |
+| `sourcePath` | artifacts are named after it and written beside it | the stack trace is parsed, exactly as before |
+| `testName` | included in the artifact name | the ambient test name is used |
+
+An explicit `sourcePath` never overrides an explicit `Namer.filePath`, and an
+explicit `testName` that differs from the ambient one is a supported override,
+not an error.
+
+Inference remains the 1.x fallback, so existing approvals keep their names
+byte for byte. The one new error is a context that supplies no `testName` while
+no test framework is active and `addTestName` is `true`: every verification in
+the file would otherwise collapse onto a single artifact name, so it fails with
+`InvalidApprovalNameException` instead.
+
+Custom namers are unaffected. `ApprovalContext` support is a separate
+`ContextAwareNamer` capability, so an existing `implements ApprovalNamer`
+compiles and behaves unchanged.
+
 ## 📦 Installation
 
 Add the following to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  approval_tests: ^1.6.1
+  approval_tests: ^1.7.0
 ```
 
-These docs target the 1.6.1 release. Dart 3.6 or newer has been
+These docs target the 1.7.0 release. Dart 3.6 or newer has been
 required since 1.5.0 because the internal console logger uses
 `ispectify 6.1.2`.
 
@@ -244,6 +293,8 @@ There are several reporters available in the package:
 - `GitReporter` - This reporter will open the diff in the Git GUI using `git diff --no-index`. Each argument is provided separately to Git and any exit code greater than `1` is surfaced as a failure, so unexpected tool errors are easier to spot. Provide a custom `DiffInfo` if you need extra arguments (for example, `DiffInfo(command: 'git', arg: 'diff --no-index --word-diff')`).
 - `DiffReporter` - This reporter will open the Diff Tool in your IDE. Arguments are tokenized automatically, so values such as `-d --wait` can be supplied in the `DiffInfo.arg` string without additional escaping.
   - For Diff Reporter I using the default paths to the IDE, if something didn't work then you in the console see the expected correct path to the IDE and specify customDiffInfo. You can also contact me for help.
+- `FirstWorkingReporter` - Reports through the first of its entries that is available here, so one configuration works both locally and on headless CI.
+- `MultiReporter` - Reports through every available entry, sequentially and in declaration order.
 
 <img src="https://github.com/yelmuratoff/packages_assets/blob/main/assets/approval_tests/diff_command_line.png?raw=true" alt="CommandLineComparator img" title="ApprovalTests" style="max-width: 500px;">
 
@@ -254,6 +305,67 @@ To use `DiffReporter` you just need to add it to `options`:
    reporter: const DiffReporter(),
  ),
 ```
+
+#### Composing reporters
+
+A diff tool that is installed locally is usually absent on CI. Rather than
+branching on the environment, compose reporters and let the package pick:
+
+```dart
+options: const Options(
+  reporter: FirstWorkingReporter([
+    DiffReporter(),
+    CommandLineReporter(),
+  ]),
+),
+```
+
+`FirstWorkingReporter` consults each entry in declaration order and reports
+through the first available one, so the same `Options` open a diff tool locally
+and print to the terminal on a headless runner. `CommandLineReporter` is always
+available, which makes it the natural last entry.
+
+Availability answers only "can this reporter run here" — a missing executable
+or an unsupported platform. A reporter that *is* available but then fails is
+never silently skipped: its error propagates, so a broken diff tool is not
+mistaken for a successful report. When no entry is available at all,
+`FirstWorkingReporter` throws `NoAvailableReporterException`.
+
+Use `MultiReporter` to notify several reporters for the same mismatch:
+
+```dart
+options: const Options(
+  reporter: MultiReporter([
+    CommandLineReporter(),
+    GitReporter(),
+  ]),
+),
+```
+
+`MultiReporter` runs its entries sequentially in declaration order, so console
+output cannot interleave, and skips unavailable ones. Every entry runs even if
+an earlier one fails; the first failure is rethrown once the rest have run and
+later failures are logged. Reporting through zero available reporters completes
+normally.
+
+Custom reporters keep working unchanged: a `Reporter` that does not implement
+the `ReporterAvailability` contract is treated as always available. Implement
+`ReporterAvailability` when your reporter depends on an external tool:
+
+```dart
+final class MyReporter implements ReporterAvailability {
+  const MyReporter();
+
+  @override
+  bool get isAvailable => ApprovalUtils.isFileExists('/usr/local/bin/my-diff');
+
+  @override
+  Future<void> report(String approvedPath, String receivedPath) async { ... }
+}
+```
+
+The default `Options.reporter` is still `CommandLineReporter`; composition is
+opt-in.
 
 ### Console diagnostics
 
@@ -450,9 +562,8 @@ Prefer learning by listening? Then you might enjoy the following podcasts:
 
 ## Coverage
 
-The 1.6.1 release has 100% line coverage for executable code under `lib`
-(742/742 lines). The full suite and a randomized-order run each pass all 170
-test executions.
+The 1.7.0 release has 100% line coverage for executable code under `lib`
+(792/792 lines). The full suite passes all 256 test executions.
 
 To reproduce the line-coverage report locally:
 
