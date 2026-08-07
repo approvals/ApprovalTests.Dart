@@ -20,13 +20,7 @@ void main() {
   );
 
   test('verify model', () {
-    Approvals.verifyAsJson(
-      jsonItem,
-      options: const Options(
-        approveResult:
-            true, // Approve the result automatically. You can remove this property after the approved file is created.
-      ),
-    );
+    Approvals.verifyAsJson(jsonItem);
   });
 }
 // end-snippet

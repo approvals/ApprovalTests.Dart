@@ -1,3 +1,18 @@
+## 1.7.1
+
+### Documentation
+
+- Added direct links from the core package guide to the Flutter package and
+  its executable state-management example.
+- Refreshed generated README snippets and changed the general JSON example to
+  verify an existing baseline without automatically approving changes.
+
+### Internal
+
+- Updated the Dart setup actions used by the build and publishing workflows to
+  1.7.2.
+- No runtime API or snapshot-output behavior changed in this release.
+
 ## 1.7.0
 
 ### Added

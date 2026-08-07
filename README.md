@@ -166,10 +166,10 @@ Add the following to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  approval_tests: ^1.7.0
+  approval_tests: ^1.7.1
 ```
 
-These docs target the 1.7.0 release. Dart 3.6 or newer has been
+These docs target the 1.7.1 release. Dart 3.6 or newer has been
 required since 1.5.0 because the internal console logger uses
 `ispectify 6.1.2`.
 
@@ -477,13 +477,7 @@ void main() {
   );
 
   test('verify model', () {
-    Approvals.verifyAsJson(
-      jsonItem,
-      options: const Options(
-        approveResult:
-            true, // Approve the result automatically. You can remove this property after the approved file is created.
-      ),
-    );
+    Approvals.verifyAsJson(jsonItem);
   });
 }
 ```
@@ -567,7 +561,7 @@ Prefer learning by listening? Then you might enjoy the following podcasts:
 
 ## Coverage
 
-The 1.7.0 release has 100% line coverage for executable code under `lib`
+The 1.7.1 release has 100% line coverage for executable code under `lib`
 (792/792 lines). The full suite passes all 256 test executions.
 
 To reproduce the line-coverage report locally:
