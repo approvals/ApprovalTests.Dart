@@ -481,7 +481,7 @@ void main() {
   });
 }
 ```
-<sup><a href='/example/verify_methods/verify_as_json/verify_as_json_test.dart#L6-L32' title='Snippet source file'>snippet source</a> | <a href='#snippet-same_verify_as_json_test_with_model' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/example/verify_methods/verify_as_json/verify_as_json_test.dart#L6-L26' title='Snippet source file'>snippet source</a> | <a href='#snippet-same_verify_as_json_test_with_model' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 this will result in the following file
