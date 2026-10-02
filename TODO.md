@@ -6,6 +6,8 @@ This is the markdown todo file for Approval Tests.
 
 Tasks for the project are listed below:
 
+- [x] Ship a consumer package skill ([dart.dev/ai/package-skills](https://dart.dev/ai/package-skills)): `skills/approval-tests-<topic>/SKILL.md` at the package root, scaffolded with `dart run skills@ create -n <topic> -d '<description>'` and kept out of `.pubignore`; users install it with `dart run skills@ get`.
+
 # DONE
 
 - [x] Github actions

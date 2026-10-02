@@ -1,3 +1,11 @@
+## 1.7.2
+
+### Added
+
+- Bundled the `approval-tests-testing` consumer skill with text and JSON
+  examples, explicit naming, baseline review, and strict CI guidance.
+- Documented skill installation with `dart run skills@ get`.
+
 ## 1.7.1
 
 ### Documentation

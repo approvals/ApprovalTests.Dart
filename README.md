@@ -166,12 +166,26 @@ Add the following to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  approval_tests: ^1.7.1
+  approval_tests: ^1.7.2
 ```
 
-These docs target the 1.7.1 release. Dart 3.6 or newer has been
+These docs target the 1.7.2 release. Dart 3.6 or newer has been
 required since 1.5.0 because the internal console logger uses
 `ispectify 6.1.2`.
+
+## AI agent skill
+
+The package includes [approval-tests-testing](skills/approval-tests-testing/SKILL.md)
+for agents writing text and JSON approval tests, naming artifacts, and reviewing
+received files. From a consumer project that depends on this package, install it
+with the [Dart package skills tool](https://dart.dev/ai/package-skills):
+
+```sh
+dart run skills@ get -p approval_tests
+```
+
+Use `dart run skills@ get` to discover skills from all direct dependencies.
+The skill ships in the package's `skills/` directory.
 
 ## 👀 Getting Started
 
@@ -561,7 +575,7 @@ Prefer learning by listening? Then you might enjoy the following podcasts:
 
 ## Coverage
 
-The 1.7.1 release has 100% line coverage for executable code under `lib`
+The 1.7.2 release has 100% line coverage for executable code under `lib`
 (792/792 lines). The full suite passes all 256 test executions.
 
 To reproduce the line-coverage report locally:
