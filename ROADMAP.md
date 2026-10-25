@@ -1,14 +1,13 @@
 # ApprovalTests.Dart Roadmap
 
-Last updated: 2026-07-26
+Last updated: 2026-10-25
 
 Current baseline:
 
 - latest published package:
-  [`approval_tests 1.5.0`](https://pub.dev/packages/approval_tests);
-- repository baseline: `main` at `552db16`, with the 1.7.0 delivery slices
-  completed in the current working tree;
-- current development version: `1.7.0`;
+  [`approval_tests 1.7.2`](https://pub.dev/packages/approval_tests);
+- repository baseline: `main` at `13b2728`, tagged `v1.7.2`;
+- current package version: `1.7.2`;
 - version 1.5.0 includes `CompositeScrubber`, the sequential and validated
   review CLI, the `ispectify` logging migration, explicit missing-approved
   policy, and the Dart 3.6 minimum;
@@ -18,6 +17,8 @@ Current baseline:
 - version 1.7.0 adds explicit `ApprovalContext` naming with a stack-trace
   fallback, and reporter composition through `ReporterAvailability`,
   `FirstWorkingReporter`, and `MultiReporter`;
+- version 1.7.1 changes documentation and CI setup only;
+- version 1.7.2 bundles the `approval-tests-testing` consumer agent skill;
 - version 1.5.0 requires Dart 3.6 because `ispectify 6.1.2` is the internal
   console logging backend;
 - compatibility policy: existing `verify()` calls and `.approved.txt` files
@@ -106,6 +107,8 @@ The package should provide:
       discovery kept as the 1.x fallback.
 - [x] Reporter availability contract with first-working and multi-reporter
       composition.
+- [x] Bundled `approval-tests-testing` consumer agent skill, installable with
+      `dart run skills@ get`.
 
 ## Milestone 0 — Safe 1.x maintenance
 
@@ -139,7 +142,7 @@ Acceptance criteria:
 
 ### Naming safety and collision detection — P0
 
-Status: complete for the 1.6.0 development tree.
+Status: released in 1.6.0.
 
 - [x] Validate test names, descriptions, extensions, and converter-produced
   artifact names as filename segments rather than accepting path separators.
@@ -187,9 +190,11 @@ artifact model.
       API docs and a migration-neutral example.
 - [x] Keep the published 1.5.0 history separate from new development changes.
 - [x] Keep the README installation snippet, `pubspec.yaml`, and CHANGELOG
-      development heading aligned at version 1.6.0.
+      heading aligned with the current release, 1.7.2.
 - [x] Record the 100% line-coverage gate and its reproducible local command.
-- [ ] Publish matching 1.6.0 package, tag, and release notes.
+- [ ] Add the missing `v1.5.0`, `v1.6.0`, and `v1.7.0` tags and GitHub
+      releases. All three versions are on pub.dev; `v1.6.1`, `v1.7.1`, and
+      `v1.7.2` are tagged.
 - [x] Document exactly which files belong in source control:
   `*.approved.*` tracked and `*.received.*` ignored.
 - [x] Document the Dart 3.6 minimum introduced by the `ispectify` migration in
@@ -245,7 +250,7 @@ Acceptance criteria:
 
 ### Reporter composition
 
-Status: complete for the 1.7.0 development tree.
+Status: released in 1.7.0.
 
 - [x] Add a first-working reporter that selects the first available reporter.
 - [x] Add a multi-reporter that invokes every configured reporter.
@@ -275,7 +280,7 @@ Acceptance criteria:
 
 ### Explicit verification context
 
-Status: complete for the 1.7.0 development tree.
+Status: released in 1.7.0.
 
 - [x] Introduce an immutable `ApprovalContext` carrying the source path and
   test name. The optional artifact description was deliberately dropped: the
@@ -642,10 +647,10 @@ validated during API review, but responsibility stays within the listed files.
 
 | Order | Deliverable | Primary files | Focused verification |
 | --- | --- | --- | --- |
-| 1 | Sequential and validated review CLI (complete) | `bin/review.dart`, `lib/src/cli/review_cli.dart`, `test/cli/review_cli_test.dart` | `dart test test/cli/review_cli_test.dart` |
-| 2 | Explicit missing-approved policy (released in 1.5.0) and atomic text-write hardening (complete for 1.6.0) | `lib/src/core/options.dart`, `lib/src/approvals.dart`, `lib/src/writers/approval_text_writer.dart`, policy and writer tests | `dart test test/groups/approvals_test.dart test/writers/approval_text_writer_test.dart` |
-| 3 | Safe names and collision diagnostics (complete for 1.6.0) | namers, final-path validation, typed exceptions, naming and collision tests | `dart test test/groups/namer.dart test/groups/approvals_test.dart` |
-| 4 | Explicit `ApprovalContext` with legacy fallback (complete for 1.7.0) | `lib/src/core/approval_context.dart`, `lib/src/approvals.dart`, `lib/src/core/approval_namer.dart`, `lib/src/namer/`, context tests | `dart test test/groups/context_test.dart` |
+| 1 | Sequential and validated review CLI (released in 1.5.0) | `bin/review.dart`, `lib/src/cli/review_cli.dart`, `test/cli/review_cli_test.dart` | `dart test test/cli/review_cli_test.dart` |
+| 2 | Explicit missing-approved policy (released in 1.5.0) and atomic text-write hardening (released in 1.6.0) | `lib/src/core/options.dart`, `lib/src/approvals.dart`, `lib/src/writers/approval_text_writer.dart`, policy and writer tests | `dart test test/groups/approvals_test.dart test/writers/approval_text_writer_test.dart` |
+| 3 | Safe names and collision diagnostics (released in 1.6.0) | namers, final-path validation, typed exceptions, naming and collision tests | `dart test test/groups/namer.dart test/groups/approvals_test.dart` |
+| 4 | Explicit `ApprovalContext` with legacy fallback (released in 1.7.0) | `lib/src/core/approval_context.dart`, `lib/src/approvals.dart`, `lib/src/core/approval_namer.dart`, `lib/src/namer/`, context tests | `dart test test/groups/context_test.dart` |
 | 5 | Awaited single-text verification path | `lib/src/core/verification_engine.dart`, `lib/src/approvals.dart`, reporter tests | `dart test test/groups/approvals_test.dart test/groups/reporter_arguments_test.dart` |
 | 6 | Text and binary artifact model | `lib/src/artifacts/`, `lib/src/core/options.dart`, artifact tests | `dart test test/groups/artifact_test.dart` |
 | 7 | Multi-artifact bundle and typed mismatch aggregation | `lib/src/artifacts/`, `lib/src/exceptions/`, bundle tests | `dart test test/groups/artifact_bundle_test.dart` |
@@ -655,13 +660,15 @@ validated during API review, but responsibility stays within the listed files.
 
 ### Completed slice verification
 
-The 1.6.0 development tree passed the local gates on 2026-07-15:
+The 1.7.2 release passed the local gates on 2026-10-25:
 
 - `dart format --output=none --set-exit-if-changed .` — no changes;
 - `dart analyze` — no issues;
-- full and randomized-order suites — all 166 test executions passed;
-- executable library code — 100% line coverage (728/728 lines);
-- `git diff --check` — clean, with no leftover temporary artifacts.
+- full and randomized-order suites — all 256 test executions passed;
+- executable library code — 100% line coverage (792/792 lines);
+- `git diff --check` — clean; the only leftover output is the git-ignored
+  received file that the date-scrubber test keeps with
+  `deleteReceivedFile: false`.
 
 After every slice run:
 

@@ -6,7 +6,7 @@ This is the markdown todo file for Approval Tests.
 
 Tasks for the project are listed below:
 
-- [x] Ship a consumer package skill ([dart.dev/ai/package-skills](https://dart.dev/ai/package-skills)): `skills/approval-tests-<topic>/SKILL.md` at the package root, scaffolded with `dart run skills@ create -n <topic> -d '<description>'` and kept out of `.pubignore`; users install it with `dart run skills@ get`.
+None right now. Longer-term plans live in [ROADMAP.md](ROADMAP.md).
 
 # DONE
 
@@ -33,3 +33,4 @@ Tasks for the project are listed below:
 - [x] Add CLI for Reviewing and Approving Tests: https://github.com/approvals/ApprovalTests.Dart/issues/11
 - [x] Make widget tests support for ApprovalTests: https://github.com/approvals/ApprovalTests.Dart/issues/13
 - [x] Add more detailed documentation to the project
+- [x] Ship a consumer package skill ([dart.dev/ai/package-skills](https://dart.dev/ai/package-skills)): `skills/approval-tests-<topic>/SKILL.md` at the package root, scaffolded with `dart run skills@ create -n <topic> -d '<description>'` and kept out of `.pubignore`; users install it with `dart run skills@ get`.
