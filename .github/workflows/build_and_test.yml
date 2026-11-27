@@ -1,6 +1,12 @@
 name: Build and test
 
-on: [push, pull_request]
+on:
+  push:
+    branches-ignore:
+      - 'dependabot/**'
+    tags:
+      - '**'
+  pull_request:
 
 jobs:
   build:
